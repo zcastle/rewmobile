@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">REWMobile</string>
+    <string name="action_settings">Configuracion</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_acceso">REWMobile</string>
+    <string name="title_activity_fragment_mesas">Mesas</string>
+    <string name="title_section1">Salon 1</string>
+    <string name="title_section2">Salon 2</string>
+    <string name="title_section3">Salon 3</string>
+    <string name="text_estatus">Cargando</string>
+    <string name="title_activity_pedido">PedidoActivity</string>
+    <string name="action_enviar">Enviar</string>
+    <string name="action_precuenta">Precuenta</string>
+    <string name="action_search">Buscar Producto</string>
+    <string name="setting_host">Host</string>
+    <string name="setting_host_default">0.0.0.0</string>
+    <string name="action_salir">Salir</string>
+    <string name="btn_reintentar">Reintentar</string>
+	<string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    
+</resources>

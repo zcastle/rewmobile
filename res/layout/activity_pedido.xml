@@ -1,0 +1,167 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <!-- tools:context=".PedidoActivity" -->
+<RelativeLayout
+    android:id="@+id/content_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="fill" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="11"
+                android:background="@drawable/background_pedido" >
+
+				    <TableLayout
+				        android:id="@+id/grid_item_pedido"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:background="@android:color/holo_blue_light" >
+				        <TableRow
+				            android:id="@+id/tableRow1"
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content" >
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="wrap_content"
+				                android:text="PRODUCTO"
+				                android:paddingLeft="3dp"
+				                android:textColor="@drawable/test_color"
+				                android:layout_weight="1"
+				                android:textSize="20sp" />
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="wrap_content"
+				                android:gravity="right"
+				                android:minWidth="80dp"
+				                android:text="CANT."
+				                android:textColor="@drawable/test_color"
+				                android:textSize="20sp" />
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="wrap_content"
+				                android:gravity="right"
+				                android:minWidth="110dp"
+				                android:text="UNIT."
+				                android:textColor="@drawable/test_color"
+				                android:textSize="20sp" />
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="wrap_content"
+				                android:gravity="right"
+				                android:minWidth="130dp"
+				                android:paddingRight="3dp"
+				                android:text="TOTAL"
+				                android:textColor="@drawable/test_color"
+				                android:textSize="20sp" />
+				        </TableRow>
+				        <TableRow
+				            android:id="@+id/tableRow2"
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content"
+				            android:background="@drawable/background_pedido_registro" >
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="wrap_content"
+				                android:text="HELADO DE CHOCOLATE MKMKMKMKMKMKMKM"
+				                android:textColor="@drawable/test_color"
+				                android:paddingLeft="3dp"
+				                android:layout_weight="1"
+				                android:textSize="25sp" />
+
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="fill_parent"
+				                android:gravity="right|center_vertical"
+				                android:text="1"
+				                android:textColor="@drawable/test_color"
+				                android:textSize="25sp" />
+
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="fill_parent"
+				                android:gravity="right|center_vertical"
+				                android:text="1000.00"
+				                android:textColor="@drawable/test_color"
+				                android:textSize="25sp" />
+
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="fill_parent"
+				                android:gravity="right|center_vertical"
+				                android:paddingRight="3dp"
+				                android:text="1000.00"
+				                android:textColor="@drawable/test_color"
+				                android:textSize="25sp" />
+
+				        </TableRow>
+				    </TableLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medium Text"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!-- <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:id="@+id/lista_productos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+        </RelativeLayout> -->
+        <GridView 
+		    android:id="@+id/gridviewproductos"
+		    android:layout_width="0dp" 
+		    android:layout_height="match_parent"
+		    android:layout_weight="1"
+		    android:columnWidth="200dp"
+		    android:numColumns="auto_fit"
+		    android:verticalSpacing="1dp"
+		    android:horizontalSpacing="1dp"
+		    android:stretchMode="columnWidth"
+		    android:gravity="center"
+		    android:background="@android:color/black"
+		/>
+    </LinearLayout>
+
+</RelativeLayout>
+<ListView
+   	android:id="@+id/left_drawer"
+       android:layout_width="240dp"
+       android:layout_height="match_parent"
+       android:layout_gravity="end"
+       android:choiceMode="singleChoice"
+       android:divider="@android:color/transparent"
+       android:dividerHeight="0dp"
+       android:background="#111" />
+</android.support.v4.widget.DrawerLayout>

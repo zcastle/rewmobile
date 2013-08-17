@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item 
+        android:id="@+id/action_enviar"
+        android:orderInCategory="1"
+        android:showAsAction="never" 
+        android:title="@string/action_enviar" />
+    <item
+        android:id="@+id/action_precuenta"
+        android:orderInCategory="2"
+        android:showAsAction="never"
+        android:title="@string/action_precuenta" />
+	<item android:id="@+id/action_search"
+          android:title="@string/action_search"
+          android:icon="@android:drawable/ic_menu_search"
+          android:showAsAction="ifRoom|collapseActionView"
+          android:actionViewClass="android.widget.SearchView" />
+</menu>
