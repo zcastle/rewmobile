@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import com.gob.rewmobile.R;
 import com.gob.rewmobile.objects.BaseClass;
+import com.gob.rewmobile.objects.Mesa;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,43 +18,49 @@ import android.widget.TextView;
 public class BloqueAdapter extends BaseAdapter {
 	
 	private LayoutInflater inflater = null;
-	private ArrayList<BaseClass> baseClass;
+	private ArrayList<?> baseClass;
 	public static String ITEM_MOZO = "ITEM_MOZO";
+	public static String ITEM_MESA = "ITEM_MESA";
 	public static String ITEM_PRODUCTO = "ITEM_PRODUCTO";
 	private String GRID_ITEM = null;
     
-    public BloqueAdapter(Context context, ArrayList<BaseClass> baseClass, String item){
+    public BloqueAdapter(Context context, ArrayList<?> baseClass, String item){
         this.inflater = LayoutInflater.from(context);
         this.baseClass = baseClass;
-        Log.i("SIZE", "SIZE: "+baseClass.size());
         this.GRID_ITEM = item;
     }
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView tv;
+		Mesa mesa = null;
     	if(convertView==null){
     		convertView = this.inflater.inflate(R.layout.layout_bloque, null);
             if(this.GRID_ITEM.equals(BloqueAdapter.ITEM_MOZO)){
             	tv = (TextView)convertView.findViewById(R.id.grid_item);
-            } else if(this.GRID_ITEM.equals(BloqueAdapter.ITEM_PRODUCTO)) {
+            } else if(this.GRID_ITEM.equals(BloqueAdapter.ITEM_MESA)){
+            	tv = (TextView)convertView.findViewById(R.id.grid_item);
+            } else if(this.GRID_ITEM.equals(BloqueAdapter.ITEM_PRODUCTO)){
             	tv = (TextView)convertView.findViewById(R.id.grid_item_producto);
             } else {
             	tv = (TextView)convertView.findViewById(R.id.grid_item);
             }
             
             convertView.setTag(tv);
-            
         } else {
-        	Log.i("convertView", "convertView");
         	tv = (TextView) convertView.getTag();
         }
     	
     	BaseClass baseClass = (BaseClass) getItem(position);
         tv.setVisibility(View.VISIBLE);
-        Log.i("PRODUCTO", baseClass.getName()+" POSICION: "+position);
         tv.setText(baseClass.getName());
-        
+        if(this.GRID_ITEM.equals(BloqueAdapter.ITEM_MESA)) {
+        	mesa = (Mesa) getItem(position);
+        	Log.i("Status", baseClass.getName()+" "+mesa.getName()+" "+mesa.getStatus()+"");
+        	if(mesa.getStatus()==1){
+        		tv.setBackgroundResource(R.drawable.background_mesa_ocupada);
+        	}
+        }
 		return convertView;
 	}
     

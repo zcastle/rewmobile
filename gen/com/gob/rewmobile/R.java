@@ -28,12 +28,13 @@ public final class R {
         public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
-        public static final int background_pedido=0x7f020000;
-        public static final int background_pedido_registro=0x7f020001;
-        public static final int drawer_shadow=0x7f020002;
-        public static final int ic_drawer=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int test_color=0x7f020005;
+        public static final int background_mesa_ocupada=0x7f020000;
+        public static final int background_pedido=0x7f020001;
+        public static final int background_pedido_registro=0x7f020002;
+        public static final int drawer_shadow=0x7f020003;
+        public static final int ic_drawer=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int test_color=0x7f020006;
     }
     public static final class id {
         public static final int action_enviar=0x7f0b0019;
@@ -111,6 +112,7 @@ public final class R {
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     
 
+        @android:style/Theme.Holo.Light.DarkActionBar
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.

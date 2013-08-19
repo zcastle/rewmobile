@@ -156,7 +156,7 @@ public class PedidoActivity extends Activity {
 			bundle.putString("mozo_name", this.mozo_name);
 			intent.putExtras(bundle);
 			//intent.putExtra("mozo_id", mozo.getId());
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+			//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 	        startActivity(intent);
 			return true;
 		}

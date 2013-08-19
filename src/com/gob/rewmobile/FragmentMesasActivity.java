@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import com.gob.rewmobile.objects.BaseClass;
+import com.gob.rewmobile.objects.Data;
+import com.gob.rewmobile.objects.Mesa;
 import com.gob.rewmobile.util.BloqueAdapter;
 
+import android.R.color;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -16,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,8 +27,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.TextView;
 
 public class FragmentMesasActivity extends FragmentActivity implements ActionBar.TabListener {
+
+	private static GridView gridView = null;
 	
 	private static String mozo_name = null;
 
@@ -113,6 +120,7 @@ public class FragmentMesasActivity extends FragmentActivity implements ActionBar
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			overridePendingTransition(R.animator.slide_out, R.animator.slide_in);
+			finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -198,15 +206,23 @@ public class FragmentMesasActivity extends FragmentActivity implements ActionBar
 			dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
 			return rootView;*/
 			View rootView = inflater.inflate(R.layout.layout_mesas, container, false);
-			GridView gridView = (GridView) rootView.findViewById(R.id.gridviewmesas);
+			gridView = (GridView) rootView.findViewById(R.id.gridviewmesas);
 			gridView.setOnItemClickListener(this);
-			ArrayList<BaseClass> mesas = new ArrayList<BaseClass>();
+			ArrayList<Mesa> mesas = new ArrayList<Mesa>();
 			int zona = getArguments().getInt(ARG_SECTION_NUMBER)==1 ? 1 : 51;
 			for (int i = zona; i <= zona + 49; i++) {
-				mesas.add(new BaseClass(1, String.valueOf(i)));
+				Mesa mesa = Data.LST_MESAS.get(i-1);
+				mesas.add(mesa);
 			}
-			gridView.setAdapter(new BloqueAdapter(getActivity(), mesas, BloqueAdapter.ITEM_MOZO));
+			gridView.setAdapter(new BloqueAdapter(getActivity(), mesas, BloqueAdapter.ITEM_MESA));
 			//gridView.setOnItemClickListener(this);
+			/////Load Estados
+			/*for (int i = 0; i < gridView.getCount(); i++) {
+				TextView tv = (TextView) gridView.getChildAt(i);
+				tv.setBackgroundColor(color.black);
+				Log.i("GV", i+"");
+			}*/
+			//////
 			return rootView;
 		}
 
