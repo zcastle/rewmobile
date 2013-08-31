@@ -15,6 +15,18 @@
         android:text="@+id/label"
         android:textSize="35sp"
         android:visibility="gone" />
+    <com.gob.rewmobile.objects.Mesa
+        android:id="@+id/grid_item_mesa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#3b9859"
+        android:textColor="@drawable/test_color"
+        android:gravity="center"
+        android:minHeight="100dp"
+        android:minWidth="100dp"
+        android:text="@+id/label"
+        android:textSize="35sp"
+        android:visibility="gone" />
     <TextView
         android:id="@+id/grid_item_producto"
         android:layout_width="match_parent"
@@ -27,15 +39,16 @@
         android:textSize="20sp"
         android:visibility="gone" />
     <TextView
-        android:id="@+id/grid_item_pedido_no"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#3b9859"
-        android:textColor="@drawable/test_color"
-        android:gravity="center"
-        android:minHeight="30dp"
-        android:minWidth="100dp"
-        android:textSize="15sp"
-        android:visibility="gone" />
+	    android:id="@+id/list_item_categoria"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+	    android:gravity="center_vertical"
+	    android:paddingLeft="16dp"
+	    android:paddingRight="16dp"
+	    android:textColor="#fff"
+	    android:background="?android:attr/activatedBackgroundIndicator"
+	    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+	    android:visibility="gone" />
 
 </LinearLayout>

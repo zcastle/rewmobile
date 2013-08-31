@@ -63,7 +63,7 @@ public class AccesoActivity extends Activity implements OnItemClickListener{
 		
 		Intent intent = new Intent(this, FragmentMesasActivity.class);
 		Bundle bundle = new Bundle();
-		bundle.putInt("mozo_id", mozo.getId());
+		bundle.putString("mozo_id", mozo.getId());
 		bundle.putString("mozo_name", mozo.getName());
 		intent.putExtras(bundle);
 		//intent.putExtra("mozo_id", mozo.getId());

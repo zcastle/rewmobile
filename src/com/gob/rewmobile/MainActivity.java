@@ -107,6 +107,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				data.loadMozos();
 				data.loadMesas();
 				data.loadProductos();
+				data.loadCategorias();
 			} catch (IOException e) {
 				/*AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 				builder.setMessage("No se puede conectar al servidor")

@@ -15,10 +15,14 @@
     <string name="action_precuenta">Precuenta</string>
     <string name="action_search">Buscar Producto</string>
     <string name="setting_host">Host</string>
-    <string name="setting_host_default">0.0.0.0</string>
+    <string name="setting_host_default">dogiacont.no-ip.org</string>
     <string name="action_salir">Salir</string>
     <string name="btn_reintentar">Reintentar</string>
 	<string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_mesas_refresh">Actualizar Mesas</string>
+    <string name="action_mesas_ocupadas">Ocupadas</string>
+    <string name="action_mesas_libres">Libres</string>
+    <string name="action_mesas_todas">Todas</string>
     
 </resources>

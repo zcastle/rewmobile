@@ -28,42 +28,44 @@ public final class R {
         public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
-        public static final int background_mesa_ocupada=0x7f020000;
-        public static final int background_pedido=0x7f020001;
-        public static final int background_pedido_registro=0x7f020002;
-        public static final int drawer_shadow=0x7f020003;
-        public static final int ic_drawer=0x7f020004;
-        public static final int ic_launcher=0x7f020005;
-        public static final int test_color=0x7f020006;
+        public static final int background_mesa_libre=0x7f020000;
+        public static final int background_mesa_ocupada=0x7f020001;
+        public static final int background_pedido=0x7f020002;
+        public static final int background_pedido_registro=0x7f020003;
+        public static final int drawer_shadow=0x7f020004;
+        public static final int ic_drawer=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int test_color=0x7f020007;
     }
     public static final class id {
-        public static final int action_enviar=0x7f0b0019;
-        public static final int action_precuenta=0x7f0b001a;
+        public static final int action_enviar=0x7f0b001a;
+        public static final int action_mesas_refresh=0x7f0b0018;
+        public static final int action_precuenta=0x7f0b001b;
         public static final int action_salir=0x7f0b0017;
-        public static final int action_search=0x7f0b001b;
-        public static final int action_settings=0x7f0b0018;
+        public static final int action_search=0x7f0b001c;
+        public static final int action_settings=0x7f0b0019;
         public static final int btnReintentar=0x7f0b0016;
-        public static final int content_frame=0x7f0b0004;
+        public static final int content_frame=0x7f0b0005;
         public static final int content_frame2=0x7f0b0011;
-        public static final int drawer_layout=0x7f0b0003;
+        public static final int drawer_layout=0x7f0b0004;
         public static final int drawer_layout2=0x7f0b0010;
-        public static final int grid_item=0x7f0b000c;
-        public static final int grid_item_pedido=0x7f0b0005;
-        public static final int grid_item_pedido_no=0x7f0b000f;
+        public static final int grid_item=0x7f0b000b;
+        public static final int grid_item_mesa=0x7f0b000d;
+        public static final int grid_item_pedido=0x7f0b0006;
         public static final int grid_item_producto=0x7f0b000e;
         public static final int gridviewacceso=0x7f0b0000;
         public static final int gridviewmesas=0x7f0b0013;
-        public static final int gridviewproductos=0x7f0b0008;
-        public static final int image=0x7f0b000b;
-        public static final int label=0x7f0b000d;
-        public static final int left_drawer=0x7f0b0009;
+        public static final int gridviewproductos=0x7f0b0007;
+        public static final int image=0x7f0b000a;
+        public static final int label=0x7f0b000c;
+        public static final int left_drawer=0x7f0b0008;
         public static final int left_drawer2=0x7f0b0012;
+        public static final int list_item_categoria=0x7f0b000f;
         public static final int pager=0x7f0b0001;
-        public static final int section_label=0x7f0b000a;
+        public static final int section_label=0x7f0b0009;
         public static final int status_sync=0x7f0b0014;
-        public static final int tableRow1=0x7f0b0006;
-        public static final int tableRow2=0x7f0b0007;
-        public static final int textView1=0x7f0b0002;
+        public static final int status_sync_mesas=0x7f0b0002;
+        public static final int textView1=0x7f0b0003;
         public static final int tvEstatus=0x7f0b0015;
     }
     public static final class layout {
@@ -87,6 +89,10 @@ public final class R {
     }
     public static final class string {
         public static final int action_enviar=0x7f08000a;
+        public static final int action_mesas_libres=0x7f080015;
+        public static final int action_mesas_ocupadas=0x7f080014;
+        public static final int action_mesas_refresh=0x7f080013;
+        public static final int action_mesas_todas=0x7f080016;
         public static final int action_precuenta=0x7f08000b;
         public static final int action_salir=0x7f08000f;
         public static final int action_search=0x7f08000c;
