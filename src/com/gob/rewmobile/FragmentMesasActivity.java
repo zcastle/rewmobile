@@ -133,7 +133,7 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
-				Looper.prepare();
+				//Looper.prepare();
 				Data data = new Data(this.context);
 				data.loadMesas();
 				Log.i("Data", "Mesas Refresh");
@@ -277,11 +277,17 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 			
 			Intent intent = new Intent(getActivity(), PedidoActivity.class);
 			//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			Bundle bundle = new Bundle();
+			//Bundle bundle = new Bundle();
 			//bundle.putInt("mesa_id", mesa.getId());
-			bundle.putString("mozo_name", mozo_name);
-			bundle.putString("mesa_name", mesa.getName());
-			intent.putExtras(bundle);
+			//bundle.putString("mozo_name", mozo_name);
+			//bundle.putSerializable("mesa", mesa);
+			intent.putExtra("mozo_name", mozo_name);
+			intent.putExtra("mesa_name", mesa.getName());
+			//intent.putExtras(bundle);
+			
+			//intent.putExtra("mozo_name", mozo_name);
+			//intent.putExtra("mesa", mesa);
+			
 			//intent.putExtra("mozo_id", mozo.getId());
 	        startActivity(intent);
 	        getActivity().finish();

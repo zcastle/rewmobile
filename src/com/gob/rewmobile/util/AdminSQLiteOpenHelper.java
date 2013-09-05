@@ -21,14 +21,14 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		db.execSQL("create table productos(id integer primary key, co_producto text, no_producto text, va_producto real, co_categoria text, no_categoria text, nu_orden integer, co_destino integer)");
+		db.execSQL("create table productos(id integer, co_producto text, no_producto text, va_producto real, co_categoria text, no_categoria text, nu_orden integer, co_destino integer)");
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int versionAnte, int versionNue) {
 		// TODO Auto-generated method stub
 		db.execSQL("drop table if exists productos");
-		db.execSQL("create table productos(id integer primary key, co_producto text, no_producto text, va_producto real, co_categoria text, no_categoria text, nu_orden integer, co_destino integer)");
+		db.execSQL("create table productos(id integer, co_producto text, no_producto text, va_producto real, co_categoria text, no_categoria text, nu_orden integer, co_destino integer)");
 	}
 
 }

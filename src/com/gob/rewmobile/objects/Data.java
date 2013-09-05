@@ -30,8 +30,9 @@ public class Data {
 	private Context context;
 	public static ArrayList<BaseClass> LST_MOZOS;
 	public static ArrayList<Mesa> LST_MESAS;
-	public static ArrayList<BaseClass> LST_PRODUCTOS;
+	public static ArrayList<Producto> LST_PRODUCTOS;
 	public static ArrayList<BaseClass> LST_CATEGORIAS;
+	public static Pedido PEDIDO;
 	//private String host01 = "10.10.10.20";
 	//private String host02 = "dogiacont.no-ip.org";
 	public static String URL_HOST;
@@ -76,7 +77,7 @@ public class Data {
 	}
 	
 	public void loadProductos() throws Exception {
-		LST_PRODUCTOS = new ArrayList<BaseClass>();
+		LST_PRODUCTOS = new ArrayList<Producto>();
 		AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this.context, "DBREWMobile", null, 1);
 		SQLiteDatabase db = admin.getWritableDatabase();
 		String url = "http://".concat(URL_HOST).concat(":8080/rewmobile/readProductos.php");
@@ -88,7 +89,8 @@ public class Data {
 			    for(int i = 0; i < obj.length(); i++) {
 			    	JSONObject element = obj.getJSONObject(i);
 			    	registro = new ContentValues();
-					registro.put("co_producto", element.getString("co_producto"));
+			    	registro.put("id", element.getString("id"));
+					//registro.put("co_producto", element.getString("co_producto"));
 					registro.put("no_producto", element.getString("no_producto"));
 					registro.put("va_producto", element.getString("precio0"));
 					registro.put("co_categoria", element.getString("co_categoria"));
@@ -145,6 +147,33 @@ public class Data {
 			    }
 			}
 		}.start();
+	}
+	
+	public void loadPedido(String mesa_name) throws IOException, Exception {
+		PEDIDO = new Pedido();
+		String url = "http://".concat(URL_HOST).concat(":8080/rewmobile/readMesaxNro.php?t=").concat(mesa_name);
+		Log.i("mesa_name", mesa_name);
+		try {
+		    JSONArray obj = getJSONObject(url);
+		    Producto producto;
+		    for(int i = 0; i < obj.length(); i++) {
+		    	JSONObject element = obj.getJSONObject(i);
+		    	producto = new Producto();
+		    	Log.i("USUARIO", element.getString("usuario"));
+		    	PEDIDO.setId(element.getInt("idatencion"));
+		    	PEDIDO.setCajero(element.getString("usuario"));
+		    	PEDIDO.setMozo(element.getString("mozo"));
+		    	PEDIDO.setPax(element.getInt("pax"));
+		    	
+		    	producto.setId(element.getInt("idproducto"));
+		    	producto.setNombre(element.getString("producto"));
+		    	producto.setCantidad(element.getDouble("cantidad"));
+		    	producto.setPrecio(element.getDouble("precio"));
+		    	PEDIDO.getProducto().add(producto);
+		    }
+		}catch(JSONException e){
+		    e.printStackTrace();
+		}
 	}
 	
 	private static JSONArray getJSONObject(String url) throws IOException, Exception {

@@ -25,4 +25,10 @@
     <string name="action_mesas_libres">Libres</string>
     <string name="action_mesas_todas">Todas</string>
     
+    <string name="header_producto">PRODUCTO</string>
+    <string name="header_cantidad">CANT.</string>
+    <string name="header_unitario">UNIT.</string>
+    <string name="header_total">TOTAL</string>
+    <string name="footer_total">TOTAL S/.</string>
+    
 </resources>
