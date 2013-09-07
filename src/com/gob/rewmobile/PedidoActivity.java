@@ -1,20 +1,25 @@
 package com.gob.rewmobile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.fortysevendeg.android.swipelistview.BaseSwipeListViewListener;
+import com.fortysevendeg.android.swipelistview.SwipeListView;
 import com.gob.rewmobile.objects.BaseClass;
 import com.gob.rewmobile.objects.Data;
 import com.gob.rewmobile.objects.ListAdapter;
 import com.gob.rewmobile.objects.MTableRow;
+import com.gob.rewmobile.objects.OnSwipeTouchListener;
 import com.gob.rewmobile.objects.Producto;
+import com.gob.rewmobile.objects.SettingsManager;
 import com.gob.rewmobile.util.AdminSQLiteOpenHelper;
 import com.gob.rewmobile.util.BloqueAdapter;
-import com.gob.rewmobile.util.SwipeDetector;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -27,14 +32,18 @@ import android.graphics.Color;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
@@ -57,12 +66,16 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 	private String mozo_name = null;
 	private String mesa_name = null;
 	//private Mesa mesa = null;
-	private ListView tb;
+	//private ListView tb;
 	private AdminSQLiteOpenHelper dbAdmin;
 	
 	private LoadPedidoTask loadPedidoTask = null;
 	private ProgressDialog mProgress;
 	
+	private SwipeListView swipeListView;
+	private ListAdapter listAdpter;
+	
+	TextView txtMontoTotalMesa;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,32 +142,91 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
             selectItem(0);
         }
 		/////
-        tb = (ListView) findViewById(R.id.grid_item_pedido);
-        //final SwipeDetector swipeDetector = new SwipeDetector();
-        //tb.setOnTouchListener(swipeDetector);
-        /*tb.setOnClickListener(new OnClickListener() {
+        txtMontoTotalMesa = (TextView) findViewById(R.id.txtMontoTotalMesa);
+        listAdpter = new ListAdapter(this, new ArrayList<Producto>());
+        swipeListView = (SwipeListView) findViewById(R.id.grid_item_pedido);
+        
+        /*swipeListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+            @Override
+            public void onOpened(int position, boolean toRight) {
+            }
+
+            @Override
+            public void onClosed(int position, boolean fromRight) {
+            }
+
+            @Override
+            public void onListChanged() {
+            }
+
+            @Override
+            public void onMove(int position, float x) {
+            }
+
+            @Override
+            public void onStartOpen(int position, int action, boolean right) {
+                Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
+            }
+
+            @Override
+            public void onStartClose(int position, boolean right) {
+                Log.d("swipe", String.format("onStartClose %d", position));
+            }
+
+            @Override
+            public void onClickFrontView(int position) {
+                Log.d("swipe", String.format("onClickFrontView %d", position));
+            }
+
+            @Override
+            public void onClickBackView(int position) {
+                Log.d("swipe", String.format("onClickBackView %d", position));
+            }
+
+            @Override
+            public void onDismiss(int[] reverseSortedPositions) {
+                for (int position : reverseSortedPositions) {
+                	Data.PEDIDO.getProducto().remove(position);
+                }
+                listAdpter.notifyDataSetChanged();
+            }
+
+        });*/
+        reload();
+        /*final SwipeDetector swipeDetector = new SwipeDetector();
+        tb.setOnTouchListener(swipeDetector);*/
+        /*tb.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (swipeDetector.swipeDetected()) {
                     if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
-
-                        Toast.makeText(getApplicationContext(),
-                            "Left to right", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(getApplicationContext(), "Left to right", Toast.LENGTH_SHORT).show();
                     }
                     if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
-
-                        Toast.makeText(getApplicationContext(),
-                            "Right to left", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(getApplicationContext(), "Right to left", Toast.LENGTH_SHORT).show();
                     }
                 }
+				
 			}
+        });*/
+        /*tb.setOnTouchListener(new OnSwipeTouchListener(){
+				public void onSwipeTop() {
+				    Toast.makeText(getBaseContext(), "top", Toast.LENGTH_SHORT).show();
+				}
+				public void onSwipeRight() {
+				    Toast.makeText(getBaseContext(), "right", Toast.LENGTH_SHORT).show();
+				}
+				public void onSwipeLeft() {
+				    Toast.makeText(getBaseContext(), "left", Toast.LENGTH_SHORT).show();
+				}
+				public void onSwipeBottom() {
+				    Toast.makeText(getBaseContext(), "bottom", Toast.LENGTH_SHORT).show();
+				}
         });*/
         
         mProgress = new ProgressDialog(this);
-	    mProgress.setMessage("Cargando Mesas...");
+	    mProgress.setMessage("Cargando Pedido...");
 	    mProgress.show();
 	    if (loadPedidoTask != null) return;
 		loadPedidoTask = new LoadPedidoTask(this, mesa_name);
@@ -162,6 +234,23 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
         
 	}
 
+	private void reload() {
+        SettingsManager settings = SettingsManager.getInstance();
+        swipeListView.setSwipeMode(settings.getSwipeMode());
+        swipeListView.setSwipeActionLeft(settings.getSwipeActionLeft());
+        swipeListView.setSwipeActionRight(settings.getSwipeActionRight());
+        swipeListView.setOffsetLeft(convertDpToPixel(settings.getSwipeOffsetLeft()));
+        swipeListView.setOffsetRight(convertDpToPixel(settings.getSwipeOffsetRight()));
+        swipeListView.setAnimationTime(settings.getSwipeAnimationTime());
+        swipeListView.setSwipeOpenOnLongPress(settings.isSwipeOpenOnLongPress());
+    }
+
+	public int convertDpToPixel(float dp) {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return (int) px;
+    }
+	
 	/**
 	 * Set up the {@link android.app.ActionBar}.
 	 */
@@ -276,14 +365,17 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View arg1, int position, long id) {
 		Producto producto = (Producto) parent.getItemAtPosition(position);
+		//insertPedido(producto, true);
 		insertPedido(producto, true);
+		((ListAdapter)swipeListView.getAdapter()).addItem(producto);
+		txtMontoTotalMesa.setText("TOTAL S/. "+Data.PEDIDO.getTotal());
 	}
 	
 	private void insertPedido(Producto producto, boolean insertDB){
 		//BaseClass producto = (BaseClass) parent.getItemAtPosition(position);
 		//TableLayout tb = (TableLayout) findViewById(R.id.grid_item_pedido);
-		MTableRow tr = new MTableRow(this);
-		tr.setProducto(producto);
+		//MTableRow tr = new MTableRow(this);
+		//tr.setProducto(producto);
 		
 		/*tr.setBackgroundResource(R.drawable.background_pedido_registro);
 		tr.setLayoutParams(new MTableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -355,7 +447,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 						m_fuente.put("mnsg", "");
 						//tv0.setText(producto.getNombre());
 						//tv2.setText(fila.getString(0));
-						tb.addView(tr);
+						//tb.addView(tr);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -364,9 +456,8 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 			db.close();
 			
 			if(insertDB){
-				String URL ="http://".concat(Data.URL_HOST).concat(":8080/rewmobile/insertPedidos.php");
 				Data data = new Data(getBaseContext());
-				data.insertPedido(URL, m_fuente);
+				data.insertPedido(m_fuente);
 			}
 		}
 	}
@@ -405,11 +496,13 @@ public class LoadPedidoTask extends AsyncTask<Void, Void, Boolean> {
 		protected void onPostExecute(final Boolean success) {
 			if (success) {
 				//tb.removeAllViews();
-				for (Producto producto: Data.PEDIDO.getProducto()) {
+				//for (Producto producto: Data.PEDIDO.getProducto()) {
 					//insertPedido(producto, false);
-				}
+				//}
 				//tb.setAdapter(new BloqueAdapter(this.context, Data.PEDIDO.getProducto(), BloqueAdapter.ITEM_PEDIDO));
-				tb.setAdapter(new ListAdapter(this.context, Data.PEDIDO.getProducto()));
+				listAdpter = new ListAdapter(this.context, Data.PEDIDO.getProducto());
+				swipeListView.setAdapter(listAdpter);
+				//((ListAdapter)swipeListView.getAdapter()).notifyDataSetChanged();
 				TextView txtMontoTotalMesa = (TextView) findViewById(R.id.txtMontoTotalMesa);
 				txtMontoTotalMesa.setText("TOTAL S/. "+Data.PEDIDO.getTotal());
 				Log.i("onPostExecute", "True");

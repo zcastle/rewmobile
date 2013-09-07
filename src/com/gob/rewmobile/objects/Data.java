@@ -42,12 +42,15 @@ public class Data {
 		this.context = context;
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.context);
 		URL_HOST = sp.getString("varHost", "");
-		Log.i("Title", URL_HOST);
+		String PORT = sp.getString("varPort", "");
+		String PATH =  sp.getString("varPath", "");
+		URL_HOST = "http://".concat(URL_HOST).concat(":").concat(PORT).concat("/").concat(PATH).concat("/");
+		//Log.i("Title", URL_HOST);
 	}
 	
 	public void loadMozos() throws IOException, Exception {
 		LST_MOZOS = new ArrayList<BaseClass>();
-		String url = "http://".concat(URL_HOST).concat(":8080/rewmobile/readUsuarios.php");
+		String url = URL_HOST.concat("readUsuarios.php");
 		try {
 		    JSONArray obj = getJSONObject(url);
 		    for(int i = 0; i < obj.length(); i++) {
@@ -61,7 +64,7 @@ public class Data {
 
 	public void loadMesas() throws IOException, Exception {
 		LST_MESAS = new ArrayList<Mesa>();
-		String url = "http://".concat(URL_HOST).concat(":8080/rewmobile/readMesas.php");
+		String url = URL_HOST.concat("readMesas.php");
 		try {
 		    JSONArray obj = getJSONObject(url);
 		    for(int i = 0; i < obj.length(); i++) {
@@ -80,7 +83,7 @@ public class Data {
 		LST_PRODUCTOS = new ArrayList<Producto>();
 		AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this.context, "DBREWMobile", null, 1);
 		SQLiteDatabase db = admin.getWritableDatabase();
-		String url = "http://".concat(URL_HOST).concat(":8080/rewmobile/readProductos.php");
+		String url = URL_HOST.concat("readProductos.php");
 		if(db != null){
 			db.delete("productos", null, null);
 			ContentValues registro;
@@ -109,7 +112,7 @@ public class Data {
 	
 	public void loadCategorias() throws IOException, Exception {
 		LST_CATEGORIAS = new ArrayList<BaseClass>();
-		String url = "http://".concat(URL_HOST).concat(":8080/rewmobile/readCategorias.php");
+		String url = URL_HOST.concat("readCategorias.php");
 		try {
 		    JSONArray obj = getJSONObject(url);
 		    for(int i = 0; i < obj.length(); i++) {
@@ -121,7 +124,8 @@ public class Data {
 		}
 	}
 	
-	public void insertPedido(final String url,final JSONObject obj) {
+	public void insertPedido(final JSONObject obj) {
+		final String url = URL_HOST.concat("insertPedidos.php");
 		new Thread() {
 			public void run() {
 				HttpClient httpclient = new DefaultHttpClient(); //myParams
@@ -151,7 +155,7 @@ public class Data {
 	
 	public void loadPedido(String mesa_name) throws IOException, Exception {
 		PEDIDO = new Pedido();
-		String url = "http://".concat(URL_HOST).concat(":8080/rewmobile/readMesaxNro.php?t=").concat(mesa_name);
+		String url = URL_HOST.concat("readMesaxNro.php?t=").concat(mesa_name);
 		Log.i("mesa_name", mesa_name);
 		try {
 		    JSONArray obj = getJSONObject(url);

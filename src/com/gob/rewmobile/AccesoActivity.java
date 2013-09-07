@@ -51,6 +51,10 @@ public class AccesoActivity extends Activity implements OnItemClickListener{
 	        	//Intent intent = new Intent(Intent.ACTION_MAIN);
 	        	finish();
 	            break;
+	        case R.id.action_settings:
+	            Intent i = new Intent(this, ConfiguracionActivity.class);
+	            startActivity(i);
+	            break;
 	        }
         return true;
     }

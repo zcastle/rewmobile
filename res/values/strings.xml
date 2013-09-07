@@ -14,8 +14,14 @@
     <string name="action_enviar">Enviar</string>
     <string name="action_precuenta">Precuenta</string>
     <string name="action_search">Buscar Producto</string>
+    
     <string name="setting_host">Host</string>
     <string name="setting_host_default">dogiacont.no-ip.org</string>
+    <string name="setting_host_port">Puerto</string>
+    <string name="setting_host_port_default">8080</string>
+    <string name="setting_host_path">Ruta</string>
+    <string name="setting_host_path_default">rewmobile</string>
+    
     <string name="action_salir">Salir</string>
     <string name="btn_reintentar">Reintentar</string>
 	<string name="drawer_open">Open navigation drawer</string>
@@ -31,4 +37,42 @@
     <string name="header_total">TOTAL</string>
     <string name="footer_total">TOTAL S/.</string>
     
+    
+    <string name="appName">SwipeListView Demo</string>
+    <string name="open">Open</string>
+    <string name="googlePlay">Google Play</string>
+    <string name="uninstall">Uninstall</string>
+
+    <string name="cantOpen">Can\'t open this application</string>
+    <string name="settings">Settings</string>
+    <string name="mode">Swipe Mode</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+    <string name="both">Both</string>
+    <string name="leftAction">Left Action</string>
+    <string name="reveal">Reveal</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="choice">Choice</string>
+    <string name="rightAction">Right Action</string>
+    <string name="rightOffset">Right Offset (%1$s dp)</string>
+    <string name="leftOffset">Left Offset (%1$s dp)</string>
+    <string name="dp">dp</string>
+    <string name="animationTime">Animation Time (Default: 0)</string>
+    <string name="milliseconds">Milliseconds</string>
+    <string name="openOnLongPress">Open On Long Press</string>
+
+    <string name="about">About</string>
+    <string name="aboutMessage">This is just a simple demo for the Open Source SwipeListView Android Library by 47 Degrees. Find all source, documentation and packaged downloads at GitHub. Cheers!</string>
+    <string name="ok">OK</string>
+
+    <string name="visit47">Visit 47deg</string>
+    <string name="goToGitHub">Go to GitHub</string>
+
+    <string name="dontShow">Don\'t show this message again</string>
+    <string name="others">Others</string>
+
+    <string name="loading">Loading</string>
+
+    <string name="newTag">New!</string>
+    <string name="discard">Discard</string>
 </resources>
