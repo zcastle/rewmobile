@@ -6,53 +6,39 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.fortysevendeg.android.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.android.swipelistview.SwipeListView;
 import com.gob.rewmobile.objects.BaseClass;
 import com.gob.rewmobile.objects.Data;
 import com.gob.rewmobile.objects.ListAdapter;
-import com.gob.rewmobile.objects.MTableRow;
-import com.gob.rewmobile.objects.OnSwipeTouchListener;
 import com.gob.rewmobile.objects.Producto;
 import com.gob.rewmobile.objects.SettingsManager;
 import com.gob.rewmobile.util.AdminSQLiteOpenHelper;
 import com.gob.rewmobile.util.BloqueAdapter;
 
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.ActionMode;
-import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class PedidoActivity extends Activity implements OnItemClickListener {
+public class PedidoActivity extends FragmentActivity implements OnItemClickListener {
 
 	//private String[] lstCategorias;
     private DrawerLayout mDrawerLayout;
@@ -146,84 +132,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
         listAdpter = new ListAdapter(this, new ArrayList<Producto>());
         swipeListView = (SwipeListView) findViewById(R.id.grid_item_pedido);
         
-        /*swipeListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
-            @Override
-            public void onOpened(int position, boolean toRight) {
-            }
-
-            @Override
-            public void onClosed(int position, boolean fromRight) {
-            }
-
-            @Override
-            public void onListChanged() {
-            }
-
-            @Override
-            public void onMove(int position, float x) {
-            }
-
-            @Override
-            public void onStartOpen(int position, int action, boolean right) {
-                Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
-            }
-
-            @Override
-            public void onStartClose(int position, boolean right) {
-                Log.d("swipe", String.format("onStartClose %d", position));
-            }
-
-            @Override
-            public void onClickFrontView(int position) {
-                Log.d("swipe", String.format("onClickFrontView %d", position));
-            }
-
-            @Override
-            public void onClickBackView(int position) {
-                Log.d("swipe", String.format("onClickBackView %d", position));
-            }
-
-            @Override
-            public void onDismiss(int[] reverseSortedPositions) {
-                for (int position : reverseSortedPositions) {
-                	Data.PEDIDO.getProducto().remove(position);
-                }
-                listAdpter.notifyDataSetChanged();
-            }
-
-        });*/
-        reload();
-        /*final SwipeDetector swipeDetector = new SwipeDetector();
-        tb.setOnTouchListener(swipeDetector);*/
-        /*tb.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (swipeDetector.swipeDetected()) {
-                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
-                        Toast.makeText(getApplicationContext(), "Left to right", Toast.LENGTH_SHORT).show();
-                    }
-                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
-                        Toast.makeText(getApplicationContext(), "Right to left", Toast.LENGTH_SHORT).show();
-                    }
-                }
-				
-			}
-        });*/
-        /*tb.setOnTouchListener(new OnSwipeTouchListener(){
-				public void onSwipeTop() {
-				    Toast.makeText(getBaseContext(), "top", Toast.LENGTH_SHORT).show();
-				}
-				public void onSwipeRight() {
-				    Toast.makeText(getBaseContext(), "right", Toast.LENGTH_SHORT).show();
-				}
-				public void onSwipeLeft() {
-				    Toast.makeText(getBaseContext(), "left", Toast.LENGTH_SHORT).show();
-				}
-				public void onSwipeBottom() {
-				    Toast.makeText(getBaseContext(), "bottom", Toast.LENGTH_SHORT).show();
-				}
-        });*/
+        //reload();
         
         mProgress = new ProgressDialog(this);
 	    mProgress.setMessage("Cargando Pedido...");
@@ -281,26 +190,10 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 	}
 	
 	private void backToMesas(){
-		/*new Thread() {
-			public void run() {
-				try {
-					Data data = new Data(getBaseContext());
-					data.loadMesas();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}.start();*/
-		
 		Intent intent = new Intent(getBaseContext(), FragmentMesasActivity.class);
 		Bundle bundle = new Bundle();
-		//bundle.putInt("mozo_id", mozo.getId());
 		bundle.putString("mozo_name", mozo_name);
 		intent.putExtras(bundle);
-		//intent.putExtra("mozo_id", mozo.getId());
-		//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
 	}
@@ -315,12 +208,6 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 	}
 
 	private void updateLstProductos(final String co_categoria){
-		//AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getBaseContext(), "DBREWMobile", null, 1);
-		//new Thread() {
-		//	public void run() {
-		//		
-		//	}
-		//}.start();
 		SQLiteDatabase db = dbAdmin.getWritableDatabase();
 		if(db != null){
 			Cursor fila;
@@ -372,61 +259,6 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 	}
 	
 	private void insertPedido(Producto producto, boolean insertDB){
-		//BaseClass producto = (BaseClass) parent.getItemAtPosition(position);
-		//TableLayout tb = (TableLayout) findViewById(R.id.grid_item_pedido);
-		//MTableRow tr = new MTableRow(this);
-		//tr.setProducto(producto);
-		
-		/*tr.setBackgroundResource(R.drawable.background_pedido_registro);
-		tr.setLayoutParams(new MTableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		
-		TextView tv0 = new TextView(this);
-		TextView tv1 = new TextView(this);
-		TextView tv2 = new TextView(this);
-		TextView tv3 = new TextView(this);
-
-		MTableRow.LayoutParams lp0 = new MTableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0f);
-		MTableRow.LayoutParams lp1 = new MTableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		lp1.gravity = Gravity.CENTER_VERTICAL;
-		
-		tv0.setTextColor(Color.WHITE);
-		tv0.setPadding(3, 0, 0, 0);
-		tv0.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
-		tv0.setText(producto.getNombre());
-		tv0.setLayoutParams(lp0);
-		
-		tv1.setTextColor(Color.WHITE);
-		tv1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
-		tv1.setText(producto.getCantidad()+"");
-		int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
-		tv1.setMinimumWidth(px);
-		tv1.setGravity(Gravity.RIGHT);
-		tv1.setLayoutParams(lp1);
-		
-		tv2.setTextColor(Color.WHITE);
-		tv2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
-		tv2.setText(producto.getPrecio()+"");
-		px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 110, getResources().getDisplayMetrics());
-		tv2.setMinimumWidth(px);
-		tv2.setGravity(Gravity.RIGHT);
-		tv2.setLayoutParams(lp1);
-		
-		tv3.setTextColor(Color.WHITE);
-		tv3.setPadding(0, 0, 3, 0);
-		tv3.setGravity(Gravity.RIGHT);
-		tv3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
-		px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130, getResources().getDisplayMetrics());
-		tv3.setMinimumWidth(px);
-		tv3.setText(producto.getTotal()+"");
-		tv3.setLayoutParams(lp1);
-		
-		tr.addView(tv0);
-		tr.addView(tv1);
-		tr.addView(tv2);
-		tr.addView(tv3);*/
-		//tr.setOnTouchListener(this);
-		//tb.addView(tr);
-		
 		SQLiteDatabase db = dbAdmin.getWritableDatabase();
 		if(db != null){
 			final JSONObject m_fuente = new JSONObject();
@@ -445,9 +277,6 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 						m_fuente.put("pax", "1");
 						m_fuente.put("cod_dest", fila.getString(1));
 						m_fuente.put("mnsg", "");
-						//tv0.setText(producto.getNombre());
-						//tv2.setText(fila.getString(0));
-						//tb.addView(tr);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}

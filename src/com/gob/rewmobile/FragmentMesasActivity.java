@@ -4,16 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import com.gob.rewmobile.MainActivity.LoadDataTask;
-import com.gob.rewmobile.objects.BaseClass;
 import com.gob.rewmobile.objects.Data;
 import com.gob.rewmobile.objects.Mesa;
 import com.gob.rewmobile.util.BloqueAdapter;
 
-import android.R.color;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
@@ -21,9 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -39,8 +31,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 public class FragmentMesasActivity extends FragmentActivity implements ActionBar.TabListener {
 

@@ -166,59 +166,60 @@ containing a value of this type.
         public static final int test_color=0x7f02000b;
     }
     public static final class id {
-        public static final int action_enviar=0x7f060032;
-        public static final int action_mesas_refresh=0x7f060030;
-        public static final int action_precuenta=0x7f060033;
-        public static final int action_salir=0x7f06002e;
-        public static final int action_search=0x7f060034;
-        public static final int action_settings=0x7f06002f;
+        public static final int action_enviar=0x7f060033;
+        public static final int action_mesas_refresh=0x7f060031;
+        public static final int action_precuenta=0x7f060034;
+        public static final int action_salir=0x7f06002f;
+        public static final int action_search=0x7f060035;
+        public static final int action_settings=0x7f060030;
         public static final int back=0x7f06000f;
         public static final int both=0x7f060001;
-        public static final int btnReintentar=0x7f060027;
+        public static final int btnReintentar=0x7f060028;
         public static final int choice=0x7f060006;
         public static final int content_frame=0x7f06000c;
-        public static final int content_frame2=0x7f060022;
+        public static final int content_frame2=0x7f060023;
         public static final int dismiss=0x7f060005;
         public static final int drawer_layout=0x7f06000b;
-        public static final int drawer_layout2=0x7f060021;
-        public static final int example_row_b_action_1=0x7f060028;
-        public static final int example_row_b_action_2=0x7f060029;
+        public static final int drawer_layout2=0x7f060022;
+        public static final int example_row_b_action_1=0x7f060029;
+        public static final int example_row_b_action_2=0x7f06002a;
         public static final int front=0x7f06000e;
         public static final int grid_item=0x7f06001b;
         public static final int grid_item_mesa=0x7f06001d;
         public static final int grid_item_pedido=0x7f06000d;
         public static final int grid_item_producto=0x7f06001e;
         public static final int gridviewacceso=0x7f060007;
-        public static final int gridviewmesas=0x7f060024;
+        public static final int gridviewmesas=0x7f060025;
         public static final int gridviewproductos=0x7f060011;
         public static final int image=0x7f06001a;
         public static final int label=0x7f06001c;
         public static final int left=0x7f060003;
         public static final int left_drawer=0x7f060012;
-        public static final int left_drawer2=0x7f060023;
+        public static final int left_drawer2=0x7f060024;
         public static final int listView1=0x7f060018;
         public static final int listView2=0x7f060016;
         public static final int list_item_categoria=0x7f06001f;
         public static final int list_item_pedido=0x7f060020;
-        public static final int menu_delete=0x7f060031;
+        public static final int menu_delete=0x7f060032;
         public static final int none=0x7f060000;
         public static final int pager=0x7f060008;
+        public static final int password=0x7f060021;
         public static final int reveal=0x7f060004;
         public static final int right=0x7f060002;
         public static final int section_label=0x7f060019;
-        public static final int status_sync=0x7f060025;
+        public static final int status_sync=0x7f060026;
         public static final int status_sync_mesas=0x7f060009;
         public static final int textView1=0x7f06000a;
         public static final int textView2=0x7f060013;
         public static final int textView3=0x7f060014;
         public static final int textView4=0x7f060015;
         public static final int textView5=0x7f060017;
-        public static final int tvEstatus=0x7f060026;
-        public static final int txtCantidad=0x7f06002b;
+        public static final int tvEstatus=0x7f060027;
+        public static final int txtCantidad=0x7f06002c;
         public static final int txtMontoTotalMesa=0x7f060010;
-        public static final int txtProducto=0x7f06002a;
-        public static final int txtTotal=0x7f06002d;
-        public static final int txtUnitario=0x7f06002c;
+        public static final int txtProducto=0x7f06002b;
+        public static final int txtTotal=0x7f06002e;
+        public static final int txtUnitario=0x7f06002d;
     }
     public static final class layout {
         public static final int activity_acceso=0x7f030000;
@@ -231,10 +232,11 @@ containing a value of this type.
         public static final int fragment_fragment_mesas_dummy=0x7f030007;
         public static final int fragment_planet=0x7f030008;
         public static final int layout_bloque=0x7f030009;
-        public static final int layout_drawer=0x7f03000a;
-        public static final int layout_mesas=0x7f03000b;
-        public static final int layout_status_sync=0x7f03000c;
-        public static final int pedido_item=0x7f03000d;
+        public static final int layout_dialog_password=0x7f03000a;
+        public static final int layout_drawer=0x7f03000b;
+        public static final int layout_mesas=0x7f03000c;
+        public static final int layout_status_sync=0x7f03000d;
+        public static final int pedido_item=0x7f03000e;
     }
     public static final class menu {
         public static final int acceso=0x7f0c0000;
@@ -246,6 +248,7 @@ containing a value of this type.
     public static final class string {
         public static final int about=0x7f0a0035;
         public static final int aboutMessage=0x7f0a0036;
+        public static final int aceptar=0x7f0a0038;
         public static final int action_enviar=0x7f0a000a;
         public static final int action_mesas_libres=0x7f0a0019;
         public static final int action_mesas_ocupadas=0x7f0a0018;
@@ -260,16 +263,17 @@ containing a value of this type.
         public static final int app_name=0x7f0a0000;
         public static final int both=0x7f0a0029;
         public static final int btn_reintentar=0x7f0a0014;
+        public static final int cancelar=0x7f0a0039;
         public static final int cantOpen=0x7f0a0024;
         public static final int choice=0x7f0a002d;
-        public static final int discard=0x7f0a003e;
+        public static final int discard=0x7f0a0040;
         public static final int dismiss=0x7f0a002c;
-        public static final int dontShow=0x7f0a003a;
+        public static final int dontShow=0x7f0a003c;
         public static final int dp=0x7f0a0031;
         public static final int drawer_close=0x7f0a0016;
         public static final int drawer_open=0x7f0a0015;
         public static final int footer_total=0x7f0a001f;
-        public static final int goToGitHub=0x7f0a0039;
+        public static final int goToGitHub=0x7f0a003b;
         public static final int googlePlay=0x7f0a0022;
         public static final int header_cantidad=0x7f0a001c;
         public static final int header_producto=0x7f0a001b;
@@ -279,14 +283,15 @@ containing a value of this type.
         public static final int left=0x7f0a0027;
         public static final int leftAction=0x7f0a002a;
         public static final int leftOffset=0x7f0a0030;
-        public static final int loading=0x7f0a003c;
+        public static final int loading=0x7f0a003e;
         public static final int milliseconds=0x7f0a0033;
         public static final int mode=0x7f0a0026;
-        public static final int newTag=0x7f0a003d;
+        public static final int newTag=0x7f0a003f;
         public static final int ok=0x7f0a0037;
         public static final int open=0x7f0a0021;
         public static final int openOnLongPress=0x7f0a0034;
-        public static final int others=0x7f0a003b;
+        public static final int others=0x7f0a003d;
+        public static final int password=0x7f0a0041;
         public static final int reveal=0x7f0a002b;
         public static final int right=0x7f0a0028;
         public static final int rightAction=0x7f0a002e;
@@ -306,7 +311,7 @@ containing a value of this type.
         public static final int title_section2=0x7f0a0006;
         public static final int title_section3=0x7f0a0007;
         public static final int uninstall=0x7f0a0023;
-        public static final int visit47=0x7f0a0038;
+        public static final int visit47=0x7f0a003a;
     }
     public static final class style {
         /** 
@@ -408,7 +413,7 @@ containing a value of this type.
 <tr><td><code>dismiss</code></td><td>1</td><td></td></tr>
 <tr><td><code>choice</code></td><td>2</td><td></td></tr>
 </table>
-          @attr name android:swipeActionLeft
+          @attr name com.gob.rewmobile:swipeActionLeft
         */
         public static final int SwipeListView_swipeActionLeft = 8;
         /**
@@ -426,7 +431,7 @@ containing a value of this type.
 <tr><td><code>dismiss</code></td><td>1</td><td></td></tr>
 <tr><td><code>choice</code></td><td>2</td><td></td></tr>
 </table>
-          @attr name android:swipeActionRight
+          @attr name com.gob.rewmobile:swipeActionRight
         */
         public static final int SwipeListView_swipeActionRight = 9;
         /**
@@ -440,7 +445,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:swipeAnimationTime
+          @attr name com.gob.rewmobile:swipeAnimationTime
         */
         public static final int SwipeListView_swipeAnimationTime = 1;
         /**
@@ -450,7 +455,7 @@ containing a value of this type.
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:swipeBackView
+          @attr name com.gob.rewmobile:swipeBackView
         */
         public static final int SwipeListView_swipeBackView = 6;
         /**
@@ -464,7 +469,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:swipeCloseAllItemsWhenMoveList
+          @attr name com.gob.rewmobile:swipeCloseAllItemsWhenMoveList
         */
         public static final int SwipeListView_swipeCloseAllItemsWhenMoveList = 4;
         /**
@@ -474,7 +479,7 @@ containing a value of this type.
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:swipeDrawableChecked
+          @attr name com.gob.rewmobile:swipeDrawableChecked
         */
         public static final int SwipeListView_swipeDrawableChecked = 10;
         /**
@@ -484,7 +489,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:swipeDrawableUnchecked
+          @attr name com.gob.rewmobile:swipeDrawableUnchecked
         */
         public static final int SwipeListView_swipeDrawableUnchecked = 11;
         /**
@@ -494,7 +499,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:swipeFrontView
+          @attr name com.gob.rewmobile:swipeFrontView
         */
         public static final int SwipeListView_swipeFrontView = 5;
         /**
@@ -513,7 +518,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 <tr><td><code>right</code></td><td>2</td><td></td></tr>
 <tr><td><code>left</code></td><td>3</td><td></td></tr>
 </table>
-          @attr name android:swipeMode
+          @attr name com.gob.rewmobile:swipeMode
         */
         public static final int SwipeListView_swipeMode = 7;
         /**
@@ -529,7 +534,7 @@ in (inches), mm (millimeters).
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:swipeOffsetLeft
+          @attr name com.gob.rewmobile:swipeOffsetLeft
         */
         public static final int SwipeListView_swipeOffsetLeft = 2;
         /**
@@ -545,7 +550,7 @@ in (inches), mm (millimeters).
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:swipeOffsetRight
+          @attr name com.gob.rewmobile:swipeOffsetRight
         */
         public static final int SwipeListView_swipeOffsetRight = 3;
         /**
@@ -559,7 +564,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:swipeOpenOnLongPress
+          @attr name com.gob.rewmobile:swipeOpenOnLongPress
         */
         public static final int SwipeListView_swipeOpenOnLongPress = 0;
     };
