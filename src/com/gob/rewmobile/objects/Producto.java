@@ -7,18 +7,20 @@ public class Producto {
 	private String nombre;
 	private Double precio;
 	private Double cantidad;
+	private String mensaje;
 	
 	public Producto(){}
 	
-	public Producto(int id, int codigo, String nombre, Double cantidad, Double precio) {
+	public Producto(int id, int codigo, String nombre, Double precio, Double cantidad, String mensaje) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
 		this.nombre = nombre;
 		this.precio = precio;
 		this.cantidad = cantidad;
+		this.mensaje = mensaje;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -62,10 +64,17 @@ public class Producto {
 	public Double getTotal(){
 		return this.cantidad * this.precio;
 	}
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
 	
 	@Override
 	public String toString() {
 		return this.nombre;
 	}
-
 }

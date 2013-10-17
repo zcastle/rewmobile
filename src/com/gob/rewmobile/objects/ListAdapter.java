@@ -3,15 +3,11 @@ package com.gob.rewmobile.objects;
 import java.util.ArrayList;
 
 import com.fortysevendeg.android.swipelistview.SwipeListView;
-import com.gob.rewmobile.PedidoActivity;
 import com.gob.rewmobile.R;
-import com.gob.rewmobile.PasswordDialogFragment.PasswordDialogListener;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,6 +112,36 @@ public class ListAdapter extends BaseAdapter{
 					.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							//Log.e("OnCLick", "CANCELARCANCELAR");
+							((SwipeListView)parent).closeOpenedItems();
+						}
+					});
+				builder.show();
+			}
+		});
+        
+        btnEditar.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				AlertDialog.Builder builder = new AlertDialog.Builder(fContext);
+				View viewDialog = fInflater.inflate(R.layout.layout_dialog_editar, null);
+				final EditText txtCantidad = (EditText) viewDialog.findViewById(R.id.txtCantidad);
+				final EditText txtNombre = (EditText) viewDialog.findViewById(R.id.txtNombre);
+				final EditText txtMensaje = (EditText) viewDialog.findViewById(R.id.txtMensaje);
+				txtCantidad.setText(item.getCantidad().toString());
+				txtNombre.setText(item.getNombre());
+				txtMensaje.setText(item.getMensaje());
+				builder.setView(viewDialog)
+					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int id) {
+							((SwipeListView)parent).closeOpenedItems();
+						}
+					})
+					.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							((SwipeListView)parent).closeOpenedItems();
 						}
 					});
 				builder.show();
