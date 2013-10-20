@@ -63,7 +63,7 @@ public class ListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, final ViewGroup parent) {
     	final Producto item = (Producto) getItem(position);
         View lView = convertView;
-        Button btnEliminar, btnEditar;
+        TextView btnEliminar, btnEditar;
         if (lView == null) {
             lView = fInflater.inflate(R.layout.pedido_item, parent, false);
         }
@@ -74,8 +74,8 @@ public class ListAdapter extends BaseAdapter{
         TextView txtUnidad = (TextView) lView.findViewById(R.id.txtUnitario);
         TextView txtTotal = (TextView) lView.findViewById(R.id.txtTotal);
         
-        btnEliminar = (Button) lView.findViewById(R.id.example_row_b_action_1);
-        btnEditar = (Button) lView.findViewById(R.id.example_row_b_action_2);
+        btnEliminar = (TextView) lView.findViewById(R.id.btnEliminar);
+        btnEditar = (TextView) lView.findViewById(R.id.btnEditar);
 
         txtProducto.setText(producto.getNombre());
         txtCantidad.setText(producto.getCantidad()+"");
@@ -137,6 +137,10 @@ public class ListAdapter extends BaseAdapter{
 						@Override
 						public void onClick(DialogInterface dialog, int id) {
 							((SwipeListView)parent).closeOpenedItems();
+							item.setCantidad(Double.parseDouble(txtCantidad.getText().toString()));
+							item.setNombre(txtNombre.getText().toString());
+							item.setMensaje(txtMensaje.getText().toString());
+							notifyDataSetChanged();
 						}
 					})
 					.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {

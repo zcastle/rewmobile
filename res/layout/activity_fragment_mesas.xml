@@ -4,26 +4,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FragmentMesasActivity" >
-
-	<LinearLayout 
-        android:id="@+id/status_sync_mesas"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        android:visibility="gone" >
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/text_estatus"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-	</LinearLayout>
+	
 </android.support.v4.view.ViewPager>

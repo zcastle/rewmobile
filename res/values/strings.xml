@@ -66,6 +66,8 @@
     <string name="ok">OK</string>
     <string name="aceptar">ACEPTAR</string>
     <string name="cancelar">CANCELAR</string>
+    <string name="eliminar">ELIMINAR</string>
+    <string name="editar">EDITAR</string>
 
     <string name="visit47">Visit 47deg</string>
     <string name="goToGitHub">Go to GitHub</string>
@@ -79,4 +81,5 @@
     <string name="discard">Discard</string>
     
     <string name="password">Contraseña</string>
+    <string name="guion">|</string>
 </resources>

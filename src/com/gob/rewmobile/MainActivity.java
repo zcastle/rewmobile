@@ -13,6 +13,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -110,6 +111,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				AlertDialog dialog = builder.create();
 				dialog.show();*/
 				//Toast.makeText(getApplicationContext(), "nada 1", Toast.LENGTH_SHORT).show();
+				Log.e("ERRORUNO", e.toString());
 				return false;
 			} catch (Exception e) {
 				/*AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -118,6 +120,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				AlertDialog dialog = builder.create();
 				dialog.show();*/
 				//Toast.makeText(getApplicationContext(), "data 2", Toast.LENGTH_SHORT).show();
+				Log.e("ERRORDOS", e.toString());
 				return false;
 			}
 			return true;

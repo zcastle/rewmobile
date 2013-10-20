@@ -8,19 +8,31 @@
             android:tag="back"
             style="@style/ListBackContent" >
 
-        <Button
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/example_row_b_action_1"
+                android:id="@+id/btnEliminar"
                 style="@style/ListButtonAction"
-                android:text="Eliminar"/>
+                android:text="@string/eliminar"
+                android:textColor="@drawable/text_color"
+        		android:textSize="25sp" />
 
-        <Button
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/example_row_b_action_2"
                 style="@style/ListButtonAction"
-                android:text="Editar"/>
+                android:text="@string/guion"
+                android:textColor="@android:color/white"
+        		android:textSize="25sp"/>
+        
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnEditar"
+                style="@style/ListButtonAction"
+                android:text="@string/editar"
+                android:textColor="@drawable/text_color"
+        		android:textSize="25sp"/>
 
         <!-- <Button
                 android:layout_width="wrap_content"
@@ -41,39 +53,45 @@
         style="@style/ListFrontContent" >
 	
 	    <TextView
+	        android:layout_width="3dp"
+	        android:layout_height="match_parent"
+	       	android:paddingLeft="1dp"
+	        android:background="@android:color/holo_orange_light" />
+	    
+	    <TextView
 	        android:id="@+id/txtProducto"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical"
 	        android:layout_weight="1"
-	        android:text="Medium Text"
-	        android:paddingLeft="3dp"
+	        android:paddingLeft="2dp"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	    <TextView
 	        android:id="@+id/txtCantidad"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical"
 	        android:gravity="right|center_vertical"
 	        android:minWidth="80dp"
-	        android:text="Medium Text"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	    <TextView
 	        android:id="@+id/txtUnitario"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical"
 	        android:gravity="right|center_vertical"
 	        android:minWidth="110dp"
-	        android:text="Medium Text"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	    <TextView
 	        android:id="@+id/txtTotal"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical"
 	        android:gravity="right|center_vertical"
 	        android:minWidth="130dp"
-	        android:text="Medium Text"
 	        android:paddingRight="3dp"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	

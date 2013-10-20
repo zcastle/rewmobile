@@ -10,9 +10,9 @@
         android:orderInCategory="2"
         android:showAsAction="never"
         android:title="@string/action_precuenta" />
-	<item android:id="@+id/action_search"
+	<!-- <item android:id="@+id/action_search"
           android:title="@string/action_search"
           android:icon="@android:drawable/ic_menu_search"
           android:showAsAction="ifRoom|collapseActionView"
-          android:actionViewClass="android.widget.SearchView" />
+          android:actionViewClass="android.widget.SearchView" /> -->
 </menu>

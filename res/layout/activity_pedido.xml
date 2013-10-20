@@ -2,8 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
-    android:layout_width="1024dp"
-    android:layout_height="600dp" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
     <!-- tools:context=".PedidoActivity" -->
 	<RelativeLayout
 	    android:id="@+id/content_frame"
@@ -31,7 +31,7 @@
 		                android:layout_height="wrap_content"
 		                android:text="@string/header_producto"
 		                android:paddingLeft="3dp"
-		                android:textColor="@drawable/test_color"
+		                android:textColor="@drawable/text_color"
 		                android:layout_weight="1"
 		                android:textAppearance="?android:attr/textAppearanceLarge" />
 		            <TextView
@@ -40,7 +40,7 @@
 		                android:gravity="right"
 		                android:minWidth="80dp"
 		                android:text="@string/header_cantidad"
-		                android:textColor="@drawable/test_color"
+		                android:textColor="@drawable/text_color"
 		                android:textAppearance="?android:attr/textAppearanceLarge" />
 		            <TextView
 		                android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
 		                android:gravity="right"
 		                android:minWidth="110dp"
 		                android:text="@string/header_unitario"
-		                android:textColor="@drawable/test_color"
+		                android:textColor="@drawable/text_color"
 		                android:textAppearance="?android:attr/textAppearanceLarge" />
 		            <TextView
 		                android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
 		                android:minWidth="130dp"
 		                android:paddingRight="3dp"
 		                android:text="@string/header_total"
-		                android:textColor="@drawable/test_color"
+		                android:textColor="@drawable/text_color"
 		                android:textAppearance="?android:attr/textAppearanceLarge" />
 	            </LinearLayout>
 	            
@@ -73,7 +73,7 @@
 		            swipe:swipeCloseAllItemsWhenMoveList="true"
 		            swipe:swipeMode="both" />
 
-	        	<RelativeLayout
+	        	<!-- <RelativeLayout
 			         android:layout_width="match_parent"
 			         android:layout_height="wrap_content" >
 	                <TextView
@@ -81,7 +81,7 @@
 	                    android:layout_width="wrap_content"
 	                    android:layout_height="wrap_content"
 	                    android:textAppearance="?android:attr/textAppearanceLarge" />
-                </RelativeLayout>
+                </RelativeLayout> -->
 	        </LinearLayout>
 	        <GridView 
 			    android:id="@+id/gridviewproductos"
