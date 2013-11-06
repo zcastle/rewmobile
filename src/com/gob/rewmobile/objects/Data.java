@@ -124,6 +124,35 @@ public class Data {
 		}
 	}
 	
+	public void loadPedido(String mesa_name) throws IOException, Exception {
+		PEDIDO = new Pedido();
+		String url = URL_HOST.concat("readMesaxNro.php?t=").concat(mesa_name);
+		Log.i("mesa_name", mesa_name);
+		try {
+		    JSONArray obj = getJSONObject(url);
+		    Producto producto;
+		    for(int i = 0; i < obj.length(); i++) {
+		    	JSONObject element = obj.getJSONObject(i);
+		    	producto = new Producto();
+		    	//Log.i("USUARIO", element.getString("usuario"));
+		    	//PEDIDO.setId(element.getInt("idatencion"));
+		    	PEDIDO.setCajero(element.getString("usuario"));
+		    	PEDIDO.setMozo(element.getString("mozo"));
+		    	PEDIDO.setPax(element.getInt("pax"));
+		    	
+		    	producto.setId(element.getInt("idproducto"));
+		    	producto.setIdAtencion(element.getInt("idatencion"));
+		    	producto.setNombre(element.getString("producto"));
+		    	producto.setCantidad(element.getDouble("cantidad"));
+		    	producto.setPrecio(element.getDouble("precio"));
+		    	producto.setMensaje(element.getString("mensaje"));
+		    	PEDIDO.getProducto().add(producto);
+		    }
+		}catch(JSONException e){
+		    e.printStackTrace();
+		}
+	}
+	
 	public void insertPedido(final JSONObject obj) {
 		final String url = URL_HOST.concat("insertPedidos.php");
 		new Thread() {
@@ -143,9 +172,7 @@ public class Data {
 			        
 			        HttpResponse response = httpclient.execute(httpPost);
 			        String temp = EntityUtils.toString(response.getEntity());
-			        Log.i("tag", temp);
-
-
+			        //Log.i("tag", temp);
 			    } catch (ClientProtocolException e) {
 			    } catch (IOException e) {
 			    }
@@ -153,31 +180,52 @@ public class Data {
 		}.start();
 	}
 	
-	public void loadPedido(String mesa_name) throws IOException, Exception {
-		PEDIDO = new Pedido();
-		String url = URL_HOST.concat("readMesaxNro.php?t=").concat(mesa_name);
-		Log.i("mesa_name", mesa_name);
-		try {
-		    JSONArray obj = getJSONObject(url);
-		    Producto producto;
-		    for(int i = 0; i < obj.length(); i++) {
-		    	JSONObject element = obj.getJSONObject(i);
-		    	producto = new Producto();
-		    	Log.i("USUARIO", element.getString("usuario"));
-		    	PEDIDO.setId(element.getInt("idatencion"));
-		    	PEDIDO.setCajero(element.getString("usuario"));
-		    	PEDIDO.setMozo(element.getString("mozo"));
-		    	PEDIDO.setPax(element.getInt("pax"));
-		    	
-		    	producto.setId(element.getInt("idproducto"));
-		    	producto.setNombre(element.getString("producto"));
-		    	producto.setCantidad(element.getDouble("cantidad"));
-		    	producto.setPrecio(element.getDouble("precio"));
-		    	PEDIDO.getProducto().add(producto);
-		    }
-		}catch(JSONException e){
-		    e.printStackTrace();
-		}
+	public void deletePedido(final JSONObject obj) throws IOException, Exception {
+		final String url = URL_HOST.concat("deletePedido.php");
+		new Thread() {
+			public void run() {
+				HttpClient httpclient = new DefaultHttpClient(); //myParams
+
+			    try {
+			        HttpPost httpPost = new HttpPost(url);
+			        httpPost.setHeader("Accept", "application/json");
+			        
+			        ArrayList<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+			        nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
+			        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			        
+			        HttpResponse response = httpclient.execute(httpPost);
+			        String temp = EntityUtils.toString(response.getEntity());
+			        //Log.i("tag", temp);
+			    } catch (ClientProtocolException e) {
+			    } catch (IOException e) {
+			    }
+			}
+		}.start();
+	}
+
+	public void updatePedido(final JSONObject obj) throws IOException, Exception {
+		final String url = URL_HOST.concat("updatePedido.php");
+		new Thread() {
+			public void run() {
+				HttpClient httpclient = new DefaultHttpClient(); //myParams
+
+			    try {
+			        HttpPost httpPost = new HttpPost(url);
+			        httpPost.setHeader("Accept", "application/json");
+			        
+			        ArrayList<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+			        nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
+			        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			        
+			        HttpResponse response = httpclient.execute(httpPost);
+			        String temp = EntityUtils.toString(response.getEntity());
+			        Log.i("respuesta", temp);
+			    } catch (ClientProtocolException e) {
+			    } catch (IOException e) {
+			    }
+			}
+		}.start();
 	}
 	
 	private static JSONArray getJSONObject(String url) throws IOException, Exception {

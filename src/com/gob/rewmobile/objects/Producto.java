@@ -3,6 +3,7 @@ package com.gob.rewmobile.objects;
 public class Producto {
 
 	private int id;
+	private int idAtencion;
 	private int codigo;
 	private String nombre;
 	private Double precio;
@@ -11,22 +12,31 @@ public class Producto {
 	
 	public Producto(){}
 	
-	public Producto(int id, int codigo, String nombre, Double precio, Double cantidad, String mensaje) {
+	public Producto(int id, int idAtencion, int codigo, String nombre, Double precio, Double cantidad, String mensaje) {
 		super();
 		this.id = id;
+		this.idAtencion = idAtencion;
 		this.codigo = codigo;
 		this.nombre = nombre;
 		this.precio = precio;
 		this.cantidad = cantidad;
 		this.mensaje = mensaje;
 	}
-
+	
 	public int getId() {
 		return id;
 	}
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getIdAtencion() {
+		return idAtencion;
+	}
+	
+	public void setIdAtencion(int idAtencion) {
+		this.idAtencion = idAtencion;
 	}
 	
 	public int getCodigo() {

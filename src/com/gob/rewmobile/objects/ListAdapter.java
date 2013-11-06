@@ -1,6 +1,10 @@
 package com.gob.rewmobile.objects;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.fortysevendeg.android.swipelistview.SwipeListView;
 import com.gob.rewmobile.R;
@@ -99,6 +103,18 @@ public class ListAdapter extends BaseAdapter{
 						public void onClick(DialogInterface dialog, int id) {
 							//Log.e("OnCLick", txtPassword.getText().toString());
 							if (txtPassword.getText().toString().equals("adm")) {
+								final JSONObject obj = new JSONObject();
+								try {
+									obj.put("id", item.getIdAtencion());
+									Data data = new Data(fContext);
+									data.deletePedido(obj);
+								} catch (JSONException e) {
+									e.printStackTrace();
+								} catch (IOException e) {
+									e.printStackTrace();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 								removeItem(item);
 								notifyDataSetChanged();
 								((SwipeListView)parent).closeOpenedItems();
@@ -136,11 +152,28 @@ public class ListAdapter extends BaseAdapter{
 					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int id) {
-							((SwipeListView)parent).closeOpenedItems();
+							final JSONObject obj = new JSONObject();
+							try {
+								obj.put("id", item.getIdAtencion());
+								obj.put("cant", item.getCantidad());
+								obj.put("prod", item.getNombre());
+								obj.put("msg", item.getMensaje());
+								obj.put("precio", item.getPrecio());
+								Data data = new Data(fContext);
+								data.updatePedido(obj);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 							item.setCantidad(Double.parseDouble(txtCantidad.getText().toString()));
 							item.setNombre(txtNombre.getText().toString());
 							item.setMensaje(txtMensaje.getText().toString());
 							notifyDataSetChanged();
+							((SwipeListView)parent).closeOpenedItems();
+							Toast.makeText(fContext, item.getNombre().concat(" Actualizado"), Toast.LENGTH_SHORT).show();
 						}
 					})
 					.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
