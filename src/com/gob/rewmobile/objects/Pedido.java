@@ -9,12 +9,13 @@ public class Pedido {
 	private String mozo;
 	private ArrayList<Producto> producto;
 	private int pax;
-	
-	public Pedido(){
+
+	public Pedido() {
 		producto = new ArrayList<Producto>();
 	}
-	
-	public Pedido(int id, String cajero, String mozo, ArrayList<Producto> producto, int pax) {
+
+	public Pedido(int id, String cajero, String mozo,
+			ArrayList<Producto> producto, int pax) {
 		this.id = id;
 		this.cajero = cajero;
 		this.mozo = mozo;
@@ -62,12 +63,12 @@ public class Pedido {
 		this.pax = pax;
 	}
 
-	public Double getTotal(){
+	public Double getTotal() {
 		Double total = 0.0;
 		for (Producto producto : this.producto) {
-			total += producto.getCantidad() * producto.getPrecio(); 
+			total += producto.getCantidad() * producto.getPrecio();
 		}
 		return total;
-	}	
+	}
 
 }

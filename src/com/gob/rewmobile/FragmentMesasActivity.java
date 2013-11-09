@@ -32,7 +32,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
-public class FragmentMesasActivity extends FragmentActivity implements ActionBar.TabListener {
+public class FragmentMesasActivity extends FragmentActivity implements
+		ActionBar.TabListener {
 
 	private static GridView gridView = null;
 	private static String mozo_name = null;
@@ -44,13 +45,13 @@ public class FragmentMesasActivity extends FragmentActivity implements ActionBar
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	private ViewPager mViewPager;
-	
+
 	private ProgressDialog mProgress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.activity_fragment_mesas);
 
 		// Set up the action bar.
@@ -58,24 +59,24 @@ public class FragmentMesasActivity extends FragmentActivity implements ActionBar
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		// Show the Up button in the action bar.
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
+
 		Bundle bundle = this.getIntent().getExtras();
 		mozo_name = bundle.getString("mozo_name");
-		//Item item = (Item) findViewById(R.id.labelMozo);
-		//item.setText(mozo_name);
+		// Item item = (Item) findViewById(R.id.labelMozo);
+		// item.setText(mozo_name);
 		ActionBar ab = getActionBar();
 		ab.setTitle(mozo_name);
 		ab.setSubtitle("Mesas");
-		
-		
+
 		mProgress = new ProgressDialog(this);
-	    mProgress.setMessage("Cargando Mesas...");
-	    mProgress.show();
-	    if (loadDataTask != null) return;
+		mProgress.setMessage("Cargando Mesas...");
+		mProgress.show();
+		if (loadDataTask != null)
+			return;
 		loadDataTask = new LoadDataTask(this);
 		loadDataTask.execute((Void) null);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -93,41 +94,42 @@ public class FragmentMesasActivity extends FragmentActivity implements ActionBar
 			return true;
 		case R.id.action_mesas_refresh:
 			mProgress.show();
-			if (loadDataTask != null) loadDataTask = null;
+			if (loadDataTask != null)
+				loadDataTask = null;
 			loadDataTask = new LoadDataTask(this);
 			loadDataTask.execute((Void) null);
-			//new Thread(new Runnable() {
-		    //    public void run() {
-		        	
-		    //    }
-		    //}).start();
-			
+			// new Thread(new Runnable() {
+			// public void run() {
+
+			// }
+			// }).start();
+
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
-		
+	public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
+
 		private Context context;
 
-		public LoadDataTask(Context context){
-		    this.context = context;
+		public LoadDataTask(Context context) {
+			this.context = context;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
-		    super.onPreExecute();
-		} 
-		
+			super.onPreExecute();
+		}
+
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
-				//Looper.prepare();
+				// Looper.prepare();
 				Data data = new Data(this.context);
 				data.loadMesas();
 				Log.i("Data", "Mesas Refresh");
-				//Looper.loop();
+				// Looper.loop();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -139,22 +141,29 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if (success) {
-				mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+				mSectionsPagerAdapter = new SectionsPagerAdapter(
+						getSupportFragmentManager());
 
 				mViewPager = (ViewPager) findViewById(R.id.pager);
 				mViewPager.setAdapter(mSectionsPagerAdapter);
 
-				mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+				mViewPager
+						.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 							@Override
 							public void onPageSelected(int position) {
-								getActionBar().setSelectedNavigationItem(position);
+								getActionBar().setSelectedNavigationItem(
+										position);
 							}
 						});
 				getActionBar().removeAllTabs();
 				for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-					getActionBar().addTab(getActionBar().newTab()
-							.setText(mSectionsPagerAdapter.getPageTitle(i))
-							.setTabListener((TabListener) this.context));
+					getActionBar()
+							.addTab(getActionBar()
+									.newTab()
+									.setText(
+											mSectionsPagerAdapter
+													.getPageTitle(i))
+									.setTabListener((TabListener) this.context));
 				}
 				Log.i("onPostExecute", "True");
 			} else {
@@ -172,7 +181,8 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	@Override
-	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+	public void onTabSelected(ActionBar.Tab tab,
+			FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
@@ -235,53 +245,61 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 	 * A dummy fragment representing a section of the app, but that simply
 	 * displays dummy text.
 	 */
-	public static class DummySectionFragment extends Fragment implements OnItemClickListener {
+	public static class DummySectionFragment extends Fragment implements
+			OnItemClickListener {
 		/**
 		 * The fragment argument representing the section number for this
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
-		public DummySectionFragment() {}
+		public DummySectionFragment() {
+		}
 
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.layout_mesas, container, false);
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.layout_mesas, container,
+					false);
 			gridView = (GridView) rootView.findViewById(R.id.gridviewmesas);
 			gridView.setOnItemClickListener(this);
 			ArrayList<Mesa> mesas = new ArrayList<Mesa>();
-			int zona = getArguments().getInt(ARG_SECTION_NUMBER)==1 ? 1 : 51;
+			int zona = getArguments().getInt(ARG_SECTION_NUMBER) == 1 ? 1 : 51;
 			for (int i = zona; i <= zona + 49; i++) {
-				Mesa mesa = Data.LST_MESAS.get(i-1);
+				Mesa mesa = Data.LST_MESAS.get(i - 1);
 				mesas.add(mesa);
 			}
-			gridView.setAdapter(new BloqueAdapter(getActivity(), mesas, BloqueAdapter.ITEM_MESA));
+			gridView.setAdapter(new BloqueAdapter(getActivity(), mesas,
+					BloqueAdapter.ITEM_MESA));
 			return rootView;
 		}
 
 		@Override
-		public void onItemClick(AdapterView<?> parent, View arg1, int position, long id) {
+		public void onItemClick(AdapterView<?> parent, View arg1, int position,
+				long id) {
 			// TODO Auto-generated method stub
 			Mesa mesa = (Mesa) parent.getItemAtPosition(position);
-			//Toast.makeText(getActivity(), mesa.getName(), Toast.LENGTH_SHORT).show();
-			
+			// Toast.makeText(getActivity(), mesa.getName(),
+			// Toast.LENGTH_SHORT).show();
+
 			Intent intent = new Intent(getActivity(), PedidoActivity.class);
-			//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			//Bundle bundle = new Bundle();
-			//bundle.putInt("mesa_id", mesa.getId());
-			//bundle.putString("mozo_name", mozo_name);
-			//bundle.putSerializable("mesa", mesa);
+			// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			// Bundle bundle = new Bundle();
+			// bundle.putInt("mesa_id", mesa.getId());
+			// bundle.putString("mozo_name", mozo_name);
+			// bundle.putSerializable("mesa", mesa);
 			intent.putExtra("mozo_name", mozo_name);
 			intent.putExtra("mesa_name", mesa.getName());
-			//intent.putExtras(bundle);
-			
-			//intent.putExtra("mozo_name", mozo_name);
-			//intent.putExtra("mesa", mesa);
-			
-			//intent.putExtra("mozo_id", mozo.getId());
-	        startActivity(intent);
-	        getActivity().finish();
-	        //overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
+			// intent.putExtras(bundle);
+
+			// intent.putExtra("mozo_name", mozo_name);
+			// intent.putExtra("mesa", mesa);
+
+			// intent.putExtra("mozo_id", mozo.getId());
+			startActivity(intent);
+			getActivity().finish();
+			// overridePendingTransition(R.animator.slide_in,
+			// R.animator.slide_out);
 		}
 	}
 

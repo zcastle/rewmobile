@@ -15,16 +15,16 @@ public class Mesa extends TextView {
 	public Mesa(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
-	
+
 	public Mesa(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+		super(context, attrs);
+	}
 
-    public Mesa(Context context) {
-        super(context);
-    }
+	public Mesa(Context context) {
+		super(context);
+	}
 
-    @Override
+	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 	}

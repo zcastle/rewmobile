@@ -8,15 +8,15 @@ import android.view.MenuItem;
 public class ConfiguracionActivity extends Activity {
 
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //addPreferencesFromResource(R.xml.configuracion);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        getFragmentManager().beginTransaction()
-        .replace(android.R.id.content, new ConfiguracionFragment())
-        .commit();
-    }
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		// addPreferencesFromResource(R.xml.configuracion);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+		getFragmentManager().beginTransaction()
+				.replace(android.R.id.content, new ConfiguracionFragment())
+				.commit();
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
