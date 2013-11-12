@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Pedido {
 
+	private String mesa;
 	private int id;
 	private String cajero;
 	private String mozo;
@@ -14,13 +15,20 @@ public class Pedido {
 		producto = new ArrayList<Producto>();
 	}
 
-	public Pedido(int id, String cajero, String mozo,
-			ArrayList<Producto> producto, int pax) {
+	public Pedido(String mesa, int id, String cajero, String mozo, ArrayList<Producto> producto, int pax) {
 		this.id = id;
 		this.cajero = cajero;
 		this.mozo = mozo;
 		this.producto = producto;
 		this.pax = pax;
+	}
+
+	public String getMesa() {
+		return mesa;
+	}
+
+	public void setMesa(String mesa) {
+		this.mesa = mesa;
 	}
 
 	public int getId() {
@@ -69,6 +77,16 @@ public class Pedido {
 			total += producto.getCantidad() * producto.getPrecio();
 		}
 		return total;
+	}
+	
+	public ArrayList<Producto> getProductoByDestino(Destino destino) {
+		ArrayList<Producto> productos = new ArrayList<Producto>();
+		for (Producto obj : getProducto()) {
+			if (obj.getDestino()==destino.getId() && !obj.isEnviado()) {
+				productos.add(obj);
+			}
+		}
+		return productos;
 	}
 
 }

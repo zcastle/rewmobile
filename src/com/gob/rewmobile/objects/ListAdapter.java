@@ -38,7 +38,7 @@ public class ListAdapter extends BaseAdapter {
 	public void addItem(Producto producto) {
 		boolean isEdit = false;
 		for (Producto p : lstProducto) {
-			if (p.getId() == producto.getId()) {
+			if (p.getId() == producto.getId() && !p.isEnviado()) { // 
 				p.setCantidad(p.getCantidad() + 1);
 				isEdit = true;
 			}
@@ -75,6 +75,7 @@ public class ListAdapter extends BaseAdapter {
 		}
 
 		Producto producto = (Producto) getItem(position);
+		TextView txtEstado = (TextView) lView.findViewById(R.id.txtEstado);
 		TextView txtProducto = (TextView) lView.findViewById(R.id.txtProducto);
 		TextView txtCantidad = (TextView) lView.findViewById(R.id.txtCantidad);
 		TextView txtUnidad = (TextView) lView.findViewById(R.id.txtUnitario);
@@ -82,6 +83,14 @@ public class ListAdapter extends BaseAdapter {
 
 		btnEliminar = (TextView) lView.findViewById(R.id.btnEliminar);
 		btnEditar = (TextView) lView.findViewById(R.id.btnEditar);
+
+		if (producto.isEnviado()) {
+			//Log.e("PENVIADO", "TRUE ".concat(producto.getNombre()));
+			txtEstado.setBackgroundResource(android.R.color.holo_orange_light);
+		} else {
+			txtEstado.setBackgroundResource(android.R.color.holo_green_light);
+			//Log.e("PENVIADO", "FALSE ".concat(producto.getNombre()));
+		}
 
 		txtProducto.setText(producto.getNombre());
 		txtCantidad.setText(producto.getCantidad() + "");

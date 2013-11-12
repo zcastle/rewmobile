@@ -33,6 +33,7 @@ public class Data {
 	public static ArrayList<Producto> LST_PRODUCTOS;
 	public static ArrayList<BaseClass> LST_CATEGORIAS;
 	public static Pedido PEDIDO;
+	public static Destinos DESTINOS;
 	// private String host01 = "10.10.10.20";
 	// private String host02 = "dogiacont.no-ip.org";
 	public static String URL_HOST;
@@ -41,8 +42,7 @@ public class Data {
 
 	public Data(Context context) {
 		this.context = context;
-		SharedPreferences sp = PreferenceManager
-				.getDefaultSharedPreferences(this.context);
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.context);
 		URL_HOST = sp.getString("varHost", "");
 		String PORT = sp.getString("varPort", "");
 		String PATH = sp.getString("varPath", "");
@@ -57,8 +57,8 @@ public class Data {
 		try {
 			JSONArray obj = getJSONObject(url);
 			for (int i = 0; i < obj.length(); i++) {
-				JSONObject element = obj.getJSONObject(i);
-				LST_MOZOS.add(new BaseClass(element.getString("id"), element
+				JSONObject e = obj.getJSONObject(i);
+				LST_MOZOS.add(new BaseClass(e.getString("id"), e
 						.getString("no_usuario")));
 			}
 		} catch (JSONException e) {
@@ -72,10 +72,10 @@ public class Data {
 		try {
 			JSONArray obj = getJSONObject(url);
 			for (int i = 0; i < obj.length(); i++) {
-				JSONObject element = obj.getJSONObject(i);
+				JSONObject e = obj.getJSONObject(i);
 				Mesa mesa = new Mesa(this.context);
-				mesa.setName(element.getString("n_ate"));
-				mesa.setStatus(element.getInt("fl_sta"));
+				mesa.setName(e.getString("n_ate"));
+				mesa.setStatus(e.getInt("fl_sta"));
 				LST_MESAS.add(mesa);
 			}
 		} catch (JSONException e) {
@@ -85,8 +85,7 @@ public class Data {
 
 	public void loadProductos() throws Exception {
 		LST_PRODUCTOS = new ArrayList<Producto>();
-		AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this.context,
-				"DBREWMobile", null, 1);
+		AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this.context, "DBREWMobile", null, 1);
 		SQLiteDatabase db = admin.getWritableDatabase();
 		String url = URL_HOST.concat("readProductos.php");
 		if (db != null) {
@@ -95,20 +94,19 @@ public class Data {
 			try {
 				JSONArray obj = getJSONObject(url);
 				for (int i = 0; i < obj.length(); i++) {
-					JSONObject element = obj.getJSONObject(i);
+					JSONObject e = obj.getJSONObject(i);
 					registro = new ContentValues();
-					registro.put("id", element.getString("id"));
+					registro.put("id", e.getString("id"));
 					// registro.put("co_producto",
 					// element.getString("co_producto"));
-					registro.put("no_producto",
-							element.getString("no_producto"));
-					registro.put("va_producto", element.getString("precio0"));
-					registro.put("co_categoria",
-							element.getString("co_categoria"));
-					registro.put("no_categoria",
-							element.getString("no_categoria"));
-					registro.put("nu_orden", element.getString("nu_orden"));
-					registro.put("co_destino", element.getString("co_destino"));
+					registro.put("no_producto", e.getString("no_producto"));
+					registro.put("va_producto", e.getString("precio0"));
+					registro.put("co_categoria", e.getString("co_categoria"));
+	 				registro.put("no_categoria", e.getString("no_categoria"));
+					registro.put("nu_orden", e.getString("nu_orden"));
+					registro.put("co_destino", e.getString("co_destino"));
+					// registro.put("no_destino",
+					// element.getString("no_destino"));
 					db.insert("productos", null, registro);
 					// LST_PRODUCTOS.add(new
 					// BaseClass(element.getInt("co_producto"),
@@ -140,25 +138,27 @@ public class Data {
 	public void loadPedido(String mesa_name) throws IOException, Exception {
 		PEDIDO = new Pedido();
 		String url = URL_HOST.concat("readMesaxNro.php?t=").concat(mesa_name);
-		Log.i("mesa_name", mesa_name);
 		try {
 			JSONArray obj = getJSONObject(url);
 			Producto producto;
 			for (int i = 0; i < obj.length(); i++) {
-				JSONObject element = obj.getJSONObject(i);
+				JSONObject e = obj.getJSONObject(i);
 				producto = new Producto();
 				// Log.i("USUARIO", element.getString("usuario"));
 				// PEDIDO.setId(element.getInt("idatencion"));
-				PEDIDO.setCajero(element.getString("usuario"));
-				PEDIDO.setMozo(element.getString("mozo"));
-				PEDIDO.setPax(element.getInt("pax"));
+				PEDIDO.setMesa(mesa_name);
+				PEDIDO.setCajero(e.getString("usuario"));
+				PEDIDO.setMozo(e.getString("mozo"));
+				PEDIDO.setPax(e.getInt("pax"));
 
-				producto.setId(element.getInt("idproducto"));
-				producto.setIdAtencion(element.getInt("idatencion"));
-				producto.setNombre(element.getString("producto"));
-				producto.setCantidad(element.getDouble("cantidad"));
-				producto.setPrecio(element.getDouble("precio"));
-				producto.setMensaje(element.getString("mensaje"));
+				producto.setId(e.getInt("idproducto"));
+				producto.setIdAtencion(e.getInt("idatencion"));
+				producto.setNombre(e.getString("producto"));
+				producto.setCantidad(e.getDouble("cantidad"));
+				producto.setPrecio(e.getDouble("precio"));
+				producto.setMensaje(e.getString("mensaje"));
+				producto.setDestino(e.getInt("co_destino"));
+				producto.setEnviado(e.getString("fl_envio").equals("S") ? true : false);
 				PEDIDO.getProducto().add(producto);
 			}
 		} catch (JSONException e) {
@@ -181,16 +181,16 @@ public class Data {
 					// se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,
 					// "application/json"));
 					ArrayList<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-					nameValuePairs.add(new BasicNameValuePair("data", obj
-							.toString()));
+					Log.e("OBJSON", obj.toString());
+					nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
 					httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 					HttpResponse response = httpclient.execute(httpPost);
-					//EntityUtils.toString(response.getEntity());
+					// EntityUtils.toString(response.getEntity());
 					String temp = EntityUtils.toString(response.getEntity());
-					//Log.i("insertPedidos.php", temp);
+					Log.i("insertPedidos.php", temp);
 					JSONObject json = new JSONObject(temp);
-					//Log.i("ID", json.getString("id"));
+					// Log.i("ID", json.getString("id"));
 					producto.setIdAtencion(json.getInt("id"));
 				} catch (ClientProtocolException e) {
 				} catch (IOException e) {
@@ -212,11 +212,12 @@ public class Data {
 					httpPost.setHeader("Accept", "application/json");
 
 					ArrayList<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-					nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
+					nameValuePairs.add(new BasicNameValuePair("data", obj
+							.toString()));
 					httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 					HttpResponse response = httpclient.execute(httpPost);
-					//EntityUtils.toString(response.getEntity());
+					// EntityUtils.toString(response.getEntity());
 					String temp = EntityUtils.toString(response.getEntity());
 					Log.i("deletePedido.php", temp);
 				} catch (ClientProtocolException e) {
@@ -251,7 +252,47 @@ public class Data {
 		}.start();
 	}
 
-	private static JSONArray getJSONObject(String url) throws IOException, Exception {
+	public void loadDestinos() throws IOException, Exception {
+		DESTINOS = new Destinos();
+		String url = URL_HOST.concat("readDestinos.php");
+		try {
+			JSONArray obj = getJSONObject(url);
+			Destino destino;
+			for (int i = 0; i < obj.length(); i++) {
+				JSONObject e = obj.getJSONObject(i);
+				destino = new Destino();
+				destino.setId(e.getInt("co_destino"));
+				destino.setNombre(e.getString("no_imp"));
+				destino.setIp(e.getString("no_destino"));
+				DESTINOS.getDestinos().add(destino);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void updateEnvio(final JSONObject obj) throws IOException, Exception {
+		String url = URL_HOST.concat("updateFlEnvio.php");
+		HttpClient httpclient = new DefaultHttpClient(); // myParams
+
+		try {
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.setHeader("Accept", "application/json");
+
+			ArrayList<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
+			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+			HttpResponse response = httpclient.execute(httpPost);
+			String temp = EntityUtils.toString(response.getEntity());
+			Log.i("updateFlEnvio.php", temp);
+		} catch (ClientProtocolException e) {
+		} catch (IOException e) {
+		}
+	}
+
+	private static JSONArray getJSONObject(String url) throws IOException,
+			Exception {
 		JSONObject json = new JSONParser().getJSONFromUrl(url);
 		return json.getJSONArray("data");
 	}

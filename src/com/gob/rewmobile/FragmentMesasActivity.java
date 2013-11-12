@@ -8,6 +8,7 @@ import com.gob.rewmobile.objects.Data;
 import com.gob.rewmobile.objects.Mesa;
 import com.gob.rewmobile.util.BloqueAdapter;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
@@ -31,22 +32,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.Toast;
 
 public class FragmentMesasActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 
-	private static GridView gridView = null;
+	//private static PullToRefreshGridView gridView = null;
 	private static String mozo_name = null;
-	private LoadDataTask loadDataTask = null;
+	private static LoadDataTask loadDataTask = null;
 
-	private SectionsPagerAdapter mSectionsPagerAdapter;
+	//private SectionsPagerAdapter mSectionsPagerAdapter;
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	private ViewPager mViewPager;
 
-	private ProgressDialog mProgress;
+	private static ProgressDialog mProgress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +100,6 @@ public class FragmentMesasActivity extends FragmentActivity implements
 				loadDataTask = null;
 			loadDataTask = new LoadDataTask(this);
 			loadDataTask.execute((Void) null);
-			// new Thread(new Runnable() {
-			// public void run() {
-
-			// }
-			// }).start();
-
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -128,7 +124,6 @@ public class FragmentMesasActivity extends FragmentActivity implements
 				// Looper.prepare();
 				Data data = new Data(this.context);
 				data.loadMesas();
-				Log.i("Data", "Mesas Refresh");
 				// Looper.loop();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -141,33 +136,21 @@ public class FragmentMesasActivity extends FragmentActivity implements
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if (success) {
-				mSectionsPagerAdapter = new SectionsPagerAdapter(
-						getSupportFragmentManager());
+				SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 				mViewPager = (ViewPager) findViewById(R.id.pager);
-				mViewPager.setAdapter(mSectionsPagerAdapter);
+				mViewPager.setAdapter(sectionsPagerAdapter);
 
-				mViewPager
-						.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-							@Override
-							public void onPageSelected(int position) {
-								getActionBar().setSelectedNavigationItem(
-										position);
-							}
-						});
+				mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+					@Override
+					public void onPageSelected(int position) {
+						getActionBar().setSelectedNavigationItem(position);
+					}
+				});
 				getActionBar().removeAllTabs();
-				for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-					getActionBar()
-							.addTab(getActionBar()
-									.newTab()
-									.setText(
-											mSectionsPagerAdapter
-													.getPageTitle(i))
-									.setTabListener((TabListener) this.context));
+				for (int i = 0; i < sectionsPagerAdapter.getCount(); i++) {
+					getActionBar().addTab(getActionBar().newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener((TabListener) this.context));
 				}
-				Log.i("onPostExecute", "True");
-			} else {
-				Log.i("onPostExecute", "False");
 			}
 			loadDataTask = null;
 			mProgress.dismiss();
@@ -210,9 +193,6 @@ public class FragmentMesasActivity extends FragmentActivity implements
 
 		@Override
 		public Fragment getItem(int position) {
-			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
 			Fragment fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
@@ -245,23 +225,27 @@ public class FragmentMesasActivity extends FragmentActivity implements
 	 * A dummy fragment representing a section of the app, but that simply
 	 * displays dummy text.
 	 */
-	public static class DummySectionFragment extends Fragment implements
-			OnItemClickListener {
+	@SuppressLint("ValidFragment")
+	public static class DummySectionFragment extends Fragment implements OnItemClickListener {
 		/**
 		 * The fragment argument representing the section number for this
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
+		private Context context;
 
 		public DummySectionFragment() {
 		}
+		
+		public DummySectionFragment(Context context) {
+			this.context = context;
+		}
+		
 
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.layout_mesas, container,
-					false);
-			gridView = (GridView) rootView.findViewById(R.id.gridviewmesas);
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.layout_mesas, container, false);
+			GridView gridView = (GridView) rootView.findViewById(R.id.gridviewmesas);
 			gridView.setOnItemClickListener(this);
 			ArrayList<Mesa> mesas = new ArrayList<Mesa>();
 			int zona = getArguments().getInt(ARG_SECTION_NUMBER) == 1 ? 1 : 51;
@@ -275,8 +259,7 @@ public class FragmentMesasActivity extends FragmentActivity implements
 		}
 
 		@Override
-		public void onItemClick(AdapterView<?> parent, View arg1, int position,
-				long id) {
+		public void onItemClick(AdapterView<?> parent, View arg1, int position, long id) {
 			// TODO Auto-generated method stub
 			Mesa mesa = (Mesa) parent.getItemAtPosition(position);
 			// Toast.makeText(getActivity(), mesa.getName(),

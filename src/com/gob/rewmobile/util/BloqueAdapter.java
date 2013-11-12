@@ -46,14 +46,11 @@ public class BloqueAdapter extends BaseAdapter {
 				tv = (Mesa) convertView.findViewById(R.id.grid_item_mesa);
 				// tv = (TextView) getItem(position);
 			} else if (this.GRID_ITEM.equals(BloqueAdapter.ITEM_PRODUCTO)) {
-				tv = (TextView) convertView
-						.findViewById(R.id.grid_item_producto);
+				tv = (TextView) convertView.findViewById(R.id.grid_item_producto);
 			} else if (this.GRID_ITEM.equals(BloqueAdapter.ITEM_CATEGORIA)) {
-				tv = (TextView) convertView
-						.findViewById(R.id.list_item_categoria);
+				tv = (TextView) convertView.findViewById(R.id.list_item_categoria);
 			} else if (this.GRID_ITEM.equals(BloqueAdapter.ITEM_PEDIDO)) {
-				ll = (MTableRow) convertView
-						.findViewById(R.id.list_item_pedido);
+				ll = (MTableRow) convertView.findViewById(R.id.list_item_pedido);
 			} else {
 				tv = (TextView) convertView.findViewById(R.id.grid_item);
 			}

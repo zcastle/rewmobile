@@ -7,14 +7,15 @@ public class Producto {
 	private int codigo;
 	private String nombre;
 	private Double precio;
-	private Double cantidad;
-	private String mensaje;
+	private Double cantidad = 1.0;
+	private String mensaje = "";
+	private int destino = 1;
+	private boolean enviado = false;
 
 	public Producto() {
 	}
 
-	public Producto(int id, int idAtencion, int codigo, String nombre,
-			Double precio, Double cantidad, String mensaje) {
+	public Producto(int id, int idAtencion, int codigo, String nombre, Double precio, Double cantidad, String mensaje, int destino) {
 		super();
 		this.id = id;
 		this.idAtencion = idAtencion;
@@ -23,6 +24,7 @@ public class Producto {
 		this.precio = precio;
 		this.cantidad = cantidad;
 		this.mensaje = mensaje;
+		this.destino = destino;
 	}
 
 	public int getId() {
@@ -50,7 +52,7 @@ public class Producto {
 	}
 
 	public String getNombre() {
-		return nombre;
+		return nombre.toUpperCase();
 	}
 
 	public void setNombre(String nombre) {
@@ -83,6 +85,22 @@ public class Producto {
 
 	public void setMensaje(String mensaje) {
 		this.mensaje = mensaje;
+	}
+
+	public int getDestino() {
+		return destino;
+	}
+
+	public void setDestino(int destino) {
+		this.destino = destino;
+	}
+
+	public boolean isEnviado() {
+		return enviado;
+	}
+
+	public void setEnviado(boolean enviado) {
+		this.enviado = enviado;
 	}
 
 	@Override

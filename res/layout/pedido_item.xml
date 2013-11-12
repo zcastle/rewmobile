@@ -53,10 +53,10 @@
         style="@style/ListFrontContent" >
 	
 	    <TextView
-	        android:layout_width="3dp"
+	        android:id="@+id/txtEstado"
+	        android:layout_width="4dp"
 	        android:layout_height="match_parent"
-	       	android:paddingLeft="1dp"
-	        android:background="@android:color/holo_orange_light" />
+	       	android:paddingLeft="1dp" />
 	    
 	    <TextView
 	        android:id="@+id/txtProducto"

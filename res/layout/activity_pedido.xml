@@ -83,19 +83,24 @@
 	                    android:textAppearance="?android:attr/textAppearanceLarge" />
                 </RelativeLayout> -->
 	        </LinearLayout>
-	        <GridView 
-			    android:id="@+id/gridviewproductos"
-			    android:layout_width="0dp" 
-			    android:layout_height="match_parent"
-			    android:layout_weight="1"
-			    android:columnWidth="200dp"
-			    android:numColumns="auto_fit"
-			    android:verticalSpacing="1dp"
-			    android:horizontalSpacing="1dp"
-			    android:stretchMode="columnWidth"
-			    android:gravity="center"
-			    android:background="@android:color/black"
-			/>
+            <LinearLayout
+				android:orientation="vertical"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1" >
+	        	<SearchView
+	        	    android:layout_width="wrap_content"
+                	android:layout_height="wrap_content" android:id="@+id/search_productos"/>
+		        <ListView 
+				    android:id="@+id/gridviewproductos"
+				    android:layout_width="match_parent" 
+				    android:layout_height="match_parent"
+				    android:verticalSpacing="1dp"
+				    android:horizontalSpacing="1dp"
+				    android:gravity="center"
+				    android:background="@android:color/black"
+				/>
+	        </LinearLayout>
 	    </LinearLayout>
 	
 	</RelativeLayout>

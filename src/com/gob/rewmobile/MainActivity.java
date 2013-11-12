@@ -106,6 +106,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				data.loadMesas();
 				data.loadProductos();
 				data.loadCategorias();
+				data.loadDestinos();
 			} catch (IOException e) {
 				/*
 				 * AlertDialog.Builder builder = new
