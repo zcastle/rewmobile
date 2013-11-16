@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import com.gob.rewmobile.objects.Data;
+import com.gob.rewmobile.adapter.MesaAdapter;
+import com.gob.rewmobile.model.Usuario;
 import com.gob.rewmobile.objects.Mesa;
-import com.gob.rewmobile.util.BloqueAdapter;
+import com.gob.rewmobile.util.Data;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -23,7 +24,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,56 +32,42 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.Toast;
 
-public class FragmentMesasActivity extends FragmentActivity implements
-		ActionBar.TabListener {
+public class FragmentMesasActivity extends FragmentActivity implements ActionBar.TabListener {
 
-	//private static PullToRefreshGridView gridView = null;
-	private static String mozo_name = null;
-	private static LoadDataTask loadDataTask = null;
-
-	//private SectionsPagerAdapter mSectionsPagerAdapter;
-
-	/**
-	 * The {@link ViewPager} that will host the section contents.
-	 */
+	private static CargarMesasTask cargarMesasTask = null;
 	private ViewPager mViewPager;
-
-	private static ProgressDialog mProgress;
+	private static ProgressDialog pd;
+	private static Usuario mozo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_fragment_mesas);
 
-		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		// Show the Up button in the action bar.
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		Bundle bundle = this.getIntent().getExtras();
-		mozo_name = bundle.getString("mozo_name");
-		// Item item = (Item) findViewById(R.id.labelMozo);
-		// item.setText(mozo_name);
+		Bundle bundle = getIntent().getExtras();
+		mozo = new Usuario(bundle.getInt("mozo_id"), bundle.getString("mozo_name"));
+
 		ActionBar ab = getActionBar();
-		ab.setTitle(mozo_name);
+		ab.setTitle(mozo.getNombre());
 		ab.setSubtitle("Mesas");
 
-		mProgress = new ProgressDialog(this);
-		mProgress.setMessage("Cargando Mesas...");
-		mProgress.show();
-		if (loadDataTask != null)
+		pd = new ProgressDialog(this);
+		pd.setTitle("Procesando...");
+		pd.setMessage("Cargando Mesas...");
+		pd.show();
+		if (cargarMesasTask != null)
 			return;
-		loadDataTask = new LoadDataTask(this);
-		loadDataTask.execute((Void) null);
+		cargarMesasTask = new CargarMesasTask(this);
+		cargarMesasTask.execute((Void) null);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.fragment_mesas, menu);
 		return true;
 	}
@@ -95,21 +81,21 @@ public class FragmentMesasActivity extends FragmentActivity implements
 			finish();
 			return true;
 		case R.id.action_mesas_refresh:
-			mProgress.show();
-			if (loadDataTask != null)
-				loadDataTask = null;
-			loadDataTask = new LoadDataTask(this);
-			loadDataTask.execute((Void) null);
+			pd.show();
+			if (cargarMesasTask != null)
+				cargarMesasTask = null;
+			cargarMesasTask = new CargarMesasTask(this);
+			cargarMesasTask.execute((Void) null);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
+	public class CargarMesasTask extends AsyncTask<Void, Void, Boolean> {
 
 		private Context context;
 
-		public LoadDataTask(Context context) {
+		public CargarMesasTask(Context context) {
 			this.context = context;
 		}
 
@@ -152,33 +138,30 @@ public class FragmentMesasActivity extends FragmentActivity implements
 					getActionBar().addTab(getActionBar().newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener((TabListener) this.context));
 				}
 			}
-			loadDataTask = null;
-			mProgress.dismiss();
+			cargarMesasTask = null;
+			pd.dismiss();
 		}
 
 		@Override
 		protected void onCancelled() {
-			loadDataTask = null;
-			mProgress.dismiss();
+			cargarMesasTask = null;
+			pd.dismiss();
 		}
 	}
 
 	@Override
-	public void onTabSelected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
-		// When the given tab is selected, switch to the corresponding page in
-		// the ViewPager.
+	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
 	public void onTabUnselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
+		FragmentTransaction fragmentTransaction) {
 	}
 
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
+		FragmentTransaction fragmentTransaction) {
 	}
 
 	/**
@@ -232,13 +215,8 @@ public class FragmentMesasActivity extends FragmentActivity implements
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
-		private Context context;
 
 		public DummySectionFragment() {
-		}
-		
-		public DummySectionFragment(Context context) {
-			this.context = context;
 		}
 		
 
@@ -253,8 +231,7 @@ public class FragmentMesasActivity extends FragmentActivity implements
 				Mesa mesa = Data.LST_MESAS.get(i - 1);
 				mesas.add(mesa);
 			}
-			gridView.setAdapter(new BloqueAdapter(getActivity(), mesas,
-					BloqueAdapter.ITEM_MESA));
+			gridView.setAdapter(new MesaAdapter(getActivity(), mesas));
 			return rootView;
 		}
 
@@ -262,27 +239,18 @@ public class FragmentMesasActivity extends FragmentActivity implements
 		public void onItemClick(AdapterView<?> parent, View arg1, int position, long id) {
 			// TODO Auto-generated method stub
 			Mesa mesa = (Mesa) parent.getItemAtPosition(position);
-			// Toast.makeText(getActivity(), mesa.getName(),
-			// Toast.LENGTH_SHORT).show();
 
 			Intent intent = new Intent(getActivity(), PedidoActivity.class);
 			// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			// Bundle bundle = new Bundle();
-			// bundle.putInt("mesa_id", mesa.getId());
-			// bundle.putString("mozo_name", mozo_name);
-			// bundle.putSerializable("mesa", mesa);
-			intent.putExtra("mozo_name", mozo_name);
-			intent.putExtra("mesa_name", mesa.getName());
-			// intent.putExtras(bundle);
+			Bundle bundle = new Bundle();
+			bundle.putInt("mozo_id", mozo.getId());
+			bundle.putString("mozo_name", mozo.getNombre());
+			bundle.putString("mesa_name", mesa.getNombre());
+			intent.putExtras(bundle);
 
-			// intent.putExtra("mozo_name", mozo_name);
-			// intent.putExtra("mesa", mesa);
-
-			// intent.putExtra("mozo_id", mozo.getId());
 			startActivity(intent);
 			getActivity().finish();
-			// overridePendingTransition(R.animator.slide_in,
-			// R.animator.slide_out);
+			// overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
 		}
 	}
 

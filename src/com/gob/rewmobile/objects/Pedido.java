@@ -2,12 +2,16 @@ package com.gob.rewmobile.objects;
 
 import java.util.ArrayList;
 
+import com.gob.rewmobile.model.Destino;
+import com.gob.rewmobile.model.Producto;
+import com.gob.rewmobile.model.Usuario;
+
 public class Pedido {
 
 	private String mesa;
 	private int id;
 	private String cajero;
-	private String mozo;
+	private Usuario mozo;
 	private ArrayList<Producto> producto;
 	private int pax;
 
@@ -15,7 +19,7 @@ public class Pedido {
 		producto = new ArrayList<Producto>();
 	}
 
-	public Pedido(String mesa, int id, String cajero, String mozo, ArrayList<Producto> producto, int pax) {
+	public Pedido(String mesa, int id, String cajero, Usuario mozo, ArrayList<Producto> producto, int pax) {
 		this.id = id;
 		this.cajero = cajero;
 		this.mozo = mozo;
@@ -47,11 +51,11 @@ public class Pedido {
 		this.cajero = cajero;
 	}
 
-	public String getMozo() {
+	public Usuario getMozo() {
 		return mozo;
 	}
 
-	public void setMozo(String mozo) {
+	public void setMozo(Usuario mozo) {
 		this.mozo = mozo;
 	}
 
@@ -79,10 +83,10 @@ public class Pedido {
 		return total;
 	}
 	
-	public ArrayList<Producto> getProductoByDestino(Destino destino) {
+	public ArrayList<Producto> getProductosByDestino(Destino destino) {
 		ArrayList<Producto> productos = new ArrayList<Producto>();
 		for (Producto obj : getProducto()) {
-			if (obj.getDestino()==destino.getId() && !obj.isEnviado()) {
+			if (obj.getDestino().getId()==destino.getId() && !obj.isEnviado()) {
 				productos.add(obj);
 			}
 		}

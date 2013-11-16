@@ -10,7 +10,7 @@
         android:orderInCategory="2"
         android:showAsAction="never"
         android:title="@string/action_precuenta" />
-	<item android:id="@+id/action_buscar"
+	<item android:id="@+id/search_productos"
           android:title="@string/action_search"
           android:icon="@android:drawable/ic_menu_search"
           android:showAsAction="ifRoom|collapseActionView"

@@ -88,9 +88,9 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1" >
-	        	<SearchView
+	        	<!-- <SearchView
 	        	    android:layout_width="wrap_content"
-                	android:layout_height="wrap_content" android:id="@+id/search_productos"/>
+                	android:layout_height="wrap_content" android:id="@+id/search_productos"/> -->
 		        <ListView 
 				    android:id="@+id/gridviewproductos"
 				    android:layout_width="match_parent" 
@@ -105,7 +105,7 @@
 	
 	</RelativeLayout>
 	<ListView
-	   	android:id="@+id/left_drawer"
+	   	android:id="@+id/listViewCategorias"
 	    android:layout_width="240dp"
 	    android:layout_height="match_parent"
 	    android:layout_gravity="start"

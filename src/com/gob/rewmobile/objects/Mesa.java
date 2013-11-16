@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 public class Mesa extends TextView {
 
-	private String name;
+	private String nombre;
 	private int status;
 
 	public Mesa(Context context, AttributeSet attrs, int defStyle) {
@@ -29,12 +29,12 @@ public class Mesa extends TextView {
 		super.onDraw(canvas);
 	}
 
-	public String getName() {
-		return name;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNombre(String name) {
+		this.nombre = name;
 		this.setText(name);
 	}
 

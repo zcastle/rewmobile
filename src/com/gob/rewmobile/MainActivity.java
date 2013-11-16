@@ -2,7 +2,7 @@ package com.gob.rewmobile;
 
 import java.io.IOException;
 
-import com.gob.rewmobile.objects.Data;
+import com.gob.rewmobile.util.Data;
 
 import android.os.AsyncTask;
 import android.os.Build;
@@ -117,7 +117,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				 */
 				// Toast.makeText(getApplicationContext(), "nada 1",
 				// Toast.LENGTH_SHORT).show();
-				Log.e("ERRORUNO", e.toString());
+				//Log.e("ERRORUNO", e.toString());
 				return false;
 			} catch (Exception e) {
 				/*
@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				 */
 				// Toast.makeText(getApplicationContext(), "data 2",
 				// Toast.LENGTH_SHORT).show();
-				Log.e("ERRORDOS", e.toString());
+				//Log.e("ERRORDOS", e.toString());
 				return false;
 			}
 			return true;

@@ -1,16 +1,14 @@
 package com.gob.rewmobile.util;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
-	private SQLiteDatabase mDb;
+	//private SQLiteDatabase mDb;
 	
 	public AdminSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version) {
 		super(context, name, factory, version);
@@ -21,8 +19,6 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 		super(context, name, factory, version, errorHandler);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
 	/*@Override
 	public void onOpen(SQLiteDatabase db) {

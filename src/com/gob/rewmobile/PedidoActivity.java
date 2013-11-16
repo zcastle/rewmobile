@@ -8,22 +8,22 @@ import org.json.JSONObject;
 
 import com.epson.eposprint.Print;
 import com.fortysevendeg.android.swipelistview.SwipeListView;
-import com.gob.rewmobile.objects.BaseClass;
-import com.gob.rewmobile.objects.Data;
-import com.gob.rewmobile.objects.Destino;
-import com.gob.rewmobile.objects.ListAdapter;
+import com.gob.rewmobile.adapter.CategoriasAdapter;
+import com.gob.rewmobile.adapter.PedidoAdapter;
+import com.gob.rewmobile.adapter.ProductoAdapter;
+import com.gob.rewmobile.model.Categoria;
+import com.gob.rewmobile.model.Destino;
+import com.gob.rewmobile.model.Producto;
+import com.gob.rewmobile.model.ProductoControlller;
 import com.gob.rewmobile.objects.Pedido;
-import com.gob.rewmobile.objects.Producto;
 import com.gob.rewmobile.util.AdminSQLiteOpenHelper;
-import com.gob.rewmobile.util.BloqueAdapter;
+import com.gob.rewmobile.util.Data;
 import com.gob.rewmobile.util.PrintTicket;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -47,19 +47,12 @@ import android.widget.Toast;
 
 public class PedidoActivity extends FragmentActivity implements OnItemClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
-	// private String[] lstCategorias;
+	private ListView listViewCategorias;
 	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
+	
 	private ListView listViewProductos;
 
-	private CharSequence mDrawerTitle;
-	// private CharSequence mTitle;
-
-	private String mozo_name = null;
-	private String mesa_name = null;
-	// private Mesa mesa = null;
-	// private ListView tb;
 	private AdminSQLiteOpenHelper dbAdmin;
 
 	private LoadPedidoTask loadPedidoTask = null;
@@ -70,94 +63,67 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 	private ProgressDialog mProgressEnvio;
 	private ProgressDialog mProgressEnvioPrecuenta;
 
-	private SwipeListView swipeListView;
-	private ListAdapter listAdpter;
+	private SwipeListView listViewPedido;
+	private PedidoAdapter pedidoAdapter;
 
 	private TextView txtMontoTotalMesa;
 	
 	private SearchView searchView;
+	
+	private Pedido PEDIDO;
+	private ProductoControlller productoControlller;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pedido);
-		dbAdmin = new AdminSQLiteOpenHelper(this, "DBREWMobile", null, 1);
-		// //
 		
-		searchView = (SearchView) findViewById(R.id.search_productos);
-		searchView.setIconifiedByDefault(false);
-        searchView.setOnQueryTextListener(this);
-        searchView.setOnCloseListener(this);
+		productoControlller = new ProductoControlller();
+		
+		dbAdmin = new AdminSQLiteOpenHelper(this, "DBREWMobile", null, 1);		
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		listViewCategorias = (ListView) findViewById(R.id.listViewCategorias);
 
-		// set a custom shadow that overlays the main content when the drawer
-		// opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		// Set the adapter for the list view
-		// mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-		// R.layout.drawer_list_item, lstCategorias));
-		mDrawerList.setAdapter(new BloqueAdapter(this, Data.LST_CATEGORIAS, BloqueAdapter.ITEM_CATEGORIA));
-		// Set the list's click listener
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		listViewCategorias.setAdapter(new CategoriasAdapter(this, Data.LST_CATEGORIAS.getCategorias()));
+		listViewCategorias.setOnItemClickListener(new DrawerItemClickListener());
 
-		// //
-		// Show the Up button in the action bar.
-		setupActionBar();
-
-		// Bundle bundle = this.getIntent().getExtras();
-		// mozo_name = bundle.getString("mozo_name");
-		// this.mesa = (Mesa) bundle.getSerializable("mesa");
-
-		Intent i = getIntent();
-
-		mozo_name = i.getExtras().getString("mozo_name");
-		mesa_name = i.getExtras().getString("mesa_name");
-
-		ActionBar ab = getActionBar();
-		ab.setTitle(mozo_name);
-		ab.setSubtitle("Mesas".concat(" ").concat(this.mesa_name));
-
-		// LinearLayout linearLayout = (LinearLayout)
-		// findViewById(R.id.lista_productos);
-		listViewProductos = (ListView) findViewById(R.id.gridviewproductos);
-		
-		updateLstProductos("");
-		// gridView.setAdapter(new BloqueAdapter(this, Data.LST_PRODUCTOS,
-		// BloqueAdapter.ITEM_PRODUCTO));
-		listViewProductos.setOnItemClickListener(this);
-
-		// ///
-		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-		R.string.drawer_open, /* "open drawer" description for accessibility */
-		R.string.drawer_close /* "close drawer" description for accessibility */
-		) {
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
 			public void onDrawerClosed(View view) {
-				// getActionBar().setTitle(mTitle);
-				invalidateOptionsMenu(); // creates call to
-											// onPrepareOptionsMenu()
+				invalidateOptionsMenu();
 			}
 
 			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle(mDrawerTitle);
-				invalidateOptionsMenu(); // creates call to
-											// onPrepareOptionsMenu()
+				invalidateOptionsMenu();
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		
+		setupActionBar();
+
+		Bundle bundle = getIntent().getExtras();
+		PEDIDO = new Pedido();
+		PEDIDO.setMesa(bundle.getString("mesa_name"));
+		PEDIDO.setMozo(Data.LST_MOZOS.getUsuarioById(bundle.getInt("mozo_id")));
+
+
+		ActionBar ab = getActionBar();
+		ab.setTitle(PEDIDO.getMozo().getNombre());
+		ab.setSubtitle("Mesa ".concat(PEDIDO.getMesa()));
+
+		listViewProductos = (ListView) findViewById(R.id.gridviewproductos);
+		loadProductos();
+		listViewProductos.setOnItemClickListener(this);
 
 		if (savedInstanceState == null) {
 			selectItem(0);
 		}
-		// ///
-		txtMontoTotalMesa = (TextView) findViewById(R.id.txtMontoTotalMesa);
-		listAdpter = new ListAdapter(this, new ArrayList<Producto>(), txtMontoTotalMesa);
-		swipeListView = (SwipeListView) findViewById(R.id.grid_item_pedido);
 
-		// reload();
+		txtMontoTotalMesa = (TextView) findViewById(R.id.txtMontoTotalMesa);
+		pedidoAdapter = new PedidoAdapter(this, PEDIDO, txtMontoTotalMesa);
+		listViewPedido = (SwipeListView) findViewById(R.id.grid_item_pedido);
+
 		mProgressEnvio = new ProgressDialog(this);
 		mProgressEnvio.setMessage("Enviando Pedido...");
 		
@@ -169,7 +135,7 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 		mProgress.show();
 		if (loadPedidoTask != null)
 			return;
-		loadPedidoTask = new LoadPedidoTask(this, mesa_name, this.mozo_name);
+		loadPedidoTask = new LoadPedidoTask(this, PEDIDO);
 		loadPedidoTask.execute((Void) null);
 
 	}
@@ -182,21 +148,6 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
         	dbAdmin.close();
         }
     }
-	
-	/*
-	 * private void reload() { SettingsManager settings =
-	 * SettingsManager.getInstance();
-	 * swipeListView.setSwipeMode(settings.getSwipeMode());
-	 * swipeListView.setSwipeActionLeft(settings.getSwipeActionLeft());
-	 * swipeListView.setSwipeActionRight(settings.getSwipeActionRight());
-	 * swipeListView
-	 * .setOffsetLeft(convertDpToPixel(settings.getSwipeOffsetLeft()));
-	 * swipeListView
-	 * .setOffsetRight(convertDpToPixel(settings.getSwipeOffsetRight()));
-	 * swipeListView.setAnimationTime(settings.getSwipeAnimationTime());
-	 * swipeListView.setSwipeOpenOnLongPress(settings.isSwipeOpenOnLongPress());
-	 * }
-	 */
 
 	public int convertDpToPixel(float dp) {
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -221,13 +172,12 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.pedido, menu);
 		
-		MenuItem searchItem = menu.findItem(R.id.action_buscar);
-		SearchView searchView = (SearchView) searchItem.getActionView();
-		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		if(null!=searchManager ) {   
-			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		}
-	    searchView.setIconifiedByDefault(false);
+		
+		
+		MenuItem searchItem = menu.findItem(R.id.search_productos);
+		searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnCloseListener(this);
 		
 		return true;
 	}
@@ -256,7 +206,8 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 	private void backToMesas() {
 		Intent intent = new Intent(getBaseContext(), FragmentMesasActivity.class);
 		Bundle bundle = new Bundle();
-		bundle.putString("mozo_name", mozo_name);
+		bundle.putInt("mozo_id", PEDIDO.getMozo().getId());
+		bundle.putString("mozo_name", PEDIDO.getMozo().toString());
 		intent.putExtras(bundle);
 		startActivity(intent);
 		finish();
@@ -266,7 +217,7 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 		mProgressEnvio.show();
 		if (enviarPedidoTask != null)
 			return;
-		enviarPedidoTask = new EnviarPedidoTask(this, Data.PEDIDO);
+		enviarPedidoTask = new EnviarPedidoTask(this, PEDIDO);
 		enviarPedidoTask.execute((Void) null);
 	}
 	
@@ -274,36 +225,23 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 		mProgressEnvioPrecuenta.show();
 		if (enviarPrecuentaTask != null)
 			return;
-		enviarPrecuentaTask = new EnviarPrecuentaTask(this, Data.PEDIDO);
+		enviarPrecuentaTask = new EnviarPrecuentaTask(this, PEDIDO);
 		enviarPrecuentaTask.execute((Void) null);
 	}
 
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			BaseClass cate = (BaseClass) parent.getItemAtPosition(position);
-			updateLstProductos(cate.getId());
+			Categoria categoria = (Categoria) parent.getItemAtPosition(position);
+			listViewProductos.setAdapter(new ProductoAdapter(getBaseContext(), productoControlller.getProductoByCategoria(categoria)));
 			selectItem(position);
 		}
 	}
-
-	private void updateLstProductos(final String co_categoria) {
+	
+	private void loadProductos() {
 		SQLiteDatabase db = dbAdmin.getWritableDatabase();
 		if (db != null) {
-			Cursor fila;
-			if (co_categoria.isEmpty()) {
-				fila = db.rawQuery(
-						"SELECT id, no_producto, va_producto, co_destino FROM productos",
-						null);
-			} else {
-				String[] campos = new String[] { "id", "no_producto", "va_producto", "co_destino" };
-				String[] args = new String[] { co_categoria };
-				// fila =
-				// db.rawQuery("SELECT co_producto, no_producto FROM productos WHERE co_categoria = ?",
-				// args);
-				fila = db.query("productos", campos, "co_categoria=?", args, null, null, null);
-			}
-			Data.LST_PRODUCTOS.clear();
+			Cursor fila = db.rawQuery("SELECT id, no_producto, va_producto, co_destino, co_categoria FROM productos", null);
 			Producto producto;
 			if (fila.moveToFirst()) {
 				do {
@@ -311,21 +249,22 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 					producto.setId(fila.getInt(0));
 					producto.setNombre(fila.getString(1));
 					producto.setPrecio(fila.getDouble(2));
-					producto.setDestino(fila.getInt(3));
+					producto.setDestino(Data.DESTINOS.getDestinoById(fila.getInt(3)));
 					producto.setCantidad(1.0);
 					producto.setEnviado(false);
-					Data.LST_PRODUCTOS.add(producto);
+					producto.setCategoria(Data.LST_CATEGORIAS.getCategoriaByCodigo(fila.getString(4)));
+					productoControlller.getProductos().add(producto);
 				} while (fila.moveToNext());
 			}
 			db.close();
-			listViewProductos.setAdapter(new BloqueAdapter(getBaseContext(), Data.LST_PRODUCTOS, BloqueAdapter.ITEM_PRODUCTO));
+			listViewProductos.setAdapter(new ProductoAdapter(this, productoControlller.getProductos()));
 		}
 	}
 
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
 		// mDrawerList.setItemChecked(position, true);
-		mDrawerLayout.closeDrawer(mDrawerList);
+		mDrawerLayout.closeDrawer(listViewCategorias);
 	}
 
 	@Override
@@ -338,32 +277,30 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 	public void onItemClick(AdapterView<?> parent, View arg1, int position, long id) {
 		Producto producto = (Producto) parent.getItemAtPosition(position);
 		insertPedido(producto, true);
-		((ListAdapter) swipeListView.getAdapter()).addItem(producto);
-		txtMontoTotalMesa.setText("TOTAL S/. " + Data.PEDIDO.getTotal());
+		((PedidoAdapter) listViewPedido.getAdapter()).addItem(producto);
+		txtMontoTotalMesa.setText("TOTAL S/. " + PEDIDO.getTotal());
 	}
 
 	private void insertPedido(Producto producto, boolean insertDB) {
 		SQLiteDatabase db = dbAdmin.getWritableDatabase();
 		if (db != null) {
 			final JSONObject m_fuente = new JSONObject();
-			String[] campos = new String[] { "va_producto", "co_destino" };
+			String[] campos = new String[] { "va_producto" };
 			String[] args = new String[] { String.valueOf(producto.getId()) };
 			Cursor fila = db.query("productos", campos, "id=?", args, null,
 					null, null);
 			if (fila.moveToFirst()) {
 				do {
 					try {
-						m_fuente.put("nmesa", mesa_name);
-						m_fuente.put("nmozo", mozo_name);
+						m_fuente.put("nmesa", PEDIDO.getMesa());
+						m_fuente.put("nmozo", PEDIDO.getMozo());
 						m_fuente.put("idprod", producto.getId());
-						//m_fuente.put("prod",xxxxx,gh,g, producto.getNombre());
-						//Log.e("PRODUCTO ENE", producto.getNombre());
 						m_fuente.put("cant", producto.getCantidad() + "");
 						m_fuente.put("precio", fila.getString(0));
 						m_fuente.put("pax", "1");
-						m_fuente.put("cod_dest", fila.getString(1));
+						//m_fuente.put("cod_dest", fila.getString(1));
 						m_fuente.put("mnsg", "");
-						m_fuente.put("co_destino", producto.getDestino());
+						m_fuente.put("co_destino", producto.getDestino().getId());
 						//m_fuente.put("fl_envio", producto.getDestino());
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -371,9 +308,9 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 				} while (fila.moveToNext());
 			}
 			db.close();
-
+			
 			if (insertDB) {
-				Data data = new Data(getBaseContext());
+				Data data = new Data(this);
 				data.insertPedido(m_fuente, producto);
 			}
 		}
@@ -382,13 +319,11 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 	public class LoadPedidoTask extends AsyncTask<Void, Void, Boolean> {
 
 		private Context context;
-		private String mesa_name;
-		private String mozo_name;
+		private Pedido pedido;
 
-		public LoadPedidoTask(Context context, String mesa_name, String mozo_name) {
+		public LoadPedidoTask(Context context, Pedido pedido) {
 			this.context = context;
-			this.mesa_name = mesa_name;
-			this.mozo_name = mozo_name;
+			this.pedido = pedido;
 		}
 
 		@Override
@@ -401,7 +336,7 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 			try {
 				// Looper.prepare();
 				Data data = new Data(this.context);
-				data.loadPedido(this.mesa_name);
+				data.loadPedido(pedido);
 				// Looper.loop();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -414,22 +349,13 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if (success) {
-				// tb.removeAllViews();
-				// for (Producto producto: Data.PEDIDO.getProducto()) {
-				// insertPedido(producto, false);
-				// }
-				// tb.setAdapter(new BloqueAdapter(this.context,
-				// Data.PEDIDO.getProducto(), BloqueAdapter.ITEM_PEDIDO));
-				listAdpter = new ListAdapter(this.context, Data.PEDIDO.getProducto(), txtMontoTotalMesa);
-				swipeListView.setAdapter(listAdpter);
-				// ((ListAdapter)swipeListView.getAdapter()).notifyDataSetChanged();
-				//TextView txtMontoTotalMesa = (TextView) findViewById(R.id.txtMontoTotalMesa);
-				txtMontoTotalMesa.setText("TOTAL S/. " + Data.PEDIDO.getTotal());
-				Data.PEDIDO.setMesa(this.mesa_name);
-				Data.PEDIDO.setMozo(this.mozo_name);
-				//Log.i("onPostExecute", "True");
+				pedidoAdapter = new PedidoAdapter(this.context, pedido, txtMontoTotalMesa);
+				listViewPedido.setAdapter(pedidoAdapter);
+				txtMontoTotalMesa.setText("TOTAL S/. " + pedido.getTotal());
+				//Data.PEDIDO.setMesa(this.mesa_name);
+				//Data.PEDIDO.setMozo(mozo);
 			} else {
-				//Log.i("onPostExecute", "False");
+				Log.i("onPostExecute", "False");
 			}
 			loadPedidoTask = null;
 			mProgress.dismiss();
@@ -463,21 +389,20 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 			boolean rpta = true;
 			for (Destino destino: Data.DESTINOS.getDestinos()) {
 				pedido = this.pedido;
-				ArrayList<Producto> productos = this.pedido.getProductoByDestino(destino);
+				ArrayList<Producto> productos = this.pedido.getProductosByDestino(destino);
 				if(productos.size()>0) {
 					pedido.setProducto(productos);
 					int[] printerStatus = new int[1];
 					PrintTicket printTicket = new PrintTicket(PedidoActivity.this, PrintTicket.TMU220, PrintTicket.ENVIO, destino, pedido);
 					printerStatus[0] = printTicket.printDoc();
 		    		if ((printerStatus[0] & Print.ST_PRINT_SUCCESS) == Print.ST_PRINT_SUCCESS){
-		    			Log.e("ERROR", "DICE QUE ENVIO");
 		    			final JSONObject obj = new JSONObject();
 						try {
 							obj.put("mesa", this.pedido.getMesa());
 							obj.put("destino", destino.getId());
 							Data data = new Data(this.context);
 							data.updateEnvio(obj);
-							data.loadPedido(this.pedido.getMesa());
+							data.loadPedido(pedido);
 						} catch (JSONException e) {
 							rpta = false;
 							e.printStackTrace();
@@ -501,12 +426,10 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if (success) {
-				/*for (Producto obj: this.pedido.getProducto()) {
-					obj.setEnviado(true);
-				}*/
-				listAdpter = new ListAdapter(this.context, Data.PEDIDO.getProducto(), txtMontoTotalMesa);
-				swipeListView.setAdapter(listAdpter);
-				txtMontoTotalMesa.setText("TOTAL S/. " + Data.PEDIDO.getTotal());
+				pedidoAdapter = new PedidoAdapter(this.context, pedido, txtMontoTotalMesa);
+				listViewPedido.setAdapter(pedidoAdapter);
+				pedidoAdapter.notifyDataSetChanged();
+				txtMontoTotalMesa.setText("TOTAL S/. " + pedido.getTotal());
 				Toast.makeText(
 						this.context,
 						"Pedido Enviado",
@@ -545,7 +468,6 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			Log.i("PRECUENTA", "Enviando");
 			int[] printerStatus = new int[1];
 			PrintTicket printTicket = new PrintTicket(PedidoActivity.this, PrintTicket.TMU220, PrintTicket.PRECUENTA, this.pedido);
 			printerStatus[0] = printTicket.printDoc();
@@ -554,16 +476,12 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
     		} else {
     			return false;
     		}
-			//return true;
 		}
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if (success) {
-				Toast.makeText(
-						this.context,
-						"Precuenta Enviada",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(this.context, "Precuenta Enviada", Toast.LENGTH_SHORT).show();
 			} else {
 				Log.i("onPostExecute", "False");
 			}
@@ -580,34 +498,26 @@ public class PedidoActivity extends FragmentActivity implements OnItemClickListe
 
 	@Override
 	public boolean onClose() {
-		listViewProductos.setAdapter(new BloqueAdapter(getBaseContext(), Data.LST_PRODUCTOS, BloqueAdapter.ITEM_PRODUCTO));
+		listViewProductos.setAdapter(new ProductoAdapter(this, productoControlller.getProductos()));
         return false;
 	}
 
-	@SuppressLint("DefaultLocale")
 	@Override
 	public boolean onQueryTextChange(String newText) {
 		if (!newText.isEmpty()){
             displayResults(newText.toUpperCase());
         } else {
-        	listViewProductos.setAdapter(new BloqueAdapter(getBaseContext(), Data.LST_PRODUCTOS, BloqueAdapter.ITEM_PRODUCTO));
+        	listViewProductos.setAdapter(new ProductoAdapter(this, productoControlller.getProductos()));
         }
 		return false;
 	}
 
 	@Override
 	public boolean onQueryTextSubmit(String query) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
 	private void displayResults(String nombre) {
-		ArrayList<Producto> lst_productos_search = new ArrayList<Producto>();
-		for (Producto p: Data.LST_PRODUCTOS) {
-			if(p.getNombre().contains(nombre)) {
-				lst_productos_search.add(p);
-			}
-		}
-		listViewProductos.setAdapter(new BloqueAdapter(getBaseContext(), lst_productos_search, BloqueAdapter.ITEM_PRODUCTO));
+		listViewProductos.setAdapter(new ProductoAdapter(this, productoControlller.getProductoContainName(nombre)));
     }
 }
