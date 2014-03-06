@@ -15,7 +15,7 @@
         android:text="@+id/label"
         android:textSize="35sp"
         android:visibility="gone" />
-    <com.gob.rewmobile.objects.Mesa
+    <com.ob.rewmobile.model.Mesa
         android:id="@+id/textviewmea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:textSize="20sp"
         android:visibility="gone" />
     <TextView
-	    android:id="@+id/textviewcategoria"
+	    android:id="@+id/textviewcategoriaold"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:textAppearance="?android:attr/textAppearanceListItemSmall"
@@ -50,4 +50,16 @@
 	    android:background="?android:attr/activatedBackgroundIndicator"
 	    android:minHeight="?android:attr/listPreferredItemHeightSmall"
 	    android:visibility="gone" />
+    <TextView
+        android:id="@+id/textviewcategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#3b9859"
+        android:textColor="@drawable/text_color"
+        android:gravity="center"
+        android:minHeight="100dp"
+        android:minWidth="100dp"
+        android:text="@+id/label"
+        android:textSize="33sp"
+        android:visibility="gone" />
 </LinearLayout>

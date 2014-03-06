@@ -1,5 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
     <item 
         android:id="@+id/action_enviar"
         android:orderInCategory="1"
@@ -10,9 +9,17 @@
         android:orderInCategory="2"
         android:showAsAction="never"
         android:title="@string/action_precuenta" />
-	<item android:id="@+id/search_productos"
-          android:title="@string/action_search"
-          android:icon="@android:drawable/ic_menu_search"
-          android:showAsAction="ifRoom|collapseActionView"
-          android:actionViewClass="android.widget.SearchView" />
+    <item 
+        android:id="@+id/action_mozo_pax"
+        android:title="@string/lbl_sinmozo_pax1"
+        android:showAsAction="ifRoom" />
+    <item 
+        android:title="@string/lbl_servicio"
+        android:showAsAction="ifRoom" />
+    <item 
+        android:id="@+id/action_servicio"
+        android:titleCondensed="@string/lbl_servicio" 
+        android:title="@string/lbl_servicio"
+        android:showAsAction="always|withText"
+        android:actionViewClass="android.widget.Switch" />
 </menu>

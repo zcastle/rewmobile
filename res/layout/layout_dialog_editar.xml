@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
-                android:text="Cantidad"
+                android:text="@string/lbl_cantidad"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
-                android:text="Producto"
+                android:text="@string/lbl_producto"
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:text="Mensaje"
+        android:text="@string/lbl_mensaje"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText

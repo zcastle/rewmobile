@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <EditTextPreference
-        android:dialogTitle="@string/setting_host"
-        android:title="@string/setting_host"
-        android:key="varHost"
-        android:defaultValue="@string/setting_host_default" />
-    <EditTextPreference
-        android:dialogTitle="@string/setting_host_port"
-        android:title="@string/setting_host_port"
-        android:key="varPort"
-        android:defaultValue="@string/setting_host_port_default" />
-	<EditTextPreference
-        android:dialogTitle="@string/setting_host_path"
-        android:title="@string/setting_host_path"
-        android:key="varPath"
-        android:defaultValue="@string/setting_host_path_default" />
+    <PreferenceCategory android:title="@string/lbl_conexion">
+        <EditTextPreference android:title="@string/lbl_host" android:key="keyHost" android:defaultValue="@string/lbl_host_default"/>
+        <EditTextPreference android:title="@string/lbl_host_port" android:key="keyPort" android:defaultValue="@string/lbl_host_port_default"/>
+        <EditTextPreference android:title="@string/lbl_host_path" android:key="keyPath" android:defaultValue="@string/lbl_host_path_default"/>
+    </PreferenceCategory>
+    <EditTextPreference android:title="@string/lbl_nombre" android:key="keyNombre"/>
+    <EditTextPreference android:title="@string/lbl_dia" android:key="keyDia"/>
+    <PreferenceCategory android:title="@string/lbl_comprobantes">
+        <EditTextPreference android:title="@string/lbl_serie_b" android:key="keySerieBoleta"/>
+        <EditTextPreference android:title="@string/lbl_numero_b" android:key="keyNumeroBoleta" android:inputType="number"/>
+        <EditTextPreference android:title="@string/lbl_serie_f" android:key="keySerieFactura"/>
+        <EditTextPreference android:title="@string/lbl_numero_f" android:key="keyNumeroFactura" android:inputType="number"/>
+    </PreferenceCategory>
+	<PreferenceCategory android:title="@string/lbl_impresoras">
+        <EditTextPreference android:title="@string/lbl_impresora_p" android:key="keyImpresoraP"/>
+        <EditTextPreference android:title="@string/lbl_impresora_b" android:key="keyImpresoraB"/>
+        <EditTextPreference android:title="@string/lbl_impresora_f" android:key="keyImpresoraF"/>
+    </PreferenceCategory>
 </PreferenceScreen>

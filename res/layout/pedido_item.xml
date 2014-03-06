@@ -65,6 +65,7 @@
 	        android:layout_gravity="center_vertical"
 	        android:layout_weight="1"
 	        android:paddingLeft="2dp"
+	        android:textColor="@android:color/black"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	    <TextView
@@ -74,6 +75,7 @@
 	        android:layout_gravity="center_vertical"
 	        android:gravity="right|center_vertical"
 	        android:minWidth="80dp"
+	        android:textColor="@android:color/black"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	    <TextView
@@ -83,6 +85,7 @@
 	        android:layout_gravity="center_vertical"
 	        android:gravity="right|center_vertical"
 	        android:minWidth="110dp"
+	        android:textColor="@android:color/black"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	    <TextView
@@ -93,6 +96,7 @@
 	        android:gravity="right|center_vertical"
 	        android:minWidth="130dp"
 	        android:paddingRight="3dp"
+	        android:textColor="@android:color/black"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</LinearLayout>

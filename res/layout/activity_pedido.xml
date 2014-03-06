@@ -5,112 +5,118 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     <!-- tools:context=".PedidoActivity" -->
-	<RelativeLayout
-	    android:id="@+id/content_frame"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"  >
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:baselineAligned="false" >
+		
+		        <LinearLayout
+		            android:layout_width="0dp"
+		            android:layout_height="match_parent"
+		            android:layout_weight="2"
+		            android:orientation="vertical" >
 	
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:baselineAligned="false" >
+					<LinearLayout
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:background="@android:color/holo_blue_dark" >
+		
+		                <TextView
+			                android:layout_width="0dp"
+			                android:layout_height="wrap_content"
+			                android:text="@string/header_producto"
+			                android:paddingLeft="3dp"
+			                android:textColor="@drawable/text_color"
+			                android:layout_weight="1"
+			                android:textAppearance="?android:attr/textAppearanceLarge" />
+			            <TextView
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:gravity="right"
+			                android:minWidth="80dp"
+			                android:text="@string/header_cantidad"
+			                android:textColor="@drawable/text_color"
+			                android:textAppearance="?android:attr/textAppearanceLarge" />
+			            <TextView
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:gravity="right"
+			                android:minWidth="110dp"
+			                android:text="@string/header_unitario"
+			                android:textColor="@drawable/text_color"
+			                android:textAppearance="?android:attr/textAppearanceLarge" />
+			            <TextView
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:gravity="right"
+			                android:minWidth="130dp"
+			                android:paddingRight="3dp"
+			                android:text="@string/header_total"
+			                android:textColor="@drawable/text_color"
+			                android:textAppearance="?android:attr/textAppearanceLarge" />
+		            </LinearLayout>
+		            
+		        	<com.fortysevendeg.android.swipelistview.SwipeListView
+				        android:id="@+id/grid_item_pedido"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:background="@android:color/darker_gray"
+				        swipe:swipeFrontView="@+id/front"
+			            swipe:swipeBackView="@+id/back"
+			            swipe:swipeDrawableChecked="@drawable/choice_selected"
+			            swipe:swipeDrawableUnchecked="@drawable/choice_unselected"
+			            swipe:swipeCloseAllItemsWhenMoveList="true"
+			            swipe:swipeMode="both" />
 	
-	        <LinearLayout
-	            android:layout_width="0dp"
-	            android:layout_height="match_parent"
-	            android:layout_weight="2"
-	            android:orientation="vertical" >
-
-				<LinearLayout
+		        </LinearLayout>
+	            <LinearLayout
+					android:orientation="vertical"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1" >
+		        	<SearchView
+		        	    android:layout_width="wrap_content"
+	                	android:layout_height="wrap_content" android:id="@+id/search_productos"/>
+			        <ListView 
+					    android:id="@+id/gridviewproductos"
+					    android:layout_width="match_parent" 
+					    android:layout_height="match_parent"
+					    android:verticalSpacing="1dp"
+					    android:horizontalSpacing="1dp"
+					    android:gravity="center"
+					    android:background="@android:color/black"
+					/>
+		        </LinearLayout>
+		    </LinearLayout>
+        </RelativeLayout>
+	    <!-- <LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="bottom" >
+	            <TextView
+	                android:id="@+id/txtMontoTotalMesa"
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
-	                android:background="@android:color/holo_blue_dark" >
-	
-	                <TextView
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:text="@string/header_producto"
-		                android:paddingLeft="3dp"
-		                android:textColor="@drawable/text_color"
-		                android:layout_weight="1"
-		                android:textAppearance="?android:attr/textAppearanceLarge" />
-		            <TextView
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:gravity="right"
-		                android:minWidth="80dp"
-		                android:text="@string/header_cantidad"
-		                android:textColor="@drawable/text_color"
-		                android:textAppearance="?android:attr/textAppearanceLarge" />
-		            <TextView
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:gravity="right"
-		                android:minWidth="110dp"
-		                android:text="@string/header_unitario"
-		                android:textColor="@drawable/text_color"
-		                android:textAppearance="?android:attr/textAppearanceLarge" />
-		            <TextView
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:gravity="right"
-		                android:minWidth="130dp"
-		                android:paddingRight="3dp"
-		                android:text="@string/header_total"
-		                android:textColor="@drawable/text_color"
-		                android:textAppearance="?android:attr/textAppearanceLarge" />
-	            </LinearLayout>
-	            
-	        	<com.fortysevendeg.android.swipelistview.SwipeListView
-			        android:id="@+id/grid_item_pedido"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:background="@android:color/darker_gray"
-			        swipe:swipeFrontView="@+id/front"
-		            swipe:swipeBackView="@+id/back"
-		            swipe:swipeDrawableChecked="@drawable/choice_selected"
-		            swipe:swipeDrawableUnchecked="@drawable/choice_unselected"
-		            swipe:swipeCloseAllItemsWhenMoveList="true"
-		            swipe:swipeMode="both" />
-
-	        	<!-- <RelativeLayout
-			         android:layout_width="match_parent"
-			         android:layout_height="wrap_content" >
-	                <TextView
-	                    android:id="@+id/txtMontoTotalMesa"
-	                    android:layout_width="wrap_content"
-	                    android:layout_height="wrap_content"
-	                    android:textAppearance="?android:attr/textAppearanceLarge" />
-                </RelativeLayout> -->
-	        </LinearLayout>
-            <LinearLayout
-				android:orientation="vertical"
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1" >
-	        	<!-- <SearchView
-	        	    android:layout_width="wrap_content"
-                	android:layout_height="wrap_content" android:id="@+id/search_productos"/> -->
-		        <ListView 
-				    android:id="@+id/gridviewproductos"
-				    android:layout_width="match_parent" 
-				    android:layout_height="match_parent"
-				    android:verticalSpacing="1dp"
-				    android:horizontalSpacing="1dp"
-				    android:gravity="center"
-				    android:background="@android:color/black"
-				/>
-	        </LinearLayout>
-	    </LinearLayout>
-	
-	</RelativeLayout>
-	<ListView
-	   	android:id="@+id/listViewCategorias"
-	    android:layout_width="240dp"
+	                android:textColor="@android:color/white"
+	                android:background="@android:color/black"
+	                android:textSize="35sp"
+	                android:textAppearance="?android:attr/textAppearanceLarge" />
+	    </LinearLayout> -->
+	    
+	<GridView
+	    android:id="@+id/listViewCategorias"
+	    android:layout_width="match_parent" 
 	    android:layout_height="match_parent"
 	    android:layout_gravity="start"
-	    android:choiceMode="singleChoice"
-	    android:divider="@android:color/transparent"
-	    android:dividerHeight="0dp"
-	    android:background="#111" />
+	    android:columnWidth="200dp"
+	    android:numColumns="auto_fit"
+	    android:verticalSpacing="1dp"
+	    android:horizontalSpacing="1dp"
+	    android:stretchMode="columnWidth"
+	    android:gravity="center"
+	    android:background="@android:color/black"
+	/>
 </android.support.v4.widget.DrawerLayout>

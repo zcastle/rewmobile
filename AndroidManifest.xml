@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gob.rewmobile"
+    package="com.ob.rewmobile"
     android:versionCode="2"
     android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.gob.rewmobile.MainActivity"
+            android:name="com.ob.rewmobile.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
             <intent-filter>
@@ -26,37 +26,59 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gob.rewmobile.AccesoActivity"
+            android:name="com.ob.rewmobile.AccesoActivity"
             android:label="@string/title_activity_acceso"
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.gob.rewmobile.FragmentMesasActivity"
+            android:name="com.ob.rewmobile.FragmentMesasActivity"
             android:label="@string/title_activity_fragment_mesas"
-            android:parentActivityName="com.gob.rewmobile.AccesoActivity"
+            android:parentActivityName="com.ob.rewmobile.AccesoActivity"
             android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gob.rewmobile.AccesoActivity" />
+                android:value="com.ob.rewmobile.AccesoActivity" />
         </activity>
         <activity
-            android:name="com.gob.rewmobile.PedidoActivity"
+            android:name="com.ob.rewmobile.PedidoActivity"
             android:label="@string/title_activity_pedido"
-            android:parentActivityName="com.gob.rewmobile.FragmentMesasActivity"
+            android:parentActivityName="com.ob.rewmobile.FragmentMesasActivity"
             android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gob.rewmobile.FragmentMesasActivity" />
+                android:value="com.ob.rewmobile.FragmentMesasActivity" />
         </activity>
         <activity
-            android:name="com.gob.rewmobile.ConfiguracionActivity"
+            android:name="com.ob.rewmobile.ConfiguracionActivity"
             android:label="@string/action_settings"
-            android:parentActivityName="com.gob.rewmobile.MainActivity"
+            android:parentActivityName="com.ob.rewmobile.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ob.rewmobile.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.ob.rewmobile.PagarActivity"
+            android:label="@string/title_activity_pagar"
+            android:parentActivityName="com.ob.rewmobile.PedidoActivity"
             android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gob.rewmobile.MainActivity" />
+                android:value="com.ob.rewmobile.PedidoActivity" />
         </activity>
+        <activity
+            android:name="com.ob.rewmobile.ConfigActivity"
+            android:label="@string/title_activity_configuracion"
+            android:parentActivityName="com.ob.rewmobile.AccesoActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ob.rewmobile.AccesoActivity" />
+        </activity>
+
+        <service
+            android:name="com.ob.rewmobile.service.SyncService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
