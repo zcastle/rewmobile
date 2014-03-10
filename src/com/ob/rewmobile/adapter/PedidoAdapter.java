@@ -57,14 +57,17 @@ public class PedidoAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
+	@Override
 	public int getCount() {
 		return productos.size();
 	}
 
+	@Override
 	public Producto getItem(int i) {
 		return productos.get(i);
 	}
 
+	@Override
 	public long getItemId(int i) {
 		return (long) i;
 	}

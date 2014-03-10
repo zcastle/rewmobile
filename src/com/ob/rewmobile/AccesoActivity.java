@@ -1,5 +1,7 @@
 package com.ob.rewmobile;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -21,6 +23,7 @@ import com.ob.rewmobile.adapter.MozoAdapter;
 import com.ob.rewmobile.model.Usuario;
 import com.ob.rewmobile.service.SyncService;
 import com.ob.rewmobile.task.LoadDataTask;
+import com.ob.rewmobile.util.Conn;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.Globals;
 
@@ -60,6 +63,7 @@ public class AccesoActivity extends Activity implements OnItemClickListener {
 			break;
 		case R.id.action_recargar_productos:
 			//new LoadDataTask(this, true).execute();
+			backup();
 			break;
 		}
 		return true;
@@ -100,6 +104,16 @@ public class AccesoActivity extends Activity implements OnItemClickListener {
 			startActivity(intent);
 			overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
 			finish();
+		}
+	}
+	
+	private void backup() {
+		Conn conn = new Conn(this);
+		try {
+			conn.backup();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

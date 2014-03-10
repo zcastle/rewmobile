@@ -58,9 +58,9 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 	private DrawerLayout drawerLayout;
 	private ActionBarDrawerToggle drawerToggle;
 	
-	private ListView listViewProductos;
+	private ListView lvProductos;
 
-	private SwipeListView listViewPedido;
+	private SwipeListView lvPedido;
 	private TextView txtMontoTotalMesa;
 	
 	private SearchView searchView;
@@ -87,9 +87,9 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		listViewCategorias.setAdapter(new CategoriasAdapter(this, Data.categoriaController.getCategorias()));
 		listViewCategorias.setOnItemClickListener(new DrawerItemClickListener());
 		
-		listViewProductos = (ListView) findViewById(R.id.gridviewproductos);
-		listViewProductos.setAdapter(new ProductoAdapter(this, Data.productoController.getProductos()));
-		listViewProductos.setOnItemClickListener(this);
+		lvProductos = (ListView) findViewById(R.id.gridviewproductos);
+		lvProductos.setAdapter(new ProductoAdapter(this, Data.productoController.getProductos()));
+		lvProductos.setOnItemClickListener(this);
 
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
 			public void onDrawerClosed(View view) {
@@ -106,12 +106,14 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 
 		Bundle bundle = getIntent().getExtras();
 		acceso_id = bundle.getInt("mozo_id");
-		
-		
+
 		getActionBar().setTitle(bundle.getString("mozo_name"));
 		getActionBar().setSubtitle("Mesa ".concat(bundle.getString("mesa_name")));
+		
+		PEDIDO = new PedidoController();
+		PEDIDO.setMesa(bundle.getString("mesa_name"));
 
-		SearchViewListener searchViewProductos = new SearchViewListener(this, listViewProductos);
+		SearchViewListener searchViewProductos = new SearchViewListener(this, lvProductos);
 		searchView = (SearchView) findViewById(R.id.search_productos);
         searchView.setOnQueryTextListener(searchViewProductos);
         searchView.setOnCloseListener(searchViewProductos);
@@ -122,10 +124,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 
 		txtMontoTotalMesa = (TextView) findViewById(R.id.txtMontoTotalMesa);
 		txtMontoTotalMesa.setText("TOTAL S/. 0.00");
-		//PEDIDO.setProductos(new ArrayList<Producto>());
-		//pedidoAdapter = new PedidoAdapter(this, PEDIDO, txtMontoTotalMesa);
-		listViewPedido = (SwipeListView) findViewById(R.id.grid_item_pedido);
-		//listViewPedido.setAdapter(pedidoAdapter);
+		lvPedido = (SwipeListView) findViewById(R.id.grid_item_pedido);
 	}
 
 	private void setupActionBar() {
@@ -220,7 +219,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		final EditText txtMesa = (EditText) viewSelectMesa.findViewById(R.id.txtMesa);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setView(viewSelectMesa);
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				PEDIDO = new PedidoController();
@@ -235,7 +234,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 				//new LoadPedidoTask(PedidoActivity.this, PEDIDO, listViewPedido, txtMontoTotalMesa, mnuItemMozoPax).execute();
 				try {
 					if(new LoadPedidoTask(PedidoActivity.this, PEDIDO).execute().get()) {
-						listViewPedido.setAdapter(new PedidoAdapter(PedidoActivity.this, PEDIDO, txtMontoTotalMesa));
+						lvPedido.setAdapter(new PedidoAdapter(PedidoActivity.this, PEDIDO, txtMontoTotalMesa));
 						((Activity) PedidoActivity.this).getActionBar().setSubtitle("Mesa ".concat(PEDIDO.getMesa()));
 						txtMontoTotalMesa.setText("TOTAL S/. " + Util.format(PEDIDO.getTotal()));
 						if (PEDIDO.getProductos().size()>0) {
@@ -311,7 +310,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setView(viewEditMesa);
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				PEDIDO.setMozo((Usuario)spinner.getSelectedItem());
@@ -340,13 +339,13 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 			new AlertDialog.Builder(this)
 			.setMessage("¿Esta seguro de querer enviar el pedido?")
 			.setCancelable(false)
-			.setPositiveButton("Si", new DialogInterface.OnClickListener(){
+			.setPositiveButton(R.string.si, new DialogInterface.OnClickListener(){
 				@Override
 		        public void onClick(DialogInterface dialog, int which) {
-					new EnviarPedidoTask(PedidoActivity.this, PEDIDO, listViewPedido, txtMontoTotalMesa).execute();
+					new EnviarPedidoTask(PedidoActivity.this, PEDIDO, lvPedido, txtMontoTotalMesa).execute();
 		        }
 			})
-			.setNegativeButton("No", null)
+			.setNegativeButton(R.string.no, null)
 		    .show();
 		} else {
 			Toast.makeText(this, "No se puede ENVIAR en la mesa 0", Toast.LENGTH_SHORT).show();
@@ -379,7 +378,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Categoria categoria = (Categoria) parent.getItemAtPosition(position);
-			listViewProductos.setAdapter(new ProductoAdapter(getBaseContext(), Data.productoController.getProductoByCategoria(categoria)));
+			lvProductos.setAdapter(new ProductoAdapter(getBaseContext(), Data.productoController.getProductoByCategoria(categoria)));
 			selectItem(position);
 		}
 	}
@@ -408,7 +407,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 				e1.printStackTrace();
 			}
 			new AddProductoTask(this, PEDIDO, newProducto, false).execute();
-			((PedidoAdapter) listViewPedido.getAdapter()).addItem(newProducto);
+			((PedidoAdapter) lvPedido.getAdapter()).addItem(newProducto);
 			txtMontoTotalMesa.setText("TOTAL S/. " + Util.format(PEDIDO.getTotal()));
 		}
 	}

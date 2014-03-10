@@ -63,6 +63,8 @@
     <string name="eliminar">ELIMINAR</string>
     <string name="editar">EDITAR</string>
     <string name="cerrar">CERRAR</string>
+    <string name="si">SI</string>
+    <string name="no">NO</string>
     <string name="visit47">Visit 47deg</string>
     <string name="goToGitHub">Go to GitHub</string>
     <string name="dontShow">Don\'t show this message again</string>
@@ -124,5 +126,8 @@
     <string name="lbl_igv">IGV</string>
     <string name="lbl_serv">SERV.</string>
     <string name="lbl_total">TOTAL</string>
+    <string name="lbl_ruc_0">00000000000</string>
+    <string name="lbl_empresa_sac">EMPRESA SAC</string>
+    <string name="lbl_x">X</string>
 
 </resources>

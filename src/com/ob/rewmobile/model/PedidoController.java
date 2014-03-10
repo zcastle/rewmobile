@@ -9,6 +9,7 @@ import org.json.JSONException;
 import android.content.Context;
 
 import com.ob.rewmobile.util.Data;
+import com.ob.rewmobile.util.Globals;
 
 
 public class PedidoController {
@@ -21,6 +22,7 @@ public class PedidoController {
 	private int pax;
 	private boolean servicio = true;
 	private Cliente cliente = null;
+	private ArrayList<Pago> pagos = new ArrayList<Pago>(); 
 
 	public PedidoController() {
 		productos = new ArrayList<Producto>();
@@ -101,6 +103,23 @@ public class PedidoController {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public ArrayList<Pago> getPagos() {
+		return pagos;
+	}
+
+	public void setPagos(ArrayList<Pago> pagos) {
+		this.pagos = pagos;
+	}
+	
+	public boolean isPagoCompleto() {
+		//boolean success = false;
+		double valorPagado = 0.0;
+		for (Pago pago: getPagos())
+			valorPagado += pago.getMoneda().equals(Globals.MONEDA_D) ? pago.getValor() * pago.getCambio() : pago.getValor();
+		//if (valorPagado>=getTotal()) success = true;
+		return valorPagado>=getTotal();
 	}
 
 	public Double getTotal() {

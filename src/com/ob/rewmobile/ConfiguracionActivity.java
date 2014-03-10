@@ -1,7 +1,7 @@
 package com.ob.rewmobile;
 
 import com.ob.rewmobile.R;
-import com.ob.rewmobile.model.Equipo;
+import com.ob.rewmobile.model.Caja;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.Globals;
 
@@ -93,7 +93,7 @@ public class ConfiguracionActivity extends PreferenceActivity {
 			EditTextPreference txtImpresoraB = (EditTextPreference) findPreference("keyImpresoraB");
 			EditTextPreference txtImpresoraF = (EditTextPreference) findPreference("keyImpresoraF");
 			
-			Equipo equipo = Data.equipoController.getEquipo();
+			Caja equipo = Data.cajaController.getCaja();
 			
 			if(equipo.getId()>0) {
 				txtNombre.setSummary(equipo.getCentroCosto().getEmpresa().getNombre());

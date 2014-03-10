@@ -2,7 +2,9 @@ package com.ob.rewmobile.util;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -20,7 +22,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.ob.rewmobile.model.Categoria;
 import com.ob.rewmobile.model.CategoriaController;
@@ -32,16 +36,18 @@ import com.ob.rewmobile.model.Destino;
 import com.ob.rewmobile.model.DestinoController;
 import com.ob.rewmobile.model.Distrito;
 import com.ob.rewmobile.model.Empresa;
-import com.ob.rewmobile.model.Equipo;
-import com.ob.rewmobile.model.EquipoController;
+import com.ob.rewmobile.model.Caja;
+import com.ob.rewmobile.model.CajaController;
 import com.ob.rewmobile.model.Mesa;
 import com.ob.rewmobile.model.PedidoController;
 import com.ob.rewmobile.model.Producto;
 import com.ob.rewmobile.model.ProductoController;
 import com.ob.rewmobile.model.Provincia;
+import com.ob.rewmobile.model.Tarjeta;
 import com.ob.rewmobile.model.UbigeoController;
 import com.ob.rewmobile.model.Usuario;
 import com.ob.rewmobile.model.UsuarioController;
+//import com.ob.rewmobile.util.AdminSQLiteOpenHelper.Tabla;
 
 public class Data {
 
@@ -52,9 +58,10 @@ public class Data {
 	public static ProductoController productoController;
 	public static DestinoController destinoController;
 	public static String URL_HOST;
-	public static EquipoController equipoController;
+	public static CajaController cajaController;
 	public static UbigeoController ubigeoController;
 	public static ClienteController clienteController;
+	public static ArrayList<Tarjeta> tarjetaController;
 
 	public Data(Context context) {
 		this.context = context;
@@ -65,18 +72,25 @@ public class Data {
 		URL_HOST = "http://".concat(URL_HOST).concat(":").concat(PORT).concat("/").concat(PATH).concat("/");
 	}
 	
+	public void loadTarjetas() {
+		tarjetaController = new ArrayList<Tarjeta>();
+		tarjetaController.add(new Tarjeta(1, "EFECTIVO"));
+		tarjetaController.add(new Tarjeta(2, "VISA"));
+		tarjetaController.add(new Tarjeta(3, "MASTERCARD"));
+	}
+	
 	public void loadEquipo(String name, boolean force) throws ClientProtocolException, URISyntaxException, IOException, JSONException {
-		equipoController = new EquipoController();
+		cajaController = new CajaController();
 		Conn conn = new Conn(context);
 		Cursor e = conn.getDB().rawQuery("SELECT id, nombre, tipo, serie_b, numero_b, serie_f, numero_f, impresora_p, impresora_b, impresora_f, tc, servicio, dia FROM equipo", null);
 		Cursor cc = conn.getDB().rawQuery("SELECT id, codigo, nombre, direccion, distrito FROM centrocosto", null);
 		Cursor ee = conn.getDB().rawQuery("SELECT id, codigo, ruc, razon, nombre, direccion, distrito, igv FROM empresa", null);
 		if (e.moveToFirst()) {
 			if (force) {
-				equipoController.setEquipo(getEquipoFromUrl(name, conn));
+				cajaController.setCaja(getEquipoFromUrl(name, conn));
 			} else {
 				//do {
-					Equipo equipo = new Equipo();
+					Caja equipo = new Caja();
 					equipo.setId(e.getInt(0));
 					equipo.setNombre(e.getString(1));
 					equipo.setTipo(e.getString(2));
@@ -118,11 +132,11 @@ public class Data {
 						centroCosto.setEmpresa(empresa);
 					}
 					
-					equipoController.setEquipo(equipo);
+					cajaController.setCaja(equipo);
 				//} while (e.moveToNext());
 			}
 		} else {
-			equipoController.setEquipo(getEquipoFromUrl(name, conn));
+			cajaController.setCaja(getEquipoFromUrl(name, conn));
 		}
 		e.close();
 		cc.close();
@@ -130,8 +144,8 @@ public class Data {
 		conn.close();
 	}
 	
-	private Equipo getEquipoFromUrl(String name, Conn conn) throws ClientProtocolException, URISyntaxException, IOException, JSONException {
-		Equipo equipo = null;
+	private Caja getEquipoFromUrl(String name, Conn conn) throws ClientProtocolException, URISyntaxException, IOException, JSONException {
+		Caja equipo = null;
 		conn.getDB().delete("equipo", null, null);
 		conn.getDB().delete("centrocosto", null, null);
 		conn.getDB().delete("empresa", null, null);
@@ -174,7 +188,7 @@ public class Data {
 			r.put("igv", e.getDouble("e_igv"));
 			conn.getDB().insert("empresa", null, r);
 			
-			equipo = new Equipo();
+			equipo = new Caja();
 			equipo.setId(e.getInt("id"));
 			equipo.setNombre(e.getString("nombre"));
 			equipo.setTipo(e.getString("tipo"));
@@ -532,7 +546,7 @@ public class Data {
 	
 	private boolean existeRuc(Cliente cliente, Conn conn) {
 		boolean existe = false;
-		Cursor c = conn.getQuery("clientes", new String[] {"*"}, "ruc=?", new String[] {cliente.getRuc()});
+		Cursor c = conn.query("clientes", new String[] {"*"}, "ruc=?", new String[] {cliente.getRuc()});
 		if (c.moveToFirst()) {
 			existe = true;
 		}
@@ -556,7 +570,7 @@ public class Data {
 	public Cliente getCienteByRuc(String ruc) {
 		Cliente cliente = null;
 		Conn conn = new Conn(context);
-		Cursor c = conn.getQuery("clientes", new String[] {"ruc","razon","direccion","distrito_id"}, "ruc=?", new String[] {ruc});
+		Cursor c = conn.query("clientes", new String[] {"ruc","razon","direccion","distrito_id"}, "ruc=?", new String[] {ruc});
 		if (c.moveToFirst()) {
 			cliente = new Cliente();
 			cliente.setRuc(c.getString(0));
@@ -591,9 +605,9 @@ public class Data {
 		Producto producto;
 		if (Globals.MODULO.equals(Globals.MODULO_CAJA)) {
 			Conn conn = new Conn(context);
-			String[] campos = new String[] {"*"};
-			String[] args = new String[] {pedido.getMesa()};
-			Cursor f = conn.getDB().query("pedidos", campos, "mesa=?", args, null, null, null);
+			String[] campos = new String[] {"id","mozo_id","cajero_id","pax","producto_id","producto","cantidad",
+					"precio","mensaje","enviado","servicio","cliente_ruc"};
+			Cursor f = conn.query("pedidos", campos, "mesa=?", new String[] {pedido.getMesa()});
 			if (f.moveToFirst()) {
 				do {
 					//mesa text, mozo_id integer, cajero_id integer, pax integer, atencion_id integer, producto_id integer, producto text, cantidad real, precio real, mensaje text, enviado text, sync text
@@ -605,17 +619,17 @@ public class Data {
 					pedido.setCajero(Data.usuarioController.getUsuarioById(f.getInt(2)));
 					pedido.setPax(f.getInt(3));
 					producto = new Producto();
-					producto.setIdAtencion(f.getInt(4));
-					producto.setId(f.getInt(5));
-					producto.setNombre(f.getString(6));
-					producto.setCantidad(f.getDouble(7));
-					producto.setPrecio(f.getDouble(8));
-					producto.setMensaje(f.getString(9));
+					producto.setIdAtencion(f.getInt(0));
+					producto.setId(f.getInt(4));
+					producto.setNombre(f.getString(5));
+					producto.setCantidad(f.getDouble(6));
+					producto.setPrecio(f.getDouble(7));
+					producto.setMensaje(f.getString(8));
+					producto.setEnviado(f.getString(9).equals("S") ? true : false);
 					producto.setDestino(productoController.getDestinoByProducto(producto));
-					producto.setEnviado(f.getString(10).equals("S") ? true : false);
 					pedido.getProductos().add(producto);
-					pedido.setServicio(f.getString(12).equals("S") ? true : false);
-					if (!f.getString(13).equals("0")) {
+					pedido.setServicio(f.getString(10).equals("S") ? true : false);
+					if (!f.getString(11).equals("0")) {
 						pedido.setCliente(getCienteByRuc(f.getString(13)));
 					}
 				} while(f.moveToNext());
@@ -649,20 +663,20 @@ public class Data {
 		int id = 0;
 		if (Globals.MODULO.equals(Globals.MODULO_CAJA) && !sync) {
 			Conn conn = new Conn(context);
-			int atencion_id = 1;
+			/*int atencion_id = 1;
 			String[] campos = new String[] {"MAX(atencion_id)"};
 			String[] args = new String[] {pedido.getMesa()};
 			Cursor f = conn.getDB().query("pedidos", campos, "mesa=?", args, null, null, null);
 			if (f.moveToFirst()) {
 				atencion_id = f.getInt(0)+1;
 			}
-			f.close();
+			f.close();*/
 			ContentValues r = new ContentValues();
 			r.put("mesa", pedido.getMesa());
 			r.put("mozo_id", pedido.getMozo().getId());
 			r.put("cajero_id", pedido.getCajero().getId());
 			r.put("pax", pedido.getPax());
-			r.put("atencion_id", atencion_id);
+			//r.put("atencion_id", atencion_id);
 			r.put("producto_id", producto.getId());
 			r.put("producto", producto.getNombre());
 			r.put("cantidad", producto.getCantidad());
@@ -677,7 +691,7 @@ public class Data {
 				r.put("cliente_ruc", "0");
 			}
 			r.put("sync", "");
-			conn.getDB().insert("pedidos", null, r);
+			conn.insert("pedidos", r);
 			conn.close();
 		}
 		if (Globals.MODULO.equals(Globals.MODULO_PEDIDO) || sync) {
@@ -710,9 +724,8 @@ public class Data {
 
 	public void deleteProducto(Producto producto, boolean sync) throws JSONException, ClientProtocolException, IOException{
 		if (Globals.MODULO.equals(Globals.MODULO_CAJA) && !sync) {
-			String[] args = new String[] {producto.getIdAtencion()+""};
 			Conn conn = new Conn(context);
-			conn.getDB().delete("pedidos", "atencion_id=?", args);
+			conn.getDB().delete("pedidos", "id=?", new String[] {producto.getIdAtencion()+""});
 			conn.close();
 		} 
 		if (Globals.MODULO.equals(Globals.MODULO_PEDIDO) || sync) {
@@ -739,9 +752,8 @@ public class Data {
 			r.put("cantidad", producto.getCantidad());
 			r.put("producto", producto.getNombre());
 			r.put("mensaje", producto.getMensaje());
-			String[] args = new String[] {producto.getIdAtencion()+""};
 			Conn conn = new Conn(context);
-			conn.getDB().update("pedidos", r, "atencion_id=?", args);
+			conn.getDB().update("pedidos", r, "id=?", new String[] {producto.getIdAtencion()+""});
 			conn.close();
 		}
 		if (Globals.MODULO.equals(Globals.MODULO_PEDIDO) || sync) {
@@ -804,13 +816,11 @@ public class Data {
 	}
 
 	public void updateEnvio(PedidoController pedido, Destino destino, boolean sync) throws ClientProtocolException, IOException, JSONException {
-		
 		if (Globals.MODULO.equals(Globals.MODULO_CAJA) && !sync) {
 			ContentValues r = new ContentValues();
 			r.put("enviado", "S");
-			String[] args = new String[] {pedido.getMesa(), destino.getId()+""};
 			Conn conn = new Conn(context);
-			conn.getDB().update("pedidos", r, "mesa=? AND destino_id=?", args);
+			conn.getDB().update("pedidos", r, "mesa=? AND destino_id=?", new String[] {pedido.getMesa(), destino.getId()+""});
 			conn.close();
 		}
 		if (Globals.MODULO.equals(Globals.MODULO_PEDIDO) || sync) {
@@ -833,6 +843,81 @@ public class Data {
 			//String temp = EntityUtils.toString(response.getEntity());
 			//Log.i("updateFlEnvio.php", temp);
 		}
+	}
+	
+	public boolean pagarCuenta(PedidoController pedido, String tipoVenta, boolean sync) {
+		boolean success = true;
+		
+		Conn conn = new Conn(context);
+		conn.getDB().beginTransaction();
+		try {
+			ContentValues values;
+			String fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+			String tipoDoc = "";
+			String serie = "";
+			int numero = 0;
+			String ruc = "";
+			String valor = pedido.getTotal().toString();
+			int mozoId = pedido.getMozo().getId();
+			int cajeroId = pedido.getCajero().getId();
+			if (pedido.getCliente()==null) {
+				tipoDoc = "BV";
+				serie = cajaController.getCaja().getSerieBoleta();
+				numero = cajaController.getCaja().getNumeroBoleta();
+			} else {
+				tipoDoc = "FV";
+				serie = cajaController.getCaja().getSerieFactura();
+				numero = cajaController.getCaja().getNumeroFactura();
+				ruc = pedido.getCliente().getRuc();
+			}
+			
+			//CABECERA DE VENTAS
+			values = new ContentValues();
+			values.put("fecha", fechaHora);
+			values.put("tipo", tipoDoc);
+			values.put("serie", serie);
+			values.put("numero", numero);
+			values.put("ruc", ruc);
+			values.put("valor", valor);
+			values.put("dscto", 0.0);
+			values.put("mozo_id", mozoId);
+			values.put("cajero_id", cajeroId);
+			long ventaId = conn.insert("ventasc", values);
+			
+			//DETALLE DE VENTAS
+			values = new ContentValues();
+			values.put("venta_id", ventaId);
+			for (Producto producto: pedido.getProductos()) {
+				values.put("producto_id", producto.getId());
+				values.put("producto", producto.getNombre());
+				values.put("cantidad", producto.getCantidad());
+				values.put("precio", producto.getPrecio());
+				values.put("mensaje", producto.getMensaje());
+				long ventaDId = conn.insert("ventasd", values);
+			}
+			
+			//REGISTRO DE PAGO
+			if (tipoVenta.equals(Globals.VENTA_RAPIDA)) {
+				values = new ContentValues();
+				values.put("venta_id", ventaId);
+				values.put("moneda", "S");
+				values.put("valor", valor);
+				values.put("cambio", Globals.VA_TC);
+				values.put("tarjeta", "EFECTIVO");
+				conn.insert("ventasp", values);
+			} else if (tipoVenta.equals(Globals.VENTA_DETALLADA)) {
+				
+			}
+			
+			conn.getDB().setTransactionSuccessful();
+		} catch (SQLiteException e) {
+			Log.e("SQLiteException", e.getMessage());
+			success = false;
+		} finally {
+			conn.getDB().endTransaction();
+			conn.close();
+		}
+		return success;
 	}
 
 	private static JSONArray getJSONObject(String url) throws ClientProtocolException, URISyntaxException, IOException, JSONException {

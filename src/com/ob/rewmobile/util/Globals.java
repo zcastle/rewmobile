@@ -21,12 +21,18 @@ public class Globals {
 	
 	public static PedidoController PEDIDO_PAGAR;
 	
-	public static final String MONEDA_S = "S/. ";
-	public static final String MONEDA_D = "$. ";
-	public static final String MONEDA = MONEDA_S;
+	public static final String MONEDA_SIMBOLO_SOLES = "S/. ";
+	public static final String MONEDA_SIMBOLO_DOLARES = "$. ";
+	public static final String MONEDA_SIMBOLO = MONEDA_SIMBOLO_SOLES;
+	public static final String MONEDA_S = "S";
+	public static final String MONEDA_D = "D";
+	public static final String MONEDA = "S";
 	
 	public static String IMPRESORA_P = "";
 	public static String IMPRESORA_B = "";
 	public static String IMPRESORA_F = "";
+	
+	public static String VENTA_RAPIDA = "VR";
+	public static String VENTA_DETALLADA = "VD";
 	
 }

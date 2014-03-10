@@ -1,18 +1,30 @@
 package com.ob.rewmobile.util;
 
+import java.io.IOException;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 public class Conn {
 
-	private AdminSQLiteOpenHelper adminDB = null;
+	private AdminSQLiteOpenHelper2 adminDB = null;
 	private SQLiteDatabase db = null;
 	
 	public Conn(Context context) {
-		adminDB = new AdminSQLiteOpenHelper(context, "DBREWMobile", null, 1);
-		db = adminDB.getWritableDatabase();
+		adminDB = new AdminSQLiteOpenHelper2(context);
+		try {
+			db = adminDB.open();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//db = adminDB.getWritableDatabase();
+	}
+	
+	public void backup() throws IOException {
+		//adminDB.backupDatabase();
 	}
 	
 	public SQLiteDatabase getDB() {
@@ -25,12 +37,12 @@ public class Conn {
 		adminDB.close();
 	}
 	
-	public Cursor getQuery(String tb, String[] fields, String where, String[] args) {
+	public Cursor query(String tb, String[] fields, String where, String[] args) {
 		return getDB().query(tb, fields, where, args, null, null, null);
 	}
 	
-	public void insert(String tb, ContentValues values) {
-		getDB().insert(tb, null, values);
+	public long insert(String tb, ContentValues values) {
+		return getDB().insert(tb, null, values);
 	}
 
 }

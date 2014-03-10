@@ -8,7 +8,7 @@ import org.json.JSONException;
 
 import com.ob.rewmobile.R;
 import com.ob.rewmobile.AccesoActivity;
-import com.ob.rewmobile.model.Equipo;
+import com.ob.rewmobile.model.Caja;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.DialogCarga;
 import com.ob.rewmobile.util.Globals;
@@ -47,8 +47,9 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 			data.loadCategorias(force);
 			data.loadProductos(force);
 			data.loadUbigeo(force);
+			data.loadTarjetas();
 			//data.loadClientes();
-			Equipo equipo = Data.equipoController.getEquipo();
+			Caja equipo = Data.cajaController.getCaja();
 			Globals.VA_IGV = equipo.getCentroCosto().getEmpresa().getIgv();
 			Globals.VA_SERV = equipo.getServicio();
 			Globals.VA_TC = equipo.getTc();

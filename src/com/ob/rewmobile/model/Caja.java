@@ -1,6 +1,6 @@
 package com.ob.rewmobile.model;
 
-public class Equipo {
+public class Caja {
 
 	private int id = 0;
 	private String nombre;
@@ -17,9 +17,9 @@ public class Equipo {
 	private Double servicio;
 	private int dia;
 
-	public Equipo() {}
+	public Caja() {}
 	
-	public Equipo(int id, String nombre, String tipo, CentroCosto centroCosto, String serieBoleta, int numeroBoleta, String serieFactura, int numeroFactura, String impresoraP, String impresoraB, String impresoraF, Double tc, Double servicio, int dia) {
+	public Caja(int id, String nombre, String tipo, CentroCosto centroCosto, String serieBoleta, int numeroBoleta, String serieFactura, int numeroFactura, String impresoraP, String impresoraB, String impresoraF, Double tc, Double servicio, int dia) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
