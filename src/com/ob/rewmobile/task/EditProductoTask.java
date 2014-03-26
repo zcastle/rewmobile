@@ -10,13 +10,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.ob.rewmobile.PedidoActivity;
 import com.ob.rewmobile.model.Producto;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.DialogCarga;
 
 public class EditProductoTask extends AsyncTask<Void, Void, Boolean> {
 
-	private ProgressDialog pd;
+	private DialogCarga pd;
 	private Context context;
 	private Producto producto;
 	private boolean sync = false;
@@ -30,7 +31,6 @@ public class EditProductoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		pd = new ProgressDialog(context);
 		pd = new DialogCarga(context, "Editando Producto...");
 		if (!sync) pd.show();
 	}
@@ -55,6 +55,7 @@ public class EditProductoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(final Boolean success) {
 		if (success) {
+			((PedidoActivity)context).pedidoListener.refresh();
 			Toast.makeText(context, "Producto Editado", Toast.LENGTH_SHORT).show();
 		}
 		if (pd.isShowing()) pd.dismiss();

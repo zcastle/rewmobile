@@ -25,14 +25,14 @@ import com.ob.rewmobile.util.PrintTicket;
 public class EnviarPedidoTask extends AsyncTask<Void, Void, Boolean> {
 
 	private Context context;
-	private ProgressDialog pd;
-	private PedidoController pedido;
+	private DialogCarga pd;
+	private PedidoController PEDIDO;
 	private SwipeListView listViewPedido;
 	private TextView txtMontoTotalMesa;
 
-	public EnviarPedidoTask(Context context, PedidoController pedido, SwipeListView listViewPedido, TextView txtMontoTotalMesa) {
+	public EnviarPedidoTask(Context context, PedidoController PEDIDO, SwipeListView listViewPedido, TextView txtMontoTotalMesa) {
 		this.context = context;
-		this.pedido = pedido;
+		this.PEDIDO = PEDIDO;
 		this.listViewPedido = listViewPedido;
 		this.txtMontoTotalMesa = txtMontoTotalMesa;
 	}
@@ -46,12 +46,11 @@ public class EnviarPedidoTask extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
-		PedidoController pedido = new PedidoController();
+		PedidoController pedido = new PedidoController(this.PEDIDO.getMesa());
 		boolean rpta = true;
 		Data data = null;
 		for (Destino destino: Data.destinoController.getDestinos()) {
-			pedido.setMesa(pedido.getMesa());
-			pedido.setMozo(pedido.getMozo());
+			pedido.setMozo(this.PEDIDO.getMozo());
 			ArrayList<Producto> productos = pedido.getProductosByDestino(destino);
 			if(productos.size()>0) {
 				pedido.setProductos(productos);
@@ -92,9 +91,9 @@ public class EnviarPedidoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean success) {
 		if (success) {
-			listViewPedido.setAdapter(new PedidoAdapter(context, pedido, txtMontoTotalMesa));
+			listViewPedido.setAdapter(new PedidoAdapter(context, PEDIDO));
 			((PedidoAdapter)listViewPedido.getAdapter()).notifyDataSetChanged();
-			txtMontoTotalMesa.setText("TOTAL S/. " + pedido.getTotal());
+			txtMontoTotalMesa.setText("TOTAL S/. " + PEDIDO.getTotal());
 			Toast.makeText(context, "Pedido Enviado", Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(context, "Pedido No Enviado", Toast.LENGTH_SHORT).show();

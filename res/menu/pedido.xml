@@ -12,14 +12,18 @@
     <item 
         android:id="@+id/action_mozo_pax"
         android:title="@string/lbl_sinmozo_pax1"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom"
+        android:visible="false" />
     <item 
+        android:id="@+id/lbl_action_servicio"
         android:title="@string/lbl_servicio"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom"
+        android:visible="false" />
     <item 
         android:id="@+id/action_servicio"
         android:titleCondensed="@string/lbl_servicio" 
         android:title="@string/lbl_servicio"
         android:showAsAction="always|withText"
-        android:actionViewClass="android.widget.Switch" />
+        android:actionViewClass="android.widget.Switch"
+        android:visible="false" />
 </menu>

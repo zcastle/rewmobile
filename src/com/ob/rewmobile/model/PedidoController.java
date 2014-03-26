@@ -8,6 +8,7 @@ import org.json.JSONException;
 
 import android.content.Context;
 
+import com.ob.rewmobile.listener.PedidoListener;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.Globals;
 
@@ -19,13 +20,14 @@ public class PedidoController {
 	private Usuario cajero;
 	private Usuario mozo = null;
 	private ArrayList<Producto> productos;
-	private int pax;
+	private int pax = 1;
 	private boolean servicio = true;
 	private Cliente cliente = null;
-	private ArrayList<Pago> pagos = new ArrayList<Pago>(); 
+	private ArrayList<Pago> pagos = new ArrayList<Pago>();
 
-	public PedidoController() {
-		productos = new ArrayList<Producto>();
+	public PedidoController(String mesa) {
+		this.productos = new ArrayList<Producto>();
+		this.mesa = mesa;
 	}
 
 	public PedidoController(String mesa, int id, Usuario cajero, Usuario mozo, ArrayList<Producto> producto, int pax) {

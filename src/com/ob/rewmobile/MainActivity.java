@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ob.rewmobile.R;
 import com.ob.rewmobile.task.LoadDataTask;
 
 public class MainActivity extends Activity {
@@ -15,6 +14,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		setTitle("Cargando Data");
 		new LoadDataTask(this, false).execute();
 	}
 
@@ -28,8 +28,7 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_settings:
-			Intent i = new Intent(this, ConfiguracionActivity.class);
-			startActivity(i);
+			startActivity(new Intent(this, ConfiguracionActivity.class));
 			break;
 		}
 		return true;

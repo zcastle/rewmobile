@@ -24,7 +24,7 @@ public class JSONParser {
 		// "android");
 		HttpGet httpGet = new HttpGet();
 		// HttpPost
-		httpGet.setHeader("Content-Type", "text/plain; charset=utf-8");
+		httpGet.setHeader("Content-Type", "application/json; charset=utf-8");
 		httpGet.setURI(new URI(url));
 
 		HttpResponse httpResponse = httpClient.execute(httpGet);

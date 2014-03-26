@@ -1,35 +1,31 @@
 package com.ob.rewmobile;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,43 +33,35 @@ import com.fortysevendeg.android.swipelistview.SwipeListView;
 import com.ob.rewmobile.adapter.CategoriasAdapter;
 import com.ob.rewmobile.adapter.PedidoAdapter;
 import com.ob.rewmobile.adapter.ProductoAdapter;
+import com.ob.rewmobile.listener.PedidoListener;
 import com.ob.rewmobile.listener.SearchViewListener;
 import com.ob.rewmobile.model.Categoria;
 import com.ob.rewmobile.model.PedidoController;
-import com.ob.rewmobile.model.Producto;
 import com.ob.rewmobile.model.Usuario;
-import com.ob.rewmobile.task.AddProductoTask;
 import com.ob.rewmobile.task.EditPedidoTask;
 import com.ob.rewmobile.task.EnviarPedidoTask;
 import com.ob.rewmobile.task.EnviarPrecuentaTask;
-import com.ob.rewmobile.task.LoadPedidoTask;
+import com.ob.rewmobile.util.App;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.Globals;
 import com.ob.rewmobile.util.Util;
 
-public class PedidoActivity extends Activity implements OnItemClickListener {
+public class PedidoActivity extends Activity {
 
-	private int acceso_id;
+	//private String acceso_name;
+	private PedidoController PEDIDO;
 	private GridView listViewCategorias;
 	private DrawerLayout drawerLayout;
 	private ActionBarDrawerToggle drawerToggle;
 	
 	private ListView lvProductos;
 
-	private SwipeListView lvPedido;
-	private TextView txtMontoTotalMesa;
-	
+	public SwipeListView swipeListView;
+	public TextView tvMontoTotalMesa;
 	private SearchView searchView;
-	
-	private PedidoController PEDIDO;
-	
 	private static final int MNU_PAGAR = 0;
-	
-	private MenuItem mnuItemMozoPax;
-	
-	private final String MOZO_PAX_MESA_NUEVA = "Sin Mozo - 1 PAX";
-	
-	private Switch swServicio;
+
+	public PedidoListener pedidoListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +69,8 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		
 		setContentView(R.layout.activity_pedido);
 
+		setupActionBar();
+		
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		listViewCategorias = (GridView) findViewById(R.id.listViewCategorias);
@@ -89,7 +79,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		
 		lvProductos = (ListView) findViewById(R.id.gridviewproductos);
 		lvProductos.setAdapter(new ProductoAdapter(this, Data.productoController.getProductos()));
-		lvProductos.setOnItemClickListener(this);
+		lvProductos.setOnItemClickListener(pedidoListener);
 
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
 			public void onDrawerClosed(View view) {
@@ -100,18 +90,20 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 				invalidateOptionsMenu();
 			}
 		};
+		drawerToggle.setDrawerIndicatorEnabled(false);
 		drawerLayout.setDrawerListener(drawerToggle);
 		
-		setupActionBar();
-
 		Bundle bundle = getIntent().getExtras();
-		acceso_id = bundle.getInt("mozo_id");
-
-		getActionBar().setTitle(bundle.getString("mozo_name"));
-		getActionBar().setSubtitle("Mesa ".concat(bundle.getString("mesa_name")));
-		
-		PEDIDO = new PedidoController();
-		PEDIDO.setMesa(bundle.getString("mesa_name"));
+		int acceso_id = bundle.getInt("mozo_id");
+		//acceso_name = bundle.getString("mozo_name");
+		Globals.USUARIO_LOGIN = Data.usuarioController.getUsuarioById(acceso_id);
+		if (App.isCaja()) {
+			PEDIDO.setCajero(Globals.USUARIO_LOGIN);
+			PEDIDO.setMozo(new Usuario(0, "*"));
+		} else if (App.isPedido()) {
+			PEDIDO.setMozo(Globals.USUARIO_LOGIN);
+		}
+		pedidoListener.refresh();
 
 		SearchViewListener searchViewProductos = new SearchViewListener(this, lvProductos);
 		searchView = (SearchView) findViewById(R.id.search_productos);
@@ -122,44 +114,27 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 			selectItem(0);
 		}
 
-		txtMontoTotalMesa = (TextView) findViewById(R.id.txtMontoTotalMesa);
-		txtMontoTotalMesa.setText("TOTAL S/. 0.00");
-		lvPedido = (SwipeListView) findViewById(R.id.grid_item_pedido);
+		swipeListView = (SwipeListView) findViewById(R.id.grid_item_pedido);
+		
+		
 	}
 
 	private void setupActionBar() {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setDisplayShowCustomEnabled(true);
-		LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View v = inflator.inflate(R.layout.layout_total, null);
-		v.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				verTotales();	
-			}
-		});
-		getActionBar().setCustomView(v);
+		LayoutInflater li = LayoutInflater.from(this); //(LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View viewActionBar = li.inflate(R.layout.layout_action_bar, null);
+		
+		PEDIDO = new PedidoController("0");
+		pedidoListener = new PedidoListener(this, PEDIDO, viewActionBar);
+		
+		getActionBar().setCustomView(viewActionBar);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.pedido, menu);
 		if (Globals.MODULO.equals(Globals.MODULO_CAJA)) menu.add(0, MNU_PAGAR, 2, R.string.mnu_pagar);
-		mnuItemMozoPax = (MenuItem) menu.findItem(R.id.action_mozo_pax);
-		swServicio = (Switch) menu.findItem(R.id.action_servicio).getActionView();
-		swServicio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		        try {
-					PEDIDO.setServicio(PedidoActivity.this, isChecked);
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-				} catch (JSONException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		    }
-		});
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -167,12 +142,9 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			if (!Globals.DIRECTO) {
-				backToMesas();
-			} else {
-				LoadPedido();
-			}
-			break;
+			NavUtils.navigateUpFromSameTask(this);
+			finish();
+			return true;
 		case R.id.action_enviar:
 			enviar();
 			break;
@@ -188,107 +160,8 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	@Override
-	public void onBackPressed() {
-		if (!Globals.DIRECTO) {
-			backToMesas();
-		} else {
-			backToMozos();
-		}
-	}
-
-	private void backToMesas() {
-		Intent intent = new Intent(getBaseContext(), FragmentMesasActivity.class);
-		Bundle bundle = new Bundle();
-		bundle.putInt("mozo_id", PEDIDO.getMozo().getId());
-		bundle.putString("mozo_name", PEDIDO.getMozo().toString());
-		intent.putExtras(bundle);
-		startActivity(intent);
-		finish();
-	}
-	
-	private void backToMozos() {
-		startActivity(new Intent(getBaseContext(), AccesoActivity.class));
-		finish();
-		overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
-	}
-	
-	private void LoadPedido() {
-		View viewSelectMesa = LayoutInflater.from(this).inflate(R.layout.layout_select_mesa, null);
-		final EditText txtMesa = (EditText) viewSelectMesa.findViewById(R.id.txtMesa);
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setView(viewSelectMesa);
-		builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				PEDIDO = new PedidoController();
-				PEDIDO.setMesa(txtMesa.getText().toString());
-				if (Globals.MODULO.equals(Globals.MODULO_CAJA)) {
-					PEDIDO.setCajero(Data.usuarioController.getUsuarioById(acceso_id));
-					PEDIDO.setMozo(new Usuario(0, "Sin Mozo"));
-				} else {
-					PEDIDO.setMozo(Data.usuarioController.getUsuarioById(acceso_id));
-					PEDIDO.setCajero(new Usuario(0, "Cajero"));
-				}
-				//new LoadPedidoTask(PedidoActivity.this, PEDIDO, listViewPedido, txtMontoTotalMesa, mnuItemMozoPax).execute();
-				try {
-					if(new LoadPedidoTask(PedidoActivity.this, PEDIDO).execute().get()) {
-						lvPedido.setAdapter(new PedidoAdapter(PedidoActivity.this, PEDIDO, txtMontoTotalMesa));
-						((Activity) PedidoActivity.this).getActionBar().setSubtitle("Mesa ".concat(PEDIDO.getMesa()));
-						txtMontoTotalMesa.setText("TOTAL S/. " + Util.format(PEDIDO.getTotal()));
-						if (PEDIDO.getProductos().size()>0) {
-							swServicio.setChecked(PEDIDO.isServicio());
-							mnuItemMozoPax.setTitle(PEDIDO.getMozo().getNombre().concat(" - ").concat(PEDIDO.getPax()+" PAX"));
-							PEDIDO.setPax(PEDIDO.getPax());
-						} else {
-							swServicio.setChecked(true);
-							mnuItemMozoPax.setTitle(MOZO_PAX_MESA_NUEVA);
-							PEDIDO.setPax(1);
-						}
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		builder.setNegativeButton(R.string.cancelar, null);
-		builder.show();
-	}
-	
-	private void verTotales() {
-		if (!PEDIDO.getMesa().equals("0")) {
-			Double sTotal, igv, serv = 0.0, total;
-			total = PEDIDO.getTotal();
-			if (PEDIDO.isServicio()) {
-				sTotal = total / (((Globals.VA_IGV+Globals.VA_SERV)/100)+1);
-				igv = sTotal * (Globals.VA_IGV / 100);
-				serv = sTotal * (Globals.VA_SERV / 100);
-			} else {
-				sTotal = total / ((Globals.VA_IGV / 100)+1);
-				igv = sTotal * (Globals.VA_IGV / 100);
-			}
-			total = sTotal+igv+serv;
-			View viewTotales = LayoutInflater.from(this).inflate(R.layout.layout_totales, null);
-			((TextView)viewTotales.findViewById(R.id.tvNeto)).setText(Util.format(sTotal));
-			((TextView)viewTotales.findViewById(R.id.tvIgv)).setText(Util.format(igv));
-			((TextView)viewTotales.findViewById(R.id.tvServ)).setText(Util.format(serv));
-			((TextView)viewTotales.findViewById(R.id.tvServData)).setText("SERV. ("+Globals.VA_SERV+"%)");
-			((TextView)viewTotales.findViewById(R.id.tvTotal)).setText(Util.format(total));
-			new AlertDialog.Builder(this)
-			.setTitle("TOTALES -> MESA: ".concat(PEDIDO.getMesa()))
-			.setIcon(R.drawable.ic_launcher)
-			.setView(viewTotales)
-			.setPositiveButton(R.string.cerrar, null)
-			.show();
-		}
-		
-	}
 	
 	private void editPedido() {
-		
 		if (PEDIDO.getMesa().equals("0")) {
 			Toast.makeText(this, "Debe ingresar a una mesa", Toast.LENGTH_SHORT).show();
 			return;
@@ -296,10 +169,14 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		
 		View viewEditMesa = LayoutInflater.from(this).inflate(R.layout.layout_edit_mesa, null);
 		
+		if (Globals.MODULO.equals(Globals.MODULO_CAJA)) {
+			LinearLayout llMozo = (LinearLayout) viewEditMesa.findViewById(R.id.llMozo);
+			llMozo.setVisibility(LinearLayout.VISIBLE);
+		}
+		
 		final EditText txtPax = (EditText) viewEditMesa.findViewById(R.id.txtPax);
 		txtPax.setText(PEDIDO.getPax()+"");
 		final Spinner spinner = (Spinner) viewEditMesa.findViewById(R.id.spnMozos);
-		//spinner.setOnItemSelectedListener(this);
 		ArrayAdapter<Usuario> spinner_adapter = new ArrayAdapter<Usuario>(this, android.R.layout.simple_spinner_item, Data.usuarioController.getUsuariosByRol(Globals.ROL_MOZO));
 		spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(spinner_adapter);
@@ -313,9 +190,12 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				PEDIDO.setMozo((Usuario)spinner.getSelectedItem());
-				PEDIDO.setPax(Integer.parseInt(txtPax.getText().toString()));
-				mnuItemMozoPax.setTitle(PEDIDO.getMozo().getNombre().concat(" - ").concat(PEDIDO.getPax()+" PAX"));
+				int pax = Integer.parseInt(txtPax.getText().toString());
+				if (App.isCaja()) {
+					Usuario mozo = (Usuario)spinner.getSelectedItem();
+					PEDIDO.setMozo(mozo);
+				}
+				PEDIDO.setPax(pax);
 				new EditPedidoTask(PedidoActivity.this, PEDIDO, false).execute();
 			}
 		});
@@ -342,7 +222,7 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 			.setPositiveButton(R.string.si, new DialogInterface.OnClickListener(){
 				@Override
 		        public void onClick(DialogInterface dialog, int which) {
-					new EnviarPedidoTask(PedidoActivity.this, PEDIDO, lvPedido, txtMontoTotalMesa).execute();
+					new EnviarPedidoTask(PedidoActivity.this, PEDIDO, swipeListView, tvMontoTotalMesa).execute();
 		        }
 			})
 			.setNegativeButton(R.string.no, null)
@@ -371,7 +251,6 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		
 		Globals.PEDIDO_PAGAR = PEDIDO;
 		startActivity(new Intent(this, PagarActivity.class));
-		overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
 	}
 
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -393,23 +272,9 @@ public class PedidoActivity extends Activity implements OnItemClickListener {
 		super.onPostCreate(savedInstanceState);
 		drawerToggle.syncState();
 	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View arg1, int position, long id) {
-		if (PEDIDO.getMesa().equals("0")) {
-			Toast.makeText(this, "Debe ingresar el numero de MESA", Toast.LENGTH_LONG).show();
-		} else {
-			Producto producto = (Producto) parent.getItemAtPosition(position);
-			Producto newProducto = null;
-			try {
-				newProducto = (Producto) producto.clone();
-			} catch (CloneNotSupportedException e1) {
-				e1.printStackTrace();
-			}
-			new AddProductoTask(this, PEDIDO, newProducto, false).execute();
-			((PedidoAdapter) lvPedido.getAdapter()).addItem(newProducto);
-			txtMontoTotalMesa.setText("TOTAL S/. " + Util.format(PEDIDO.getTotal()));
-		}
+	
+	public PedidoAdapter getPedidoAdapter() {
+		return (PedidoAdapter)swipeListView.getAdapter();
 	}
 	
 }

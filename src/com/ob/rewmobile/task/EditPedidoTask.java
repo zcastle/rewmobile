@@ -5,19 +5,20 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.ob.rewmobile.model.PedidoController;
+import com.ob.rewmobile.util.App;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.DialogCarga;
+import com.ob.rewmobile.util.Globals;
 
 public class EditPedidoTask extends AsyncTask<Void, Void, Boolean> {
 
 	private Context context;
-	private ProgressDialog pd;
+	private DialogCarga pd;
 	private PedidoController pedido;
 	private boolean sync = false;
 
@@ -31,7 +32,7 @@ public class EditPedidoTask extends AsyncTask<Void, Void, Boolean> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 		pd = new DialogCarga(context, "Editando Pedido...");
-		if (!sync) pd.show();
+		if(App.isPedido()) pd.show();
 	}
 
 	@Override
@@ -48,6 +49,9 @@ public class EditPedidoTask extends AsyncTask<Void, Void, Boolean> {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}
@@ -56,6 +60,8 @@ public class EditPedidoTask extends AsyncTask<Void, Void, Boolean> {
 	protected void onPostExecute(Boolean success) {
 		if (success) {
 			//Toast.makeText(context, "Pedido Editado", Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(context, Globals.SERVER_NO_CONNECTION_MESSAGE, Toast.LENGTH_LONG).show();
 		}
 		if (pd.isShowing()) pd.dismiss();
 	}

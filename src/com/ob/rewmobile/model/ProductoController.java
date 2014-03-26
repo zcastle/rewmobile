@@ -53,8 +53,9 @@ public class ProductoController {
 	
 	public ArrayList<Producto> getProductoContainName(String nombre) {
 		ArrayList<Producto> productos = new ArrayList<Producto>();
+		nombre = nombre.toUpperCase();
 		for (Producto p: getProductos()) {
-			if(p.getNombre().toUpperCase().contains(nombre.toUpperCase())) {
+			if(p.getNombre().toUpperCase().contains(nombre) || p.getCodigo().toUpperCase().equals(nombre)) {
 				productos.add(p);
 			}
 		}

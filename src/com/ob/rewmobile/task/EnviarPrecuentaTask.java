@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 public class EnviarPrecuentaTask extends AsyncTask<Void, Void, Boolean> {
 
-	private ProgressDialog pd;
+	private DialogCarga pd;
 	private PedidoController pedido;
 	private Context context;
 

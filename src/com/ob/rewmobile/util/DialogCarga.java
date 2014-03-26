@@ -1,26 +1,40 @@
 package com.ob.rewmobile.util;
 
-import com.ob.rewmobile.R;
-
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.view.ContextThemeWrapper;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import com.ob.rewmobile.R;
 
 public class DialogCarga extends ProgressDialog {
 
-	public DialogCarga(Context context, String msg) {
+	private String mensaje;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.layout_dialog_carga);
+		TextView txtMensaje = (TextView) findViewById(R.id.txtMensaje);
+		txtMensaje.setText(mensaje);
+	}
+
+	public DialogCarga(Context context, String mensaje) {
 		super(context);
-		setTitle(R.string.procesando);
 		setCancelable(false);
-		setMessage(msg);
+		this.mensaje = mensaje;
+		/*view = LayoutInflater.from(context).inflate(R.layout.layout_dialog_carga, null);
+		TextView txtMensaje = (TextView) view.findViewById(R.id.txtMensaje);
+		txtMensaje.setText(msg);*/
+		
+		/*setTitle(R.string.procesando);
+		setMessage(msg);*/
+	}
+
+	@Override
+	public void show() {
+		super.show();
 	}
 	
-	public DialogCarga(Context context) {
-		super(context);
-	}
-
-	public DialogCarga(Context context, int theme) {
-		super(context, theme);
-	}
-
 }

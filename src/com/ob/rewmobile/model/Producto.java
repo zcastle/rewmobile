@@ -1,6 +1,7 @@
 package com.ob.rewmobile.model;
 
 import java.util.Date;
+import java.util.Locale;
 
 public class Producto implements Cloneable {
 

@@ -30,5 +30,8 @@
 
     <color name="background_new_tag">#ff0000</color>
     <color name="text_new_tag">#ffffff</color>
+    
+    <color name="progress_bg">#727072</color> 
+ 	<color name="progress_text">#fff</color>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.ob.rewmobile.util;
 
 import com.ob.rewmobile.model.PedidoController;
+import com.ob.rewmobile.model.Usuario;
 
 public class Globals {
 	
@@ -9,7 +10,6 @@ public class Globals {
 	public static final int ROL_MOZO = 6;
 	
 	public static final boolean DIRECTO = true;
-	public static final String USUARIO_TABLET = "TABLET";
 	
 	public static final String MODULO_CAJA = "C";
 	public static final String MODULO_PEDIDO = "P";
@@ -34,5 +34,12 @@ public class Globals {
 	
 	public static String VENTA_RAPIDA = "VR";
 	public static String VENTA_DETALLADA = "VD";
+	
+	public static boolean IS_SHOWING_SERVICE = false;
+	public static String IP_HOST;
+	
+	public static final String SERVER_NO_CONNECTION_MESSAGE = "No se ha posido conectar con el servidor";
+	
+	public static Usuario USUARIO_LOGIN = null;
 	
 }

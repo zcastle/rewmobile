@@ -8,15 +8,20 @@ import org.json.JSONException;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
+import com.ob.rewmobile.PedidoActivity;
+import com.ob.rewmobile.adapter.PedidoAdapter;
 import com.ob.rewmobile.model.PedidoController;
 import com.ob.rewmobile.model.Producto;
+import com.ob.rewmobile.util.App;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.DialogCarga;
+import com.ob.rewmobile.util.Globals;
 
 public class AddProductoTask extends AsyncTask<Void, Void, Boolean> {
 
-	private ProgressDialog pd;
+	private DialogCarga pd;
 	private PedidoController pedido;
 	private Context context;
 	private Producto producto;
@@ -33,7 +38,7 @@ public class AddProductoTask extends AsyncTask<Void, Void, Boolean> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 		pd = new DialogCarga(context, "Añadiendo Producto...");
-		//if (!sync) pd.show();
+		if(App.isPedido()) pd.show();
 	}
 
 	@Override
@@ -49,6 +54,9 @@ public class AddProductoTask extends AsyncTask<Void, Void, Boolean> {
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}
@@ -57,6 +65,11 @@ public class AddProductoTask extends AsyncTask<Void, Void, Boolean> {
 	protected void onPostExecute(final Boolean success) {
 		if (success) {
 			//Toast.makeText(context, "Producto Añadido", Toast.LENGTH_SHORT).show();
+			PedidoActivity activity = (PedidoActivity) context;
+			activity.getPedidoAdapter().addItem(producto);
+			activity.pedidoListener.refresh();
+		} else {
+			Toast.makeText(context, Globals.SERVER_NO_CONNECTION_MESSAGE, Toast.LENGTH_LONG).show();
 		}
 		if (pd.isShowing()) pd.dismiss();
 	}

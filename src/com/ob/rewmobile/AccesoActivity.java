@@ -12,17 +12,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
 
-import com.ob.rewmobile.R;
 import com.ob.rewmobile.adapter.MozoAdapter;
 import com.ob.rewmobile.model.Usuario;
-import com.ob.rewmobile.service.SyncService;
-import com.ob.rewmobile.task.LoadDataTask;
+import com.ob.rewmobile.util.App;
 import com.ob.rewmobile.util.Conn;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.Globals;
@@ -35,13 +33,15 @@ public class AccesoActivity extends Activity implements OnItemClickListener {
 		setContentView(R.layout.activity_acceso);
 
 		GridView gridView = (GridView) findViewById(R.id.gridviewacceso);
-		if (Globals.MODULO.equals(Globals.MODULO_CAJA)) {
+		if (App.isCaja()) {
 			gridView.setAdapter(new MozoAdapter(this, Data.usuarioController.getUsuariosByRol(Globals.ROL_CAJA)));
+			setTitle("Acceso a Caja");
 		} else {
 			gridView.setAdapter(new MozoAdapter(this, Data.usuarioController.getUsuariosByRol(Globals.ROL_MOZO)));
+			setTitle("Acceso a Pedido");
 		}
 		gridView.setOnItemClickListener(this);
-		startService(new Intent(getBaseContext(), SyncService.class));
+		//startService(new Intent(getBaseContext(), SyncService.class));
 	}
 	
 	@Override
@@ -91,8 +91,8 @@ public class AccesoActivity extends Activity implements OnItemClickListener {
 				public void onClick(DialogInterface dialog, int id) {
 					if (mozo.isPasswordOk(txtPassword.getText().toString())) {
 						startActivity(intent);
-						overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
-						finish();
+						//overridePendingTransition(R.animator.animation_leave, R.animator.animation_enter);
+						//finish();
 					} else {
 						Toast.makeText(getBaseContext(), "Contraseña Incorrecta", Toast.LENGTH_SHORT).show();
 					}
@@ -102,8 +102,8 @@ public class AccesoActivity extends Activity implements OnItemClickListener {
 			builder.show();
 		} else if (Globals.MODULO.equals(Globals.MODULO_PEDIDO)) {
 			startActivity(intent);
-			overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
-			finish();
+			//overridePendingTransition(R.animator.animation_enter, R.animator.animation_leave);
+			//finish();
 		}
 	}
 	

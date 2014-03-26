@@ -1,10 +1,12 @@
 package com.ob.rewmobile.util;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -13,6 +15,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,6 +70,7 @@ public class Data {
 		this.context = context;
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.context);
 		URL_HOST = sp.getString("keyHost", "");
+		Globals.IP_HOST = URL_HOST;
 		String PORT = sp.getString("keyPort", "");
 		String PATH = sp.getString("keyPath", "");
 		URL_HOST = "http://".concat(URL_HOST).concat(":").concat(PORT).concat("/").concat(PATH).concat("/");
@@ -601,23 +605,23 @@ public class Data {
 		}
 	}
 
-	public void loadPedido(PedidoController pedido) throws ClientProtocolException, URISyntaxException, IOException, JSONException {
+	public void loadPedido(PedidoController PEDIDO) throws ClientProtocolException, URISyntaxException, IOException, JSONException {
 		Producto producto;
-		if (Globals.MODULO.equals(Globals.MODULO_CAJA)) {
+		if (App.isCaja()) {
 			Conn conn = new Conn(context);
 			String[] campos = new String[] {"id","mozo_id","cajero_id","pax","producto_id","producto","cantidad",
 					"precio","mensaje","enviado","servicio","cliente_ruc"};
-			Cursor f = conn.query("pedidos", campos, "mesa=?", new String[] {pedido.getMesa()});
+			Cursor f = conn.query("pedidos", campos, "mesa=?", new String[] {PEDIDO.getMesa()});
 			if (f.moveToFirst()) {
 				do {
 					//mesa text, mozo_id integer, cajero_id integer, pax integer, atencion_id integer, producto_id integer, producto text, cantidad real, precio real, mensaje text, enviado text, sync text
 					if(f.getInt(1)>0) {
-						pedido.setMozo(Data.usuarioController.getUsuarioById(f.getInt(1)));
+						PEDIDO.setMozo(Data.usuarioController.getUsuarioById(f.getInt(1)));
 					} else {
-						pedido.setMozo(new Usuario(0, "Sin Mozo"));
+						PEDIDO.setMozo(new Usuario(0, "Sin Mozo"));
 					}
-					pedido.setCajero(Data.usuarioController.getUsuarioById(f.getInt(2)));
-					pedido.setPax(f.getInt(3));
+					PEDIDO.setCajero(Data.usuarioController.getUsuarioById(f.getInt(2)));
+					PEDIDO.setPax(f.getInt(3));
 					producto = new Producto();
 					producto.setIdAtencion(f.getInt(0));
 					producto.setId(f.getInt(4));
@@ -627,23 +631,22 @@ public class Data {
 					producto.setMensaje(f.getString(8));
 					producto.setEnviado(f.getString(9).equals("S") ? true : false);
 					producto.setDestino(productoController.getDestinoByProducto(producto));
-					pedido.getProductos().add(producto);
-					pedido.setServicio(f.getString(10).equals("S") ? true : false);
+					PEDIDO.getProductos().add(producto);
+					PEDIDO.setServicio(f.getString(10).equals("S") ? true : false);
 					if (!f.getString(11).equals("0")) {
-						pedido.setCliente(getCienteByRuc(f.getString(13)));
+						PEDIDO.setCliente(getCienteByRuc(f.getString(13)));
 					}
 				} while(f.moveToNext());
 			}
 			conn.close();
 		} else {
-			String url = URL_HOST.concat("readMesaxNro.php?t=").concat(pedido.getMesa());
+			String url = URL_HOST.concat("readMesaxNro.php?t=").concat(PEDIDO.getMesa());
 			JSONArray obj = getJSONObject(url);
 			for (int i = 0; i < obj.length(); i++) {
 				JSONObject e = obj.getJSONObject(i);
-				pedido.setCajero(Data.usuarioController.getUsuarioById(e.getInt("usuario")));
-				pedido.setPax(e.getInt("pax"));
+				PEDIDO.setPax(e.getInt("pax"));
 				if(e.getInt("mozo")>0) {
-					pedido.setMozo(Data.usuarioController.getUsuarioById(e.getInt("mozo")));
+					PEDIDO.setMozo(Data.usuarioController.getUsuarioById(e.getInt("mozo")));
 				}
 				producto = new Producto();
 				producto.setId(e.getInt("idproducto"));
@@ -654,14 +657,14 @@ public class Data {
 				producto.setMensaje(e.getString("mensaje"));
 				producto.setDestino(destinoController.getDestinoById(e.getInt("co_destino")));
 				producto.setEnviado(e.getString("fl_envio").equals("S") ? true : false);
-				pedido.getProductos().add(producto);
+				PEDIDO.getProductos().add(producto);
 			}
 		}
 	}
 
 	public int insertPedido(PedidoController pedido, Producto producto, boolean sync) throws ClientProtocolException, IOException, JSONException {
 		int id = 0;
-		if (Globals.MODULO.equals(Globals.MODULO_CAJA) && !sync) {
+		if (App.isCaja() && !sync) {
 			Conn conn = new Conn(context);
 			/*int atencion_id = 1;
 			String[] campos = new String[] {"MAX(atencion_id)"};
@@ -691,33 +694,23 @@ public class Data {
 				r.put("cliente_ruc", "0");
 			}
 			r.put("sync", "");
-			conn.insert("pedidos", r);
+			id = (int) conn.insert("pedidos", r);
 			conn.close();
 		}
-		if (Globals.MODULO.equals(Globals.MODULO_PEDIDO) || sync) {
+		if (App.isPedido() || sync) {
 			JSONObject row = new JSONObject();
 			row.put("mesa", pedido.getMesa());
 			row.put("mozoid", pedido.getMozo().getId());
 			row.put("cajeroid", pedido.getCajero().getId());
 			row.put("idprod", producto.getId());
+			row.put("producto", producto.getNombre());
 			row.put("cant", producto.getCantidad() + "");
 			row.put("precio", producto.getPrecio());
 			row.put("pax", pedido.getPax());
 			row.put("co_destino", producto.getDestino().getId());
+			row.put("pc", App.DEVICE_NAME);
 			
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(URL_HOST.concat("insertPedidos.php"));
-			httpPost.setHeader("content-type", "application/json");
-			
-			ArrayList<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("data", row.toString()));
-			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	
-			HttpResponse response = httpclient.execute(httpPost);
-			String temp = EntityUtils.toString(response.getEntity());
-			//Log.i("insertPedidos.php", temp);
-			JSONObject json = new JSONObject(temp);
-			id = json.getInt("idatencion");
+			id = postData("insertPedidos.php", row);
 		}
 		return id;
 	}
@@ -739,10 +732,7 @@ public class Data {
 			nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	
-			//HttpResponse response = 
 			httpclient.execute(httpPost);
-			//String temp = EntityUtils.toString(response.getEntity());
-			//Log.i("deletePedido.php", temp);
 		}
 	}
 
@@ -923,5 +913,22 @@ public class Data {
 	private static JSONArray getJSONObject(String url) throws ClientProtocolException, URISyntaxException, IOException, JSONException {
 		JSONObject json = new JSONParser().getJSONFromUrl(url);
 		return json.getJSONArray("data");
+	}
+	
+	private int postData(String url, JSONObject row) throws ClientProtocolException, IOException, JSONException {
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost(URL_HOST.concat(url));
+		//httpPost.setHeader("content-type", "application/json; charset=utf-8");
+		
+		List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("data", row.toString()));
+		httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
+
+		HttpResponse response = httpclient.execute(httpPost);
+		String temp = EntityUtils.toString(response.getEntity());
+		Log.i("OBJ JSON", row.toString());
+		Log.i(url, temp);
+		JSONObject json = new JSONObject(temp);
+		return json.getInt("id");
 	}
 }

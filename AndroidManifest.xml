@@ -43,11 +43,11 @@
         <activity
             android:name="com.ob.rewmobile.PedidoActivity"
             android:label="@string/title_activity_pedido"
-            android:parentActivityName="com.ob.rewmobile.FragmentMesasActivity"
+            android:parentActivityName="com.ob.rewmobile.AccesoActivity"
             android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ob.rewmobile.FragmentMesasActivity" />
+                android:value="com.ob.rewmobile.AccesoActivity" />
         </activity>
         <activity
             android:name="com.ob.rewmobile.ConfiguracionActivity"

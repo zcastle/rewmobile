@@ -1,7 +1,6 @@
 package com.ob.rewmobile.adapter;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -26,16 +25,12 @@ public class PedidoAdapter extends BaseAdapter {
 
 	private Context context;
 	protected LayoutInflater layoutInflater;
-	private PedidoController pedido;
 	protected ArrayList<Producto> productos;
-	private TextView txtMontoTotalMesa;
 
-	public PedidoAdapter(Context context, PedidoController pedido, TextView txtMontoTotalMesa) {
+	public PedidoAdapter(Context context, PedidoController pedido) {
 		this.context = context;
-		this.pedido = pedido;
 		this.productos = pedido.getProductos();
 		this.layoutInflater = LayoutInflater.from(context);
-		this.txtMontoTotalMesa = txtMontoTotalMesa; 
 	}
 
 	public void addItem(Producto producto) {
@@ -169,9 +164,6 @@ public class PedidoAdapter extends BaseAdapter {
 						txtTotal.setText(Util.format(producto.getTotal()));
 						//producto.setPrecio(Double.parseDouble(txtCantidad.getText().toString()));
 						new EditProductoTask(context, producto, false).execute();
-						//((SwipeListView) parent).closeOpenedItems();
-						txtMontoTotalMesa.setText("TOTAL S/. " + Util.format(pedido.getTotal()));
-						
 						//Toast.makeText(context, producto.getNombre().concat(" Actualizado"), Toast.LENGTH_SHORT).show();
 					}
 				});
@@ -189,22 +181,20 @@ public class PedidoAdapter extends BaseAdapter {
 	}
 	
 	private void removerItem(Producto producto, ViewGroup parent, int position){
-		try {
-			if(new DelProductoTask(context, producto, false).execute().get()) {
-				removeItem(producto);
-				closeAnimation(parent, position);
-				txtMontoTotalMesa.setText("TOTAL S/. " + Util.format(pedido.getTotal()));
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+		new DelProductoTask(context, producto, false).execute();
+		removeItem(producto);
+		closeAnimation(parent, position);
 	}
 	
 	private void closeAnimation(ViewGroup parent, int position) {
-		((SwipeListView) parent).closeAnimate(position);
-		((SwipeListView) parent).closeOpenedItems();
+		try {
+			//((SwipeListView) parent).closeAnimate(position-1);
+			((SwipeListView) parent).closeOpenedItems();
+			notifyDataSetChanged();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

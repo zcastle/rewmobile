@@ -2,65 +2,43 @@ package com.ob.rewmobile.task;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.fortysevendeg.android.swipelistview.SwipeListView;
-import com.ob.rewmobile.R;
+import com.ob.rewmobile.PedidoActivity;
 import com.ob.rewmobile.adapter.PedidoAdapter;
 import com.ob.rewmobile.model.PedidoController;
-import com.ob.rewmobile.model.Producto;
 import com.ob.rewmobile.util.Data;
+import com.ob.rewmobile.util.DialogCarga;
+import com.ob.rewmobile.util.Globals;
 
 public class LoadPedidoTask extends AsyncTask<Void, Void, Boolean> {
 
 	private Context context;
-	private ProgressDialog pd;
-	private PedidoController pedido;
-	/*private SwipeListView listViewPedido;
-	private TextView txtMontoTotalMesa;
-	private MenuItem mnuItemMozoPax;*/
-
-	public LoadPedidoTask(Context context, PedidoController pedido, SwipeListView listViewPedido, TextView txtMontoTotalMesa, MenuItem mnuItemMozoPax) {
-		this.context = context;
-		this.pedido = pedido;
-		/*this.listViewPedido = listViewPedido;
-		this.txtMontoTotalMesa = txtMontoTotalMesa;
-		this.mnuItemMozoPax = mnuItemMozoPax;*/
-	}
+	private DialogCarga pd;
+	private PedidoController PEDIDO;
 	
-	public LoadPedidoTask(Context context, PedidoController pedido) {
+	public LoadPedidoTask(Context context, PedidoController PEDIDO) {
 		this.context = context;
-		this.pedido = pedido;
-		/*this.listViewPedido = listViewPedido;
-		this.txtMontoTotalMesa = txtMontoTotalMesa;
-		this.mnuItemMozoPax = mnuItemMozoPax;*/
+		this.PEDIDO = PEDIDO;
 	}
 	
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		pd = new ProgressDialog(context);
-		pd.setTitle(R.string.procesando);
-		pd.setCancelable(false);
-		pd.setMessage("Cargando Pedido...");
+		pd = new DialogCarga(context, "Cargando Pedido...");
 		pd.show();
 	}
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		try {
-			pedido.setProductos(new ArrayList<Producto>());
-			new Data(context).loadPedido(pedido);
+			new Data(context).loadPedido(PEDIDO);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			return false;
@@ -73,6 +51,9 @@ public class LoadPedidoTask extends AsyncTask<Void, Void, Boolean> {
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}
@@ -80,17 +61,18 @@ public class LoadPedidoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean success) {
 		if (success) {
-			/*listViewPedido.setAdapter(new PedidoAdapter(context, pedido, txtMontoTotalMesa));
-			txtMontoTotalMesa.setText("TOTAL S/. " + pedido.getTotal());
-			((Activity) context).getActionBar().setSubtitle("Mesa ".concat(pedido.getMesa()));
-			mnuItemMozoPax.setTitle(pedido.getMozo().getNombre().concat(" - ").concat(pedido.getPax()+" PAX"));*/
+			PedidoActivity activity = (PedidoActivity) context;
+			activity.swipeListView.setAdapter(new PedidoAdapter(context, PEDIDO));
+			activity.pedidoListener.refresh();
+		} else {
+			Toast.makeText(context, Globals.SERVER_NO_CONNECTION_MESSAGE, Toast.LENGTH_LONG).show();
 		}
-		pd.dismiss();
+		if (pd.isShowing()) pd.dismiss();
 	}
 
 	@Override
 	protected void onCancelled() {
-		pd.dismiss();
+		if (pd.isShowing()) pd.dismiss();
 	}
 
 }

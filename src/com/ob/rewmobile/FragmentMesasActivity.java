@@ -78,7 +78,7 @@ public class FragmentMesasActivity extends FragmentActivity implements ActionBar
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
-			overridePendingTransition(R.animator.slide_out, R.animator.slide_in);
+			overridePendingTransition(R.animator.animation_leave, R.animator.animation_enter);
 			finish();
 			return true;
 		case R.id.action_mesas_refresh:

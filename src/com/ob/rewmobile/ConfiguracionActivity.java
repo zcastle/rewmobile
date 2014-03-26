@@ -46,7 +46,7 @@ public class ConfiguracionActivity extends PreferenceActivity {
 				NavUtils.navigateUpFromSameTask(this);
 			} catch(Exception e) {
 				startActivity(new Intent(getBaseContext(), AccesoActivity.class));
-				overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
+				overridePendingTransition(R.animator.animation_enter, R.animator.animation_leave);
 			}
 			finish();
 			return true;
