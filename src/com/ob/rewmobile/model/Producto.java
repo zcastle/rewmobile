@@ -1,7 +1,7 @@
 package com.ob.rewmobile.model;
 
+import android.annotation.SuppressLint;
 import java.util.Date;
-import java.util.Locale;
 
 public class Producto implements Cloneable {
 
@@ -48,6 +48,7 @@ public class Producto implements Cloneable {
 		return nombre;
 	}
 
+	@SuppressLint("DefaultLocale")
 	public void setNombre(String nombre) {
 		this.nombre = nombre.toUpperCase();
 	}

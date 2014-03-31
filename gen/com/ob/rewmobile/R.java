@@ -178,11 +178,10 @@ containing a value of this type.
         public static final int TextView02=0x7f06000b;
         public static final int action_enviar=0x7f06005f;
         public static final int action_mesas_refresh=0x7f06005d;
-        public static final int action_mozo_pax=0x7f060061;
+        public static final int action_pagar=0x7f060061;
         public static final int action_precuenta=0x7f060060;
         public static final int action_recargar_productos=0x7f06005a;
         public static final int action_salir=0x7f06005c;
-        public static final int action_servicio=0x7f060063;
         public static final int action_settings=0x7f06005b;
         public static final int back=0x7f06001d;
         public static final int both=0x7f060001;
@@ -202,14 +201,13 @@ containing a value of this type.
         public static final int grid_item_pedido=0x7f06001b;
         public static final int gridviewacceso=0x7f060007;
         public static final int gridviewmesas=0x7f06004b;
-        public static final int gridviewproductos=0x7f06001f;
         public static final int image=0x7f060022;
         public static final int imageView1=0x7f060009;
         public static final int label=0x7f06002a;
-        public static final int lbl_action_servicio=0x7f060062;
         public static final int left=0x7f060003;
         public static final int listViewCategorias=0x7f060020;
         public static final int listViewPedido=0x7f060019;
+        public static final int listViewProductos=0x7f06001f;
         public static final int llMozo=0x7f060048;
         public static final int lvPagos=0x7f06003b;
         public static final int menu_delete=0x7f06005e;
@@ -317,6 +315,7 @@ containing a value of this type.
         public static final int action_mesas_ocupadas=0x7f0a0019;
         public static final int action_mesas_refresh=0x7f0a0018;
         public static final int action_mesas_todas=0x7f0a001b;
+        public static final int action_pagar=0x7f0a004f;
         public static final int action_precuenta=0x7f0a000b;
         public static final int action_salir=0x7f0a0014;
         public static final int action_search=0x7f0a000c;
@@ -403,7 +402,6 @@ containing a value of this type.
         public static final int leftOffset=0x7f0a0031;
         public static final int loading=0x7f0a0044;
         public static final int milliseconds=0x7f0a0034;
-        public static final int mnu_pagar=0x7f0a004f;
         public static final int mnu_recargar_datos=0x7f0a006c;
         public static final int mode=0x7f0a0027;
         public static final int newTag=0x7f0a0045;

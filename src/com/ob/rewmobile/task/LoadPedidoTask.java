@@ -63,7 +63,7 @@ public class LoadPedidoTask extends AsyncTask<Void, Void, Boolean> {
 		if (success) {
 			PedidoActivity activity = (PedidoActivity) context;
 			activity.swipeListView.setAdapter(new PedidoAdapter(context, PEDIDO));
-			activity.pedidoListener.refresh();
+			activity.getPedidoListener().refresh();
 		} else {
 			Toast.makeText(context, Globals.SERVER_NO_CONNECTION_MESSAGE, Toast.LENGTH_LONG).show();
 		}

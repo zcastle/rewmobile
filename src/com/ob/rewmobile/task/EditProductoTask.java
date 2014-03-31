@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -55,7 +54,9 @@ public class EditProductoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(final Boolean success) {
 		if (success) {
-			((PedidoActivity)context).pedidoListener.refresh();
+			PedidoActivity activity = (PedidoActivity) context;
+			activity.getPedidoAdapter().notifyDataSetChanged();
+			activity.getPedidoListener().refresh();
 			Toast.makeText(context, "Producto Editado", Toast.LENGTH_SHORT).show();
 		}
 		if (pd.isShowing()) pd.dismiss();

@@ -62,10 +62,10 @@ public class AddProductoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(final Boolean success) {
 		if (success) {
-			//Toast.makeText(context, "Producto Añadido", Toast.LENGTH_SHORT).show();
 			PedidoActivity activity = (PedidoActivity) context;
 			activity.getPedidoAdapter().addItem(producto);
-			activity.pedidoListener.refresh();
+			activity.getPedidoListener().refresh();
+			Toast.makeText(context, "Producto Añadido", Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(context, Globals.SERVER_NO_CONNECTION_MESSAGE, Toast.LENGTH_LONG).show();
 		}

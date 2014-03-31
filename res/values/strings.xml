@@ -80,7 +80,7 @@
     <string name="lbl_cantidad">Cantidad</string>
     <string name="lbl_producto">Producto</string>
     <string name="lbl_mensaje">Mensaje</string>
-    <string name="mnu_pagar">Pagar</string>
+    <string name="action_pagar">Pagar</string>
     <string name="title_activity_pagar">Pagar Cuenta</string>
     <string name="lbl_ruc">RUC</string>
     <string name="lbl_nombre_razon">Nombre/Razon Social</string>

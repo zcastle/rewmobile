@@ -117,7 +117,7 @@ public class PedidoAdapter extends BaseAdapter {
 					View viewDialogClave = layoutInflater.inflate(R.layout.layout_dialog_password, null);
 					final EditText txtPassword = (EditText) viewDialogClave.findViewById(R.id.password);
 					builder.setView(viewDialogClave);
-					builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int id) {
 							if (txtPassword.getText().toString().equals("adm")) {
@@ -137,7 +137,7 @@ public class PedidoAdapter extends BaseAdapter {
 					builder.show();
 				} else {
 					new AlertDialog.Builder(context)
-					.setMessage("¿Esta seguro de querer enviar el pedido?")
+					.setMessage("¿Esta seguro de querer eliminar el producto?")
 					.setCancelable(false)
 					.setPositiveButton(R.string.si, new DialogInterface.OnClickListener(){
 						@Override
@@ -171,7 +171,7 @@ public class PedidoAdapter extends BaseAdapter {
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				builder.setView(viewDialogEditar);
 				builder.setCancelable(false);
-				builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
 						closeAnimation(parent, position);
@@ -203,7 +203,7 @@ public class PedidoAdapter extends BaseAdapter {
 		PedidoController pedido = new PedidoController(this.PEDIDO.getMesa());
 		pedido.setMozo(this.PEDIDO.getMozo());
 		pedido.getProductos().add(producto);
-		new DelProductoTask(context, pedido, this, false).execute();
+		new DelProductoTask(context, pedido, false).execute();
 		//removeItem(producto);
 		closeAnimation(parent, position);
 	}

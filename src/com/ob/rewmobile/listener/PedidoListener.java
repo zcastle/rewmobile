@@ -3,16 +3,22 @@ package com.ob.rewmobile.listener;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ob.rewmobile.PagarActivity;
 import com.ob.rewmobile.PedidoActivity;
 import com.ob.rewmobile.R;
 import com.ob.rewmobile.model.PedidoController;
@@ -21,8 +27,10 @@ import com.ob.rewmobile.model.Usuario;
 import com.ob.rewmobile.task.AddProductoTask;
 import com.ob.rewmobile.task.EditPedidoTask;
 import com.ob.rewmobile.task.EnviarPedidoTask;
+import com.ob.rewmobile.task.EnviarPrecuentaTask;
 import com.ob.rewmobile.task.LoadPedidoTask;
 import com.ob.rewmobile.util.App;
+import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.Globals;
 import com.ob.rewmobile.util.Util;
 
@@ -94,7 +102,7 @@ public class PedidoListener implements OnClickListener, OnItemClickListener {
 				//
 				break;
 			case R.id.tvMozo:
-				//
+				changeMozo();
 				break;
 			case R.id.tvPax:
 				changePax();
@@ -206,19 +214,98 @@ public class PedidoListener implements OnClickListener, OnItemClickListener {
 		}
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View arg1, int position, long id) {
+	private void changeMozo() {
+		if (App.isPedido()) return;
+		if (PEDIDO.getMesa().equals("0")) {
+			Toast.makeText(context, "Debe ingresar a una mesa", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		View viewEditMesa = LayoutInflater.from(context).inflate(R.layout.layout_edit_mesa, null);
+		
+		if (App.isCaja()) {
+			LinearLayout llMozo = (LinearLayout) viewEditMesa.findViewById(R.id.llMozo);
+			llMozo.setVisibility(LinearLayout.VISIBLE);
+		}
+		
+		final EditText txtPax = (EditText) viewEditMesa.findViewById(R.id.txtPax);
+		txtPax.setText(PEDIDO.getPax()+"");
+		final Spinner spinner = (Spinner) viewEditMesa.findViewById(R.id.spnMozos);
+		ArrayAdapter<Usuario> spinner_adapter = new ArrayAdapter<Usuario>(context, android.R.layout.simple_spinner_item, Data.usuarioController.getUsuariosByRol(Globals.ROL_MOZO));
+		spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(spinner_adapter);
+		
+		if(PEDIDO.getMozo().getId()>0) {
+			SelectSpinnerItemByObject(spinner, PEDIDO.getMozo());
+		}
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setView(viewEditMesa);
+		builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				int pax = Integer.parseInt(txtPax.getText().toString());
+				if (App.isCaja()) {
+					Usuario mozo = (Usuario)spinner.getSelectedItem();
+					PEDIDO.setMozo(mozo);
+				}
+				PEDIDO.setPax(pax);
+				new EditPedidoTask(context, PEDIDO, false).execute();
+			}
+		});
+		builder.setNegativeButton(R.string.cancelar, null);
+		builder.show();
+	}
+	
+	public static void SelectSpinnerItemByObject(Spinner spinner, Usuario mozoSelected) {
+	    SpinnerAdapter adapter = spinner.getAdapter();
+	    for (int pos = 0; pos < adapter.getCount(); pos++) {
+	    	Usuario mozo = (Usuario) adapter.getItem(pos);
+	        if(mozo == mozoSelected) {
+	            spinner.setSelection(pos);
+	            return;
+	        }
+	    }
+	}
+	
+	public void precuenta() {
+		if(!PEDIDO.getMesa().equals("0")){
+			new EnviarPrecuentaTask(context, PEDIDO).execute();
+		} else {
+			Toast.makeText(context, "No se puede enviar PRECUENTA en la mesa 0", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	public void pagar() {
+		if (PEDIDO.getMesa().equals("0")) {
+			Util.showDialogAdvertencia(context, "No hay un pedido para procesar");
+			return;
+		} else if (PEDIDO.getMozo().getId()==0) {
+			Util.showDialogAdvertencia(context, "Debe especificar un mozo");
+			return;
+		}
+		
+		Globals.PEDIDO_PAGAR = PEDIDO;
+		context.startActivity(new Intent(context, PagarActivity.class));
+	}
+	
+	private void addProducto(Producto producto) {
 		if (PEDIDO.getMesa().equals("0")) {
 			Toast.makeText(context, "Debe ingresar el numero de MESA", Toast.LENGTH_LONG).show();
 		} else {
-			Producto producto = (Producto) parent.getItemAtPosition(position);
-			Producto newProducto = null;
-			try {
-				newProducto = (Producto) producto.clone();
-			} catch (CloneNotSupportedException e1) {
-				e1.printStackTrace();
-			}
-			new AddProductoTask(context, PEDIDO, newProducto, false).execute();
+			new AddProductoTask(context, PEDIDO, producto, false).execute();
+		}
+	}
+	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Producto producto = (Producto) parent.getItemAtPosition(position);
+		Producto newProducto = null;
+		try {
+			newProducto = (Producto) producto.clone();
+			addProducto(newProducto);
+		} catch (CloneNotSupportedException e1) {
+			e1.printStackTrace();
 		}
 	}
 }

@@ -4,36 +4,29 @@ import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.epson.eposprint.Print;
 import com.ob.rewmobile.PedidoActivity;
-import com.ob.rewmobile.adapter.PedidoAdapter;
 import com.ob.rewmobile.model.PedidoController;
 import com.ob.rewmobile.model.Producto;
 import com.ob.rewmobile.util.App;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.DialogCarga;
 import com.ob.rewmobile.util.Globals;
-import com.ob.rewmobile.util.PrintTicket;
 
 public class DelProductoTask extends AsyncTask<Void, Void, Boolean> {
 
 	private Context context;
 	private DialogCarga pd;
 	private PedidoController PEDIDO;
-	private PedidoAdapter pedidoAdapter;
 	private boolean sync = false;
 
-	public DelProductoTask(Context context, PedidoController PEDIDO, PedidoAdapter pedidoAdapter, boolean sync) {
+	public DelProductoTask(Context context, PedidoController PEDIDO, boolean sync) {
 		this.context = context;
 		this.PEDIDO = PEDIDO;
-		this.pedidoAdapter = pedidoAdapter;
 		this.sync = sync;
 	}
 
@@ -79,9 +72,9 @@ public class DelProductoTask extends AsyncTask<Void, Void, Boolean> {
 	protected void onPostExecute(Boolean success) {
 		if (success) {
 			PedidoActivity activity = (PedidoActivity)context;
-			activity.pedidoListener.refresh();
-			pedidoAdapter.removeItem(PEDIDO);
-			//Toast.makeText(context, producto.getNombre().concat(" Removido"), Toast.LENGTH_SHORT).show();
+			activity.getPedidoAdapter().removeItem(PEDIDO);
+			activity.getPedidoListener().refresh();
+			Toast.makeText(context, "Producto Removido", Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(context, Globals.SERVER_NO_CONNECTION_MESSAGE, Toast.LENGTH_LONG).show();
 		}

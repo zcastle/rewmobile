@@ -77,7 +77,7 @@
 		        	    android:layout_width="match_parent"
 	                	android:layout_height="wrap_content" android:id="@+id/search_productos"/>
 			        <ListView 
-					    android:id="@+id/gridviewproductos"
+					    android:id="@+id/listViewProductos"
 					    android:layout_width="match_parent" 
 					    android:layout_height="match_parent"
 					    android:verticalSpacing="1dp"
