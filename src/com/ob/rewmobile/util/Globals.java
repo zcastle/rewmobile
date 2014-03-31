@@ -38,7 +38,7 @@ public class Globals {
 	public static boolean IS_SHOWING_SERVICE = false;
 	public static String IP_HOST;
 	
-	public static final String SERVER_NO_CONNECTION_MESSAGE = "No se ha posido conectar con el servidor";
+	public static final String SERVER_NO_CONNECTION_MESSAGE = "No se ha podido conectar con el servidor";
 	
 	public static Usuario USUARIO_LOGIN = null;
 	

@@ -10,13 +10,14 @@ import com.ob.rewmobile.R;
 public class DialogCarga extends ProgressDialog {
 
 	private String mensaje;
+	private TextView txtMensaje;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_dialog_carga);
-		TextView txtMensaje = (TextView) findViewById(R.id.txtMensaje);
+		txtMensaje = (TextView) findViewById(R.id.txtMensaje);
 		txtMensaje.setText(mensaje);
 	}
 

@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -50,13 +51,13 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 			data.loadEquipo(App.DEVICE_NAME, force);
 			equipo = Data.cajaController.getCaja();
 			Globals.MODULO = equipo.getTipo().equals(Globals.MODULO_CAJA) ? Globals.MODULO_CAJA : Globals.MODULO_PEDIDO;
-			if(App.isPedido()) {
-				Log.e("IP_HOST", Globals.IP_HOST);
+			/*if(App.isPedido()) {
+				//Log.e("IP_HOST", Globals.IP_HOST);
 				InetAddress in = InetAddress.getByName(Globals.IP_HOST);
 				if (!in.isReachable(5000)) {
 	                return false;
 	            }
-			}
+			}*/
 			data.loadUsuarios(force);
 			data.loadDestinos(force);
 			data.loadCategorias(force);
@@ -65,17 +66,22 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 			data.loadTarjetas();
 			//data.loadClientes();
 		} catch (UnknownHostException e) {
+			e.printStackTrace();
 			return false;
 		} catch (ClientProtocolException e) {
+			e.printStackTrace();
 			return false;
 		} catch (URISyntaxException e) {
+			e.printStackTrace();
 			return false;
 		} catch (IOException e) {
+			e.printStackTrace();
 			return false;
 		} catch (JSONException e) {
+			e.printStackTrace();
 			return false;
 		} catch (Exception e) {
-			//Log.e("ERROR", e.toString());
+			Log.e("ERROR", e.toString());
 			e.printStackTrace();
 			return false;
 		}
@@ -84,7 +90,12 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 	
 	@Override
 	protected void onPostExecute(Boolean success) {
-		MainActivity activity = (MainActivity) context;
+		Activity activity = (Activity) context;
+		/*if(force) {
+			
+		} else {
+			activity = (MainActivity) context;
+		}*/
 		if (success) {
 			Globals.VA_IGV = equipo.getCentroCosto().getEmpresa().getIgv();
 			Globals.VA_SERV = equipo.getServicio();

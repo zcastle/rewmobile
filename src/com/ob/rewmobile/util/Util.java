@@ -10,10 +10,22 @@ import android.util.DisplayMetrics;
 
 public class Util {
 
-	public static int convertDpToPixel(Context context, float dp) {
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+	public static int convertDpToPixel(Context context, int dp) {
+		/*DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		float px = dp * (metrics.densityDpi / 160f);
-		return (int) px;
+		return (int) px;*/
+		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+	    int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+	    return px;
+	}
+	
+	public static int convertPixelsToDp(Context context, int px){
+	    /*DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+	    float dp = px / (metrics.densityDpi / 160f);
+	    return dp;*/
+		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+	    int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+	    return dp;
 	}
 	
 	public static String getMD5(String md5) {

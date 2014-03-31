@@ -5,13 +5,11 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.ob.rewmobile.PedidoActivity;
-import com.ob.rewmobile.adapter.PedidoAdapter;
 import com.ob.rewmobile.model.PedidoController;
 import com.ob.rewmobile.model.Producto;
 import com.ob.rewmobile.util.App;

@@ -42,7 +42,7 @@ public class PrintTicket {
 	public PrintTicket(Context context, String modeloImpresora, String tipoComprobante, PedidoController pedido) {
 		this.modeloImpresora = modeloImpresora;
 		this.tipoComprobante = tipoComprobante;
-		this.destino = null;
+		this.destino = pedido.getProductos().get(0).getDestino();
 		this.pedido = pedido;
 	}
 
@@ -196,10 +196,9 @@ public class PrintTicket {
 			builder.addText("HORA: ".concat(fechaHora).concat("\n"));
 			builder.addText("----------------------------------------\n");
 			for (Producto obj: pedido.getProductos()) {
-				String cant = String.valueOf(obj.getCantidad().intValue()).concat("  ").substring(0, 3).concat(" ");
-				builder.addText(cant.concat(obj.getNombre()).concat("\n"));
-				if (!obj.getMensaje().isEmpty()) {
-					builder.addText(" -".concat(obj.getMensaje()).concat("\n"));
+				if(obj.isEnviado()) {
+					String cant = String.valueOf(obj.getCantidad().intValue()).concat("  ").substring(0, 3).concat(" ");
+					builder.addText(cant.concat(obj.getNombre()).concat("\n"));
 				}
 			}
 			builder.addText("========================================\n");

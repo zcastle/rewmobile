@@ -7,7 +7,7 @@
         android:id="@+id/textviewmozo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#3b9859"
+        android:background="@android:color/holo_green_dark"
         android:textColor="@drawable/text_color"
         android:gravity="center"
         android:minHeight="100dp"
@@ -31,11 +31,10 @@
         android:id="@+id/textviewproducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#3b9859"
+        android:background="@android:color/holo_green_dark"
         android:textColor="@drawable/text_color"
         android:gravity="center"
         android:minHeight="50dp"
-        android:minWidth="100dp"
         android:textSize="20sp"
         android:visibility="gone" />
     <TextView

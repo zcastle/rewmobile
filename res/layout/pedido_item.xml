@@ -9,37 +9,32 @@
             style="@style/ListBackContent" >
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnEliminar"
-                style="@style/ListButtonAction"
+            	android:id="@+id/btnEliminar"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
                 android:text="@string/eliminar"
-                android:textColor="@drawable/text_color"
-        		android:textSize="25sp" />
+                android:textColor="@android:color/white"
+                android:background="@android:color/holo_red_light"
+        		android:textSize="20sp"
+        		android:gravity="center" />
 
-        <TextView
+        <!-- <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/ListButtonAction"
                 android:text="@string/guion"
                 android:textColor="@android:color/white"
-        		android:textSize="25sp"/>
+        		android:textSize="25sp" /> -->
         
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnEditar"
-                style="@style/ListButtonAction"
+            	android:id="@+id/btnEditar"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
                 android:text="@string/editar"
-                android:textColor="@drawable/text_color"
-        		android:textSize="25sp"/>
-
-        <!-- <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/example_row_b_action_3"
-                style="@style/ListButtonAction"
-                android:text="uninstall"/> -->
+                android:textColor="@android:color/white"
+                android:background="@android:color/holo_orange_light"
+        		android:textSize="20sp"
+        		android:gravity="center" />
 
     </LinearLayout>
     

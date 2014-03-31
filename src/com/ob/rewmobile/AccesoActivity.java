@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.ob.rewmobile.adapter.MozoAdapter;
 import com.ob.rewmobile.model.Usuario;
+import com.ob.rewmobile.task.LoadDataTask;
 import com.ob.rewmobile.util.App;
 import com.ob.rewmobile.util.Conn;
 import com.ob.rewmobile.util.Data;
@@ -62,7 +63,7 @@ public class AccesoActivity extends Activity implements OnItemClickListener {
 			finish();
 			break;
 		case R.id.action_recargar_productos:
-			//new LoadDataTask(this, true).execute();
+			new LoadDataTask(this, true).execute();
 			backup();
 			break;
 		}

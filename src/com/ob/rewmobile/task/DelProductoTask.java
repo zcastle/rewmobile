@@ -4,29 +4,36 @@ import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.epson.eposprint.Print;
 import com.ob.rewmobile.PedidoActivity;
+import com.ob.rewmobile.adapter.PedidoAdapter;
+import com.ob.rewmobile.model.PedidoController;
 import com.ob.rewmobile.model.Producto;
 import com.ob.rewmobile.util.App;
 import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.DialogCarga;
 import com.ob.rewmobile.util.Globals;
+import com.ob.rewmobile.util.PrintTicket;
 
 public class DelProductoTask extends AsyncTask<Void, Void, Boolean> {
 
 	private Context context;
 	private DialogCarga pd;
-	private Producto producto;
+	private PedidoController PEDIDO;
+	private PedidoAdapter pedidoAdapter;
 	private boolean sync = false;
 
-	public DelProductoTask(Context context, Producto producto, boolean sync) {
+	public DelProductoTask(Context context, PedidoController PEDIDO, PedidoAdapter pedidoAdapter, boolean sync) {
 		this.context = context;
-		this.producto = producto;
+		this.PEDIDO = PEDIDO;
+		this.pedidoAdapter = pedidoAdapter;
 		this.sync = sync;
 	}
 
@@ -40,7 +47,17 @@ public class DelProductoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		try {
-			new Data(context).deleteProducto(producto, sync);
+			for (Producto producto: PEDIDO.getProductos()) {
+				new Data(context).deleteProducto(producto, sync);
+			}
+			
+			/*int[] printerStatus = new int[1];
+			PrintTicket printTicket = new PrintTicket(context, PrintTicket.TMU220, PrintTicket.ELIMINAR_ENVIO, PEDIDO);
+			printerStatus[0] = printTicket.printDoc();
+			if ((printerStatus[0] & Print.ST_PRINT_SUCCESS) == Print.ST_PRINT_SUCCESS){
+				
+    		}*/
+			
 		} catch (ClientProtocolException e) {
 			Toast.makeText(context, "Error en la Conexion...", Toast.LENGTH_SHORT).show();
 			e.printStackTrace();
@@ -61,10 +78,9 @@ public class DelProductoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean success) {
 		if (success) {
-			if(producto.isEnviado()) {
-				
-			}
-			((PedidoActivity)context).pedidoListener.refresh();
+			PedidoActivity activity = (PedidoActivity)context;
+			activity.pedidoListener.refresh();
+			pedidoAdapter.removeItem(PEDIDO);
 			//Toast.makeText(context, producto.getNombre().concat(" Removido"), Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(context, Globals.SERVER_NO_CONNECTION_MESSAGE, Toast.LENGTH_LONG).show();

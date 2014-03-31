@@ -23,8 +23,8 @@
     <style name="ListBackContent">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">@dimen/height_list</item>
-        <item name="android:background">@android:color/holo_blue_bright</item>
-        <item name="android:gravity">center</item>
+        <!-- <item name="android:background">@android:color/holo_blue_bright</item> -->
+        <item name="android:gravity">right</item>
     </style>
 
     <style name="ListFrontContent">

@@ -2,21 +2,21 @@ package com.ob.rewmobile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.ActionMode;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -62,7 +62,7 @@ public class PedidoActivity extends Activity {
 	private static final int MNU_PAGAR = 0;
 
 	public PedidoListener pedidoListener;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,6 +115,16 @@ public class PedidoActivity extends Activity {
 		}
 
 		swipeListView = (SwipeListView) findViewById(R.id.grid_item_pedido);
+		swipeListView.setSwipeMode(SwipeListView.SWIPE_MODE_LEFT);
+		
+		WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		
+		//Log.e("convertPixelsToDp", Util.convertPixelsToDp(this, display.getWidth())+"");
+		
+		int widthPanel = (Util.convertPixelsToDp(this, display.getWidth()) - 300) - 200;
+		
+		swipeListView.setOffsetLeft(Util.convertDpToPixel(this, widthPanel));
 		
 		
 	}
@@ -146,7 +156,7 @@ public class PedidoActivity extends Activity {
 			finish();
 			return true;
 		case R.id.action_enviar:
-			enviar();
+			pedidoListener.enviar();
 			break;
 		case R.id.action_precuenta:
 			precuenta();
@@ -212,24 +222,6 @@ public class PedidoActivity extends Activity {
 	            return;
 	        }
 	    }
-	}
-	
-	private void enviar() {
-		if(!this.PEDIDO.getMesa().equals("0")){
-			new AlertDialog.Builder(this)
-			.setMessage("¿Esta seguro de querer enviar el pedido?")
-			.setCancelable(false)
-			.setPositiveButton(R.string.si, new DialogInterface.OnClickListener(){
-				@Override
-		        public void onClick(DialogInterface dialog, int which) {
-					new EnviarPedidoTask(PedidoActivity.this, PEDIDO, swipeListView, tvMontoTotalMesa).execute();
-		        }
-			})
-			.setNegativeButton(R.string.no, null)
-		    .show();
-		} else {
-			Toast.makeText(this, "No se puede ENVIAR en la mesa 0", Toast.LENGTH_SHORT).show();
-		}
 	}
 	
 	private void precuenta() {

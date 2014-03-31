@@ -1,7 +1,6 @@
 package com.ob.rewmobile.util;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +28,8 @@ import android.database.sqlite.SQLiteException;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.ob.rewmobile.model.Caja;
+import com.ob.rewmobile.model.CajaController;
 import com.ob.rewmobile.model.Categoria;
 import com.ob.rewmobile.model.CategoriaController;
 import com.ob.rewmobile.model.CentroCosto;
@@ -39,8 +40,6 @@ import com.ob.rewmobile.model.Destino;
 import com.ob.rewmobile.model.DestinoController;
 import com.ob.rewmobile.model.Distrito;
 import com.ob.rewmobile.model.Empresa;
-import com.ob.rewmobile.model.Caja;
-import com.ob.rewmobile.model.CajaController;
 import com.ob.rewmobile.model.Mesa;
 import com.ob.rewmobile.model.PedidoController;
 import com.ob.rewmobile.model.Producto;

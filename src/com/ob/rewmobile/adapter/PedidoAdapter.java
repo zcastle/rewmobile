@@ -26,10 +26,12 @@ public class PedidoAdapter extends BaseAdapter {
 	private Context context;
 	protected LayoutInflater layoutInflater;
 	protected ArrayList<Producto> productos;
+	PedidoController PEDIDO;
 
-	public PedidoAdapter(Context context, PedidoController pedido) {
+	public PedidoAdapter(Context context, PedidoController PEDIDO) {
 		this.context = context;
-		this.productos = pedido.getProductos();
+		this.productos = PEDIDO.getProductos();
+		this.PEDIDO = PEDIDO;
 		this.layoutInflater = LayoutInflater.from(context);
 	}
 
@@ -47,8 +49,10 @@ public class PedidoAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public void removeItem(Producto producto) {
-		productos.remove(producto);
+	public void removeItem(PedidoController pedido) {
+		for (Producto producto: pedido.getProductos()) {
+			productos.remove(producto);
+		}
 		notifyDataSetChanged();
 	}
 
@@ -132,7 +136,22 @@ public class PedidoAdapter extends BaseAdapter {
 					});
 					builder.show();
 				} else {
-					removerItem(producto, parent, position);
+					new AlertDialog.Builder(context)
+					.setMessage("¿Esta seguro de querer enviar el pedido?")
+					.setCancelable(false)
+					.setPositiveButton(R.string.si, new DialogInterface.OnClickListener(){
+						@Override
+				        public void onClick(DialogInterface dialog, int which) {
+							removerItem(producto, parent, position);
+				        }
+					})
+					.setNegativeButton(R.string.no, new DialogInterface.OnClickListener(){
+						@Override
+				        public void onClick(DialogInterface dialog, int which) {
+							closeAnimation(parent, position);
+				        }
+					})
+				    .show();
 				}
 			}
 		});
@@ -181,8 +200,11 @@ public class PedidoAdapter extends BaseAdapter {
 	}
 	
 	private void removerItem(Producto producto, ViewGroup parent, int position){
-		new DelProductoTask(context, producto, false).execute();
-		removeItem(producto);
+		PedidoController pedido = new PedidoController(this.PEDIDO.getMesa());
+		pedido.setMozo(this.PEDIDO.getMozo());
+		pedido.getProductos().add(producto);
+		new DelProductoTask(context, pedido, this, false).execute();
+		//removeItem(producto);
 		closeAnimation(parent, position);
 	}
 	

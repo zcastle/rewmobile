@@ -20,9 +20,9 @@ import com.ob.rewmobile.model.Producto;
 import com.ob.rewmobile.model.Usuario;
 import com.ob.rewmobile.task.AddProductoTask;
 import com.ob.rewmobile.task.EditPedidoTask;
+import com.ob.rewmobile.task.EnviarPedidoTask;
 import com.ob.rewmobile.task.LoadPedidoTask;
 import com.ob.rewmobile.util.App;
-import com.ob.rewmobile.util.Data;
 import com.ob.rewmobile.util.Globals;
 import com.ob.rewmobile.util.Util;
 
@@ -185,6 +185,25 @@ public class PedidoListener implements OnClickListener, OnItemClickListener {
 			.setPositiveButton(R.string.cerrar, null)
 			.show();
 		}		
+	}
+	
+	public void enviar() {
+		if(!PEDIDO.getMesa().equals("0")){
+			new AlertDialog.Builder(context)
+			.setMessage("¿Esta seguro de querer enviar el pedido?")
+			.setCancelable(false)
+			.setPositiveButton(R.string.si, new DialogInterface.OnClickListener(){
+				@Override
+		        public void onClick(DialogInterface dialog, int which) {
+					PedidoActivity activity = (PedidoActivity) context;
+					new EnviarPedidoTask(context, PEDIDO, activity.swipeListView, activity.tvMontoTotalMesa).execute();
+		        }
+			})
+			.setNegativeButton(R.string.no, null)
+		    .show();
+		} else {
+			Toast.makeText(context, "No se puede ENVIAR en la mesa 0", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
