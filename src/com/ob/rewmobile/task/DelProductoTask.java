@@ -41,14 +41,13 @@ public class DelProductoTask extends AsyncTask<Void, Void, Boolean> {
 	protected Boolean doInBackground(Void... params) {
 		try {
 			for (Producto producto: PEDIDO.getProductos()) {
-				new Data(context).deleteProducto(producto, sync);
+				return new Data(context).deleteProducto(producto, sync);
 			}
 			
 			/*int[] printerStatus = new int[1];
 			PrintTicket printTicket = new PrintTicket(context, PrintTicket.TMU220, PrintTicket.ELIMINAR_ENVIO, PEDIDO);
 			printerStatus[0] = printTicket.printDoc();
 			if ((printerStatus[0] & Print.ST_PRINT_SUCCESS) == Print.ST_PRINT_SUCCESS){
-				
     		}*/
 			
 		} catch (ClientProtocolException e) {
@@ -65,7 +64,7 @@ public class DelProductoTask extends AsyncTask<Void, Void, Boolean> {
 			e.printStackTrace();
 			return false;
 		}
-		return true;
+		return false;
 	}
 
 	@Override

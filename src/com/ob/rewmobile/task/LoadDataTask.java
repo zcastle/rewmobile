@@ -1,10 +1,8 @@
 package com.ob.rewmobile.task;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -17,8 +15,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ob.rewmobile.AccesoActivity;
-import com.ob.rewmobile.MainActivity;
-import com.ob.rewmobile.R;
 import com.ob.rewmobile.model.Caja;
 import com.ob.rewmobile.util.App;
 import com.ob.rewmobile.util.Data;
@@ -58,12 +54,14 @@ public class LoadDataTask extends AsyncTask<Void, Void, Boolean> {
 	                return false;
 	            }
 			}*/
+			
 			data.loadUsuarios(force);
 			data.loadDestinos(force);
 			data.loadCategorias(force);
 			data.loadProductos(force);
-			data.loadUbigeo(force);
-			data.loadTarjetas();
+			
+			//data.loadUbigeo(force);
+			//data.loadTarjetas();
 			//data.loadClientes();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

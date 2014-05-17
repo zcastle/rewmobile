@@ -5,21 +5,18 @@ import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -153,7 +150,8 @@ public class Data {
 		conn.getDB().delete("centrocosto", null, null);
 		conn.getDB().delete("empresa", null, null);
 		ContentValues r;
-		JSONArray obj = getJSONObject(URL_HOST.concat("readEquipos.php?nombre=").concat(name));
+		//JSONArray obj = getJSONObject(URL_HOST.concat("equipos.php/").concat(name));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("equipos.php/").concat(name));
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
 			r = new ContentValues();
@@ -250,15 +248,16 @@ public class Data {
 		ArrayList<Destino> destinos = new ArrayList<Destino>();
 		conn.getDB().delete("destinos", null, null);
 		ContentValues r;
-		JSONArray obj = getJSONObject(URL_HOST.concat("readDestinos.php"));
+		//JSONArray obj = getJSONObject(URL_HOST.concat("readDestinos.php"));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("destino.php"));
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
 			r = new ContentValues();
-			r.put("id", e.getInt("co_destino"));
-			r.put("nombre", e.getString("no_imp"));
-			r.put("ip", e.getString("no_destino"));
+			r.put("id", e.getInt("id"));
+			r.put("nombre", e.getString("nombre"));
+			r.put("ip", e.getString("destino"));
 			conn.getDB().insert("destinos", null, r);
-			destinos.add(new Destino(e.getInt("co_destino"), e.getString("no_imp"), e.getString("no_destino")));
+			destinos.add(new Destino(e.getInt("id"), e.getString("nombre"), e.getString("destino")));
 		}
 		return destinos;
 	}
@@ -286,15 +285,16 @@ public class Data {
 		ArrayList<Categoria> categorias = new ArrayList<Categoria>();
 		conn.getDB().delete("categorias", null, null);
 		ContentValues r;
-		JSONArray obj = getJSONObject(URL_HOST.concat("readCategorias.php"));
+		//JSONArray obj = getJSONObject(URL_HOST.concat("readCategorias.php"));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("categoria.php/tablet/"));
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
 			r = new ContentValues();
 			r.put("id", e.getInt("id"));
-			r.put("codigo", e.getString("co_categoria"));
-			r.put("nombre", e.getString("no_categoria"));
+			r.put("codigo", e.getString("codigo"));
+			r.put("nombre", e.getString("nombre"));
 			conn.getDB().insert("categorias", null, r);
-			categorias.add(new Categoria(e.getInt("id"), e.getString("co_categoria"), e.getString("no_categoria")));
+			categorias.add(new Categoria(e.getInt("id"), e.getString("codigo"), e.getString("nombre")));
 		}
 		return categorias;
 	}
@@ -330,26 +330,27 @@ public class Data {
 		ArrayList<Producto> productos = new ArrayList<Producto>();
 		conn.getDB().delete("productos", null, null);
 		ContentValues r;
-		JSONArray obj = getJSONObject(URL_HOST.concat("readProductos.php"));
+		//JSONArray obj = getJSONObject(URL_HOST.concat("readProductos.php"));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("producto.php/tablet/"));
 		Producto producto;
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
 			r = new ContentValues();
 			r.put("id", e.getInt("id"));
-			r.put("codigo", e.getString("co_producto"));
-			r.put("nombre", e.getString("no_producto"));
-			r.put("precio", e.getDouble("precio0"));
-			r.put("categoria_id", e.getString("co_categoria"));
-			r.put("nu_orden", e.getString("nu_orden"));
-			r.put("destino_id", e.getString("co_destino"));
+			r.put("codigo", e.getString("codigo"));
+			r.put("nombre", e.getString("nombre"));
+			r.put("precio", e.getDouble("precio"));
+			r.put("categoria_id", e.getString("categoria_id"));
+			r.put("nu_orden", e.getString("orden"));
+			r.put("destino_id", e.getString("destino_id"));
 			conn.getDB().insert("productos", null, r);
 			producto = new Producto();
 			producto.setId(e.getInt("id"));
-			producto.setCodigo(e.getString("co_producto"));
-			producto.setNombre(e.getString("no_producto"));
-			producto.setPrecio(e.getDouble("precio0"));
-			producto.setCategoria(Data.categoriaController.getCategoriaByCodigo(e.getString("co_categoria")));
-			producto.setDestino(Data.destinoController.getDestinoById(e.getInt("co_destino")));
+			producto.setCodigo(e.getString("codigo"));
+			producto.setNombre(e.getString("nombre"));
+			producto.setPrecio(e.getDouble("precio"));
+			producto.setCategoria(Data.categoriaController.getCategoriaByCodigo(e.getString("categoria_id")));
+			producto.setDestino(Data.destinoController.getDestinoById(e.getInt("destino_id")));
 			productos.add(producto);
 		}
 		return productos;
@@ -378,7 +379,8 @@ public class Data {
 		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 		conn.getDB().delete("usuarios", null, null);
 		ContentValues r;
-		JSONArray obj = getJSONObject(URL_HOST.concat("readUsuarios.php"));
+		//JSONArray obj = getJSONObject(URL_HOST.concat("readUsuarios.php"));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("usuario.php/tablet/"));
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
 			r = new ContentValues();
@@ -639,8 +641,9 @@ public class Data {
 			}
 			conn.close();
 		} else {
-			String url = URL_HOST.concat("readMesaxNro.php?t=").concat(PEDIDO.getMesa());
-			JSONArray obj = getJSONObject(url);
+			//String url = URL_HOST.concat("readMesaxNro.php?t=").concat(PEDIDO.getMesa());			
+			//JSONArray obj = getJSONObject(url);
+			JSONArray obj = new RewServices().get(URL_HOST.concat("pedido.php/tablet?mesa=").concat(PEDIDO.getMesa()));
 			for (int i = 0; i < obj.length(); i++) {
 				JSONObject e = obj.getJSONObject(i);
 				PEDIDO.setPax(e.getInt("pax"));
@@ -661,18 +664,10 @@ public class Data {
 		}
 	}
 
-	public int insertPedido(PedidoController pedido, Producto producto, boolean sync) throws ClientProtocolException, IOException, JSONException {
+	public int insertPedido(PedidoController pedido, Producto producto, boolean sync) throws ClientProtocolException, IOException, JSONException, URISyntaxException {
 		int id = 0;
 		if (App.isCaja() && !sync) {
 			Conn conn = new Conn(context);
-			/*int atencion_id = 1;
-			String[] campos = new String[] {"MAX(atencion_id)"};
-			String[] args = new String[] {pedido.getMesa()};
-			Cursor f = conn.getDB().query("pedidos", campos, "mesa=?", args, null, null, null);
-			if (f.moveToFirst()) {
-				atencion_id = f.getInt(0)+1;
-			}
-			f.close();*/
 			ContentValues r = new ContentValues();
 			r.put("mesa", pedido.getMesa());
 			r.put("mozo_id", pedido.getMozo().getId());
@@ -698,45 +693,39 @@ public class Data {
 		}
 		if (App.isPedido() || sync) {
 			JSONObject row = new JSONObject();
-			row.put("mesa", pedido.getMesa());
-			row.put("mozoid", pedido.getMozo().getId());
-			row.put("cajeroid", pedido.getCajero().getId());
-			row.put("idprod", producto.getId());
-			row.put("producto", producto.getNombre());
-			row.put("cant", producto.getCantidad() + "");
+			row.put("nroatencion", pedido.getMesa());
+			row.put("mozo_id", pedido.getMozo().getId());
+			row.put("cajero_id", pedido.getCajero().getId());
+			row.put("producto_id", producto.getId());
+			row.put("producto_name", producto.getNombre());
+			row.put("cantidad", producto.getCantidad() + "");
 			row.put("precio", producto.getPrecio());
 			row.put("pax", pedido.getPax());
-			row.put("co_destino", producto.getDestino().getId());
+			row.put("mensaje", "");
+			//row.put("co_destino", producto.getDestino().getId());
 			row.put("pc", App.DEVICE_NAME);
 			
-			id = postData("insertPedidos.php", row);
+			id = new RewServices().post(URL_HOST.concat("pedido.php/"), row); 
+			Log.e("NUEO ID ", id+"");
 		}
 		return id;
 	}
 
-	public void deleteProducto(Producto producto, boolean sync) throws JSONException, ClientProtocolException, IOException{
-		if (Globals.MODULO.equals(Globals.MODULO_CAJA) && !sync) {
+	public boolean deleteProducto(Producto producto, boolean sync) throws JSONException, ClientProtocolException, IOException{
+		if (App.isCaja() && !sync) {
 			Conn conn = new Conn(context);
 			conn.getDB().delete("pedidos", "id=?", new String[] {producto.getIdAtencion()+""});
 			conn.close();
-		} 
-		if (Globals.MODULO.equals(Globals.MODULO_PEDIDO) || sync) {
-			JSONObject obj = new JSONObject();
-			obj.put("id", producto.getIdAtencion());
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(URL_HOST.concat("deletePedido.php"));
-			httpPost.setHeader("Accept", "application/json");
-	
-			ArrayList<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
-			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	
-			httpclient.execute(httpPost);
+			return true;
 		}
+		if (App.isPedido() || sync) {
+			return new RewServices().delete(URL_HOST.concat("pedido.php/").concat(producto.getIdAtencion()+""));
+		}
+		return false;
 	}
 
-	public void updateProducto(Producto producto, boolean sync) throws JSONException, ClientProtocolException, IOException {
-		if (Globals.MODULO.equals(Globals.MODULO_CAJA) && !sync) {
+	public boolean updateProducto(Producto producto, boolean sync) throws JSONException, ClientProtocolException, IOException {
+		if (App.isCaja() && !sync) {
 			ContentValues r = new ContentValues();
 			r.put("cantidad", producto.getCantidad());
 			r.put("producto", producto.getNombre());
@@ -744,32 +733,22 @@ public class Data {
 			Conn conn = new Conn(context);
 			conn.getDB().update("pedidos", r, "id=?", new String[] {producto.getIdAtencion()+""});
 			conn.close();
+			return true;
 		}
-		if (Globals.MODULO.equals(Globals.MODULO_PEDIDO) || sync) {
+		if (App.isPedido() || sync) {
 			JSONObject obj = new JSONObject();
-			obj.put("id", producto.getIdAtencion());
-			obj.put("cant", producto.getCantidad());
-			obj.put("prod", producto.getNombre());
-			obj.put("msg", producto.getMensaje());
-			//obj.put("precio", producto.getPrecio());
+			obj.put("cantidad", producto.getCantidad());
+			obj.put("producto_name", producto.getNombre());
+			obj.put("mensaje", producto.getMensaje());
 			
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(URL_HOST.concat("updatePedido.php"));
-			httpPost.setHeader("Accept", "application/json");
-	
-			ArrayList<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
-			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	
-			HttpResponse response = httpclient.execute(httpPost);
-			//String temp = 
-			EntityUtils.toString(response.getEntity());
-			//Log.e("updatePedido.php", temp);
+			return new RewServices().put(URL_HOST.concat("pedido.php/").concat(producto.getIdAtencion()+"") , obj);
+
 		}
+		return false;
 	}
 	
-	public void updatePedido(PedidoController pedido, boolean sync) throws JSONException, ClientProtocolException, IOException {
-		if (Globals.MODULO.equals(Globals.MODULO_CAJA) && !sync) {
+	public boolean updatePedido(PedidoController pedido, boolean sync) throws JSONException, ClientProtocolException, IOException {
+		if (App.isCaja() && !sync) {
 			ContentValues r = new ContentValues();
 			r.put("mozo_id", pedido.getMozo().getId());
 			r.put("pax", pedido.getPax());
@@ -782,37 +761,27 @@ public class Data {
 			Conn conn = new Conn(context);
 			conn.getDB().update("pedidos", r, "mesa=?", new String[] {pedido.getMesa()});
 			conn.close();
+			return true;
 		}
-		if (Globals.MODULO.equals(Globals.MODULO_PEDIDO) || sync) {
+		if (App.isPedido() || sync) {
 			JSONObject obj = new JSONObject();
-			obj.put("nroatencion", pedido.getMesa());
 			obj.put("pax", pedido.getPax());
-			obj.put("mozo", pedido.getMozo().getId());
+			obj.put("mozo_id", pedido.getMozo().getId());
 			
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(URL_HOST.concat("updatePaxMozo.php"));
-			httpPost.setHeader("Accept", "application/json");
-	
-			ArrayList<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
-			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	
-			//HttpResponse response = 
-			httpclient.execute(httpPost);
-			//String temp = EntityUtils.toString(response.getEntity());
-			//Log.e("updatePaxMozo.php", temp);
+			return new RewServices().put(URL_HOST.concat("pedido.php/mesa/").concat(pedido.getMesa()) , obj);
 		}
+		return false;
 	}
 
-	public void updateEnvio(PedidoController pedido, Destino destino, boolean sync) throws ClientProtocolException, IOException, JSONException {
-		if (Globals.MODULO.equals(Globals.MODULO_CAJA) && !sync) {
+	public void updateEnvio(PedidoController pedido, Destino destino, boolean sync) throws JSONException, ClientProtocolException, IOException {
+		if (App.isCaja() && !sync) {
 			ContentValues r = new ContentValues();
 			r.put("enviado", "S");
 			Conn conn = new Conn(context);
 			conn.getDB().update("pedidos", r, "mesa=? AND destino_id=?", new String[] {pedido.getMesa(), destino.getId()+""});
 			conn.close();
 		}
-		if (Globals.MODULO.equals(Globals.MODULO_PEDIDO) || sync) {
+		if (App.isPedido() || sync) {
 			JSONObject obj = new JSONObject();
 			obj.put("mesa", pedido.getMesa());
 			obj.put("destino", destino.getId());
@@ -827,13 +796,11 @@ public class Data {
 			nameValuePairs.add(new BasicNameValuePair("data", obj.toString()));
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	
-			//HttpResponse response = 
 			httpclient.execute(httpPost);
-			//String temp = EntityUtils.toString(response.getEntity());
-			//Log.i("updateFlEnvio.php", temp);
 		}
 	}
 	
+	@SuppressLint("SimpleDateFormat")
 	public boolean pagarCuenta(PedidoController pedido, String tipoVenta, boolean sync) {
 		boolean success = true;
 		
@@ -882,6 +849,7 @@ public class Data {
 				values.put("cantidad", producto.getCantidad());
 				values.put("precio", producto.getPrecio());
 				values.put("mensaje", producto.getMensaje());
+				@SuppressWarnings("unused")
 				long ventaDId = conn.insert("ventasd", values);
 			}
 			
@@ -913,21 +881,5 @@ public class Data {
 		JSONObject json = new JSONParser().getJSONFromUrl(url);
 		return json.getJSONArray("data");
 	}
-	
-	private int postData(String url, JSONObject row) throws ClientProtocolException, IOException, JSONException {
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(URL_HOST.concat(url));
-		//httpPost.setHeader("content-type", "application/json; charset=utf-8");
-		
-		List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-		nameValuePairs.add(new BasicNameValuePair("data", row.toString()));
-		httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
 
-		HttpResponse response = httpclient.execute(httpPost);
-		String temp = EntityUtils.toString(response.getEntity());
-		Log.i("OBJ JSON", row.toString());
-		Log.i(url, temp);
-		JSONObject json = new JSONObject(temp);
-		return json.getInt("id");
-	}
 }

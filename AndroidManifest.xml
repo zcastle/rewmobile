@@ -66,15 +66,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ob.rewmobile.PedidoActivity" />
         </activity>
-        <activity
-            android:name="com.ob.rewmobile.ConfigActivity"
-            android:label="@string/title_activity_configuracion"
-            android:parentActivityName="com.ob.rewmobile.AccesoActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ob.rewmobile.AccesoActivity" />
-        </activity>
-
         <service
             android:name="com.ob.rewmobile.service.SyncService"
             android:enabled="true"

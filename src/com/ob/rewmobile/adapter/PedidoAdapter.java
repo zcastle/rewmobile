@@ -174,6 +174,24 @@ public class PedidoAdapter extends BaseAdapter {
 				builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
+						
+						if(txtCantidad.getText().toString().isEmpty()) {
+							Toast.makeText(context, "Ingrese Cantidad", Toast.LENGTH_SHORT).show();
+							txtCantidad.requestFocus();
+							return;
+						}
+						if(txtCantidad.getText().toString().equals("0")) {
+							Toast.makeText(context, "No se puede ingresar cantidad en cero", Toast.LENGTH_SHORT).show();
+							txtCantidad.requestFocus();
+							return;
+						}
+						
+						if(txtNombre.getText().toString().isEmpty()) {
+							Toast.makeText(context, "Nombre de producto no puede ser estar blanco", Toast.LENGTH_SHORT).show();
+							txtCantidad.requestFocus();
+							return;
+						}
+						
 						closeAnimation(parent, position);
 						producto.setCantidad(Double.parseDouble(txtCant.getText().toString()));
 						producto.setNombre(txtNombre.getText().toString());

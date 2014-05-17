@@ -20,7 +20,7 @@
     <string name="lbl_host_port">Puerto</string>
     <string name="lbl_host_port_default">80</string>
     <string name="lbl_host_path">Ruta</string>
-    <string name="lbl_host_path_default">rewmobile</string>
+    <string name="lbl_host_path_default">rewservices</string>
     <string name="action_salir">Salir</string>
     <string name="btn_reintentar">Reintentar</string>
     <string name="drawer_open">Open navigation drawer</string>

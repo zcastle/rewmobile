@@ -38,22 +38,10 @@
         android:textSize="20sp"
         android:visibility="gone" />
     <TextView
-	    android:id="@+id/textviewcategoriaold"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:textAppearance="?android:attr/textAppearanceListItemSmall"
-	    android:gravity="center_vertical"
-	    android:paddingLeft="16dp"
-	    android:paddingRight="16dp"
-	    android:textColor="#fff"
-	    android:background="?android:attr/activatedBackgroundIndicator"
-	    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-	    android:visibility="gone" />
-    <TextView
         android:id="@+id/textviewcategoria"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#3b9859"
+        android:background="@android:color/holo_green_dark"
         android:textColor="@drawable/text_color"
         android:gravity="center"
         android:minHeight="100dp"

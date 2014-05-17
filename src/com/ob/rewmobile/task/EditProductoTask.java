@@ -37,7 +37,7 @@ public class EditProductoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		try {
-			new Data(context).updateProducto(producto, sync);
+			return new Data(context).updateProducto(producto, sync);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			return false;
@@ -48,7 +48,6 @@ public class EditProductoTask extends AsyncTask<Void, Void, Boolean> {
 			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 
 	@Override
@@ -58,6 +57,8 @@ public class EditProductoTask extends AsyncTask<Void, Void, Boolean> {
 			activity.getPedidoAdapter().notifyDataSetChanged();
 			activity.getPedidoListener().refresh();
 			Toast.makeText(context, "Producto Editado", Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(context, "No se a podido editar el producto", Toast.LENGTH_SHORT).show();
 		}
 		if (pd.isShowing()) pd.dismiss();
 	}

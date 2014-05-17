@@ -127,7 +127,7 @@ public class PedidoActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.pedido, menu);
-		if (App.isPedido()) menu.findItem(R.id.action_pagar).setVisible(true);
+		if (App.isPedido()) menu.findItem(R.id.action_pagar).setVisible(false);
 		return super.onCreateOptionsMenu(menu);
 	}
 

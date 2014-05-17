@@ -38,7 +38,7 @@ public class EditPedidoTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		try {
-			new Data(context).updatePedido(pedido, sync);
+			return new Data(context).updatePedido(pedido, sync);
 		} catch (ClientProtocolException e) {
 			Toast.makeText(context, "Error en la Conexion...", Toast.LENGTH_SHORT).show();
 			e.printStackTrace();
@@ -53,7 +53,6 @@ public class EditPedidoTask extends AsyncTask<Void, Void, Boolean> {
 			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 
 	@Override
@@ -61,7 +60,8 @@ public class EditPedidoTask extends AsyncTask<Void, Void, Boolean> {
 		if (success) {
 			//Toast.makeText(context, "Pedido Editado", Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(context, Globals.SERVER_NO_CONNECTION_MESSAGE, Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "No se a podido editadar el pedido", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(context, Globals.SERVER_NO_CONNECTION_MESSAGE, Toast.LENGTH_LONG).show();
 		}
 		if (pd.isShowing()) pd.dismiss();
 	}

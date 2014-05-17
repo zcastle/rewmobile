@@ -71,6 +71,7 @@ public class PedidoListener implements OnClickListener, OnItemClickListener {
 		if (PEDIDO.getMozo().getId()>0) {
 			tvMozo.setText("Mozo: ".concat(PEDIDO.getMozo().getNombre()));
 		}
+		//tvMozo.setText("Mozo: ");
 		if (App.isCaja()) {
 			setCajero(PEDIDO.getCajero().getNombre());
 		} else if (App.isPedido()) {

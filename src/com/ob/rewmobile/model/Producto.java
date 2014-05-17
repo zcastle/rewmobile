@@ -44,8 +44,9 @@ public class Producto implements Cloneable {
 		this.codigo = codigo;
 	}
 
+	@SuppressLint("DefaultLocale")
 	public String getNombre() {
-		return nombre;
+		return nombre.toUpperCase();
 	}
 
 	@SuppressLint("DefaultLocale")
