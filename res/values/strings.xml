@@ -129,5 +129,16 @@
     <string name="lbl_ruc_0">00000000000</string>
     <string name="lbl_empresa_sac">EMPRESA SAC</string>
     <string name="lbl_x">X</string>
+    <string name="lbl_num_1">1</string>
+    <string name="lbl_num_2">2</string>
+    <string name="lbl_num_3">3</string>
+    <string name="lbl_num_4">4</string>
+    <string name="lbl_num_5">5</string>
+    <string name="lbl_num_6">6</string>
+    <string name="lbl_num_7">7</string>
+    <string name="lbl_num_8">8</string>
+    <string name="lbl_num_9">9</string>
+    <string name="lbl_num_0">0</string>
+    <string name="lbl_num_c">C</string>
 
 </resources>

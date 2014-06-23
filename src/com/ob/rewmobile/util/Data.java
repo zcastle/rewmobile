@@ -151,7 +151,7 @@ public class Data {
 		conn.getDB().delete("empresa", null, null);
 		ContentValues r;
 		//JSONArray obj = getJSONObject(URL_HOST.concat("equipos.php/").concat(name));
-		JSONArray obj = new RewServices().get(URL_HOST.concat("equipos.php/").concat(name));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("equipos/").concat(name));
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
 			r = new ContentValues();
@@ -249,7 +249,7 @@ public class Data {
 		conn.getDB().delete("destinos", null, null);
 		ContentValues r;
 		//JSONArray obj = getJSONObject(URL_HOST.concat("readDestinos.php"));
-		JSONArray obj = new RewServices().get(URL_HOST.concat("destino.php"));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("destino"));
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
 			r = new ContentValues();
@@ -286,7 +286,7 @@ public class Data {
 		conn.getDB().delete("categorias", null, null);
 		ContentValues r;
 		//JSONArray obj = getJSONObject(URL_HOST.concat("readCategorias.php"));
-		JSONArray obj = new RewServices().get(URL_HOST.concat("categoria.php/tablet/"));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("categoria/tablet/"));
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
 			r = new ContentValues();
@@ -331,7 +331,7 @@ public class Data {
 		conn.getDB().delete("productos", null, null);
 		ContentValues r;
 		//JSONArray obj = getJSONObject(URL_HOST.concat("readProductos.php"));
-		JSONArray obj = new RewServices().get(URL_HOST.concat("producto.php/tablet/"));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("producto/tablet/"));
 		Producto producto;
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
@@ -380,7 +380,7 @@ public class Data {
 		conn.getDB().delete("usuarios", null, null);
 		ContentValues r;
 		//JSONArray obj = getJSONObject(URL_HOST.concat("readUsuarios.php"));
-		JSONArray obj = new RewServices().get(URL_HOST.concat("usuario.php/tablet/"));
+		JSONArray obj = new RewServices().get(URL_HOST.concat("usuario/tablet/"));
 		for (int i = 0; i < obj.length(); i++) {
 			JSONObject e = obj.getJSONObject(i);
 			r = new ContentValues();
@@ -480,7 +480,7 @@ public class Data {
 		ContentValues rde;
 		ContentValues rpr;
 		ContentValues rdi;
-		JSONArray de = getJSONObject(URL_HOST.concat("readUbigeo.php?out=de"));
+		JSONArray de = getJSONObject(URL_HOST.concat("readUbigeo?out=de"));
 		for (int i = 0; i < de.length(); i++) {
 			JSONObject dep = de.getJSONObject(i);
 			departamento = new Departamento();
@@ -492,7 +492,7 @@ public class Data {
 			departamento.setId(dep.getInt("id"));
 			departamento.setCodigo(dep.getString("co_departamento"));
 			departamento.setNombre(dep.getString("no_ubigeo"));
-			JSONArray pr = getJSONObject(URL_HOST.concat("readUbigeo.php?out=pr&de=".concat(dep.getString("co_departamento"))));
+			JSONArray pr = getJSONObject(URL_HOST.concat("readUbigeo?out=pr&de=".concat(dep.getString("co_departamento"))));
 			Provincia provincia;
 			for (int j = 0; j < pr.length(); j++) {
 				JSONObject pro = pr.getJSONObject(j);
@@ -507,7 +507,7 @@ public class Data {
 				provincia.setCodigo(pro.getString("co_provincia"));
 				provincia.setNombre(pro.getString("no_ubigeo"));
 				provincia.setDepartamento(departamento);
-				JSONArray di = getJSONObject(URL_HOST.concat("readUbigeo.php?out=di&de=".concat(dep.getString("co_departamento")).concat("&pr=").concat(pro.getString("co_provincia"))));
+				JSONArray di = getJSONObject(URL_HOST.concat("readUbigeo?out=di&de=".concat(dep.getString("co_departamento")).concat("&pr=").concat(pro.getString("co_provincia"))));
 				Distrito distrito;
 				for (int k = 0; k < di.length(); k++) {
 					JSONObject dis = di.getJSONObject(k);
@@ -591,7 +591,7 @@ public class Data {
 
 	public void loadMesas() throws IOException, Exception {
 		LST_MESAS = new ArrayList<Mesa>();
-		String url = URL_HOST.concat("readMesas.php");
+		String url = URL_HOST.concat("readMesas");
 		try {
 			JSONArray obj = getJSONObject(url);
 			for (int i = 0; i < obj.length(); i++) {
@@ -643,7 +643,7 @@ public class Data {
 		} else {
 			//String url = URL_HOST.concat("readMesaxNro.php?t=").concat(PEDIDO.getMesa());			
 			//JSONArray obj = getJSONObject(url);
-			JSONArray obj = new RewServices().get(URL_HOST.concat("pedido.php/tablet?mesa=").concat(PEDIDO.getMesa()));
+			JSONArray obj = new RewServices().get(URL_HOST.concat("pedido/tablet?mesa=").concat(PEDIDO.getMesa()));
 			for (int i = 0; i < obj.length(); i++) {
 				JSONObject e = obj.getJSONObject(i);
 				PEDIDO.setPax(e.getInt("pax"));
@@ -705,7 +705,7 @@ public class Data {
 			//row.put("co_destino", producto.getDestino().getId());
 			row.put("pc", App.DEVICE_NAME);
 			
-			id = new RewServices().post(URL_HOST.concat("pedido.php/"), row); 
+			id = new RewServices().post(URL_HOST.concat("pedido/"), row); 
 			Log.e("NUEO ID ", id+"");
 		}
 		return id;
@@ -719,7 +719,7 @@ public class Data {
 			return true;
 		}
 		if (App.isPedido() || sync) {
-			return new RewServices().delete(URL_HOST.concat("pedido.php/").concat(producto.getIdAtencion()+""));
+			return new RewServices().delete(URL_HOST.concat("pedido/").concat(producto.getIdAtencion()+""));
 		}
 		return false;
 	}
@@ -741,7 +741,7 @@ public class Data {
 			obj.put("producto_name", producto.getNombre());
 			obj.put("mensaje", producto.getMensaje());
 			
-			return new RewServices().put(URL_HOST.concat("pedido.php/").concat(producto.getIdAtencion()+"") , obj);
+			return new RewServices().put(URL_HOST.concat("pedido/").concat(producto.getIdAtencion()+"") , obj);
 
 		}
 		return false;
@@ -768,7 +768,7 @@ public class Data {
 			obj.put("pax", pedido.getPax());
 			obj.put("mozo_id", pedido.getMozo().getId());
 			
-			return new RewServices().put(URL_HOST.concat("pedido.php/mesa/").concat(pedido.getMesa()) , obj);
+			return new RewServices().put(URL_HOST.concat("pedido/mesa/").concat(pedido.getMesa()) , obj);
 		}
 		return false;
 	}
@@ -786,7 +786,7 @@ public class Data {
 			obj.put("mesa", pedido.getMesa());
 			obj.put("destino", destino.getId());
 			
-			String url = URL_HOST.concat("updateFlEnvio.php");
+			String url = URL_HOST.concat("updateFlEnvio");
 			HttpClient httpclient = new DefaultHttpClient(); // myParams
 	
 			HttpPost httpPost = new HttpPost(url);
